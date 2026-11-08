@@ -59,6 +59,21 @@ import { MediaRoot, MediaVideo, MediaSurface, MediaControls, MediaSeek, MediaPla
 </MediaRoot>
 ```
 
+### Types
+
+Every component exports its props type under its own name plus `Props`, so a
+wrapper can extend it.
+
+```tsx
+import { AudioPlayer, type AudioPlayerProps } from "reel-media"
+
+function EpisodePlayer(props: AudioPlayerProps) {
+  return <AudioPlayer showSpeed persistKey="episodes" {...props} />
+}
+```
+
+`MediaState`, `MediaStore` and `MediaInfo` type the store and its metadata.
+
 ### Framework-agnostic core
 
 `reel-media/core` exports `createMediaStore()`, a dependency-free store you can `attach` to any `HTMLMediaElement`.

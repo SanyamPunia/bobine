@@ -233,7 +233,9 @@ function useMediaElement<E extends HTMLMediaElement>(
   return { mediaRef }
 }
 
-function MediaVideo({ className, ref, src, loader, ...props }: MediaElementProps<React.ComponentProps<"video">>) {
+type MediaVideoProps = MediaElementProps<React.ComponentProps<"video">>
+
+function MediaVideo({ className, ref, src, loader, ...props }: MediaVideoProps) {
   const media = useMediaElement(ref, typeof src === "string" ? src : undefined, loader)
   return (
     <video
@@ -249,7 +251,9 @@ function MediaVideo({ className, ref, src, loader, ...props }: MediaElementProps
   )
 }
 
-function MediaAudio({ ref, src, loader, ...props }: MediaElementProps<React.ComponentProps<"audio">>) {
+type MediaAudioProps = MediaElementProps<React.ComponentProps<"audio">>
+
+function MediaAudio({ ref, src, loader, ...props }: MediaAudioProps) {
   const media = useMediaElement(ref, typeof src === "string" ? src : undefined, loader)
   return (
     <audio
@@ -268,7 +272,7 @@ function MediaAudio({ ref, src, loader, ...props }: MediaElementProps<React.Comp
 const buttonClass =
   "group/media-button relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,scale,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:enabled:active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
-type TooltipAlign = "start" | "center" | "end"
+type MediaTooltipAlign = "start" | "center" | "end"
 
 /**
  * The label over a control. Decorative: the control already carries the same
@@ -276,7 +280,7 @@ type TooltipAlign = "start" | "center" | "end"
  * at once; keyboard focus shows it straight away. Touch never shows it, since
  * the hover variants only apply to pointers that can hover.
  */
-function MediaTooltip({ label, shortcut, align = "center" }: { label: React.ReactNode; shortcut?: string; align?: TooltipAlign }) {
+function MediaTooltip({ label, shortcut, align = "center" }: { label: React.ReactNode; shortcut?: string; align?: MediaTooltipAlign }) {
   const { tooltips, hotkeys } = React.useContext(MediaOptionsContext)
   if (!tooltips || !label) return null
   return (
@@ -306,7 +310,7 @@ type MediaButtonProps = React.ComponentProps<"button"> & {
   /** Shortcut shown beside the tooltip when the root has `hotkeys`. */
   shortcut?: string
   /** Pin the tooltip to an edge for buttons at either end of a bar. */
-  tooltipAlign?: TooltipAlign
+  tooltipAlign?: MediaTooltipAlign
 }
 
 function MediaButton({ className, type = "button", tooltip, shortcut, tooltipAlign, children, ...props }: MediaButtonProps) {
@@ -414,13 +418,18 @@ function MediaPictureInPictureButton({ onClick, ...props }: MediaButtonProps) {
   )
 }
 
+type MediaPlaybackRateButtonProps = MediaButtonProps & {
+  /** Speeds a click cycles through, in order. */
+  rates?: number[]
+}
+
 function MediaPlaybackRateButton({
   rates = [1, 1.25, 1.5, 2, 0.75],
   className,
   style,
   onClick,
   ...props
-}: MediaButtonProps & { rates?: number[] }) {
+}: MediaPlaybackRateButtonProps) {
   const store = useMediaStore()
   const rate = useMedia((s) => s.playbackRate)
 
@@ -454,7 +463,9 @@ function MediaPlaybackRateButton({
  * Bar that reveals while the pointer is active, playback is paused,
  * or keyboard focus is inside the player.
  */
-function MediaControls({ className, ...props }: React.ComponentProps<"div">) {
+type MediaControlsProps = React.ComponentProps<"div">
+
+function MediaControls({ className, ...props }: MediaControlsProps) {
   return (
     <div
       data-slot="media-controls"
@@ -849,7 +860,9 @@ function MediaTime({ type = "current", toggle = false, className, ...props }: Me
 
 /* --------------------------------- Loading -------------------------------- */
 
-function MediaLoading({ className, ...props }: React.ComponentProps<"span">) {
+type MediaLoadingProps = React.ComponentProps<"span">
+
+function MediaLoading({ className, ...props }: MediaLoadingProps) {
   const waiting = useMedia((s) => s.waiting && !s.paused)
   return (
     <span
@@ -872,7 +885,9 @@ function MediaLoading({ className, ...props }: React.ComponentProps<"span">) {
  * Renders active caption cues. Native rendering is disabled so cues can be
  * styled and can slide above the controls when they appear.
  */
-function MediaCaptions({ className, ...props }: React.ComponentProps<"div">) {
+type MediaCaptionsProps = React.ComponentProps<"div">
+
+function MediaCaptions({ className, ...props }: MediaCaptionsProps) {
   const cues = useMedia((s) => (s.textTrack === -1 ? emptyCues : s.cues))
   if (!cues.length) return null
   return (
@@ -1108,4 +1123,21 @@ export {
   useMedia,
   useMediaStore,
 }
-export type { MediaSourceLoader, MediaRootProps, MediaButtonProps }
+export type {
+  MediaSourceLoader,
+  MediaRootProps,
+  MediaVideoProps,
+  MediaAudioProps,
+  MediaSurfaceProps,
+  MediaControlsProps,
+  MediaButtonProps,
+  MediaTooltipAlign,
+  MediaPlaybackRateButtonProps,
+  MediaSeekProps,
+  MediaVolumeProps,
+  MediaTimeProps,
+  MediaLoadingProps,
+  MediaCaptionsProps,
+  MediaSettingsProps,
+  MediaErrorMessageProps,
+}

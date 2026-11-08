@@ -51,7 +51,7 @@ npx shadcn@latest add <docs-host>/r/media-hls.json      # hlsLoader for .m3u8
 
 ## Compose a custom player
 
-Use the parts from `@/components/ui/media` inside `<MediaRoot>`: `MediaVideo` or `MediaAudio`, `MediaSurface`, `MediaControls`, `MediaSeek`, `MediaVolume`, `MediaTime`, the `Media*Button` family, `MediaSettings`, `MediaCaptions`, `MediaLoading` and `MediaErrorMessage`. Read state with `useMedia(selector)` and act with `useMediaStore()`.
+Use the parts from `@/components/ui/media` inside `<MediaRoot>`: `MediaVideo` or `MediaAudio`, `MediaSurface`, `MediaControls`, `MediaSeek`, `MediaVolume`, `MediaTime`, the `Media*Button` family, `MediaSettings`, `MediaCaptions`, `MediaLoading` and `MediaErrorMessage`. Read state with `useMedia(selector)` and act with `useMediaStore()`. Each part exports its props type as its name plus `Props` (`MediaSeekProps`, `AudioPlayerProps`), for wrappers that extend one.
 
 `MediaRoot` exposes `data-paused`, `data-started`, `data-waiting`, `data-idle` and `data-fullscreen`. Style against them with the `group/media` variants instead of copying state into React.
 

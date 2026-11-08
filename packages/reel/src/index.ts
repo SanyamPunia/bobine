@@ -7,6 +7,7 @@ export {
   formatTime,
   describeMediaError,
   type MediaStore,
+  type MediaStoreOptions,
   type MediaState,
   type MediaInfo,
   type MediaTextTrack,

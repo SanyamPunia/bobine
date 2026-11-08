@@ -1,6 +1,6 @@
 import * as React from "react"
 
-type IconProps = React.ComponentProps<"svg">
+export type MediaIconProps = React.ComponentProps<"svg">
 
 const base = {
   xmlns: "http://www.w3.org/2000/svg",
@@ -16,7 +16,7 @@ const base = {
  * box-centred triangle looks shifted right, because its weight is in the flat
  * left side.
  */
-export function PlayIcon(props: IconProps) {
+export function PlayIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="currentColor" {...props}>
       <path d="M6.87 4.9v14.2a1.5 1.5 0 0 0 2.31 1.26l11.07-7.1a1.5 1.5 0 0 0 0-2.52L9.18 3.64A1.5 1.5 0 0 0 6.87 4.9Z" />
@@ -24,7 +24,7 @@ export function PlayIcon(props: IconProps) {
   )
 }
 
-export function PauseIcon(props: IconProps) {
+export function PauseIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="currentColor" {...props}>
       <rect x="5" y="3.5" width="5" height="17" rx="1.6" />
@@ -33,7 +33,7 @@ export function PauseIcon(props: IconProps) {
   )
 }
 
-export function VolumeIcon({ muted, ...props }: IconProps & { muted?: boolean }) {
+export function VolumeIcon({ muted, ...props }: MediaIconProps & { muted?: boolean }) {
   const fade = "origin-[11px_12px] transition-[opacity,transform] duration-200 ease-media motion-reduce:transition-none"
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -54,7 +54,7 @@ export function VolumeIcon({ muted, ...props }: IconProps & { muted?: boolean })
   )
 }
 
-export function EnterFullscreenIcon(props: IconProps) {
+export function EnterFullscreenIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M4 9V6a2 2 0 0 1 2-2h3M15 4h3a2 2 0 0 1 2 2v3M20 15v3a2 2 0 0 1-2 2h-3M9 20H6a2 2 0 0 1-2-2v-3" />
@@ -62,7 +62,7 @@ export function EnterFullscreenIcon(props: IconProps) {
   )
 }
 
-export function ExitFullscreenIcon(props: IconProps) {
+export function ExitFullscreenIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M9 4v3a2 2 0 0 1-2 2H4M20 9h-3a2 2 0 0 1-2-2V4M15 20v-3a2 2 0 0 1 2-2h3M4 15h3a2 2 0 0 1 2 2v3" />
@@ -70,7 +70,7 @@ export function ExitFullscreenIcon(props: IconProps) {
   )
 }
 
-export function PictureInPictureIcon(props: IconProps) {
+export function PictureInPictureIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
@@ -82,7 +82,7 @@ export function PictureInPictureIcon(props: IconProps) {
 const captionLetters = "M10.5 10.2a2.2 2.2 0 1 0 0 3.6M17 10.2a2.2 2.2 0 1 0 0 3.6"
 
 /** Outlined when off; filled with knocked-out letters when on. */
-export function CaptionsIcon({ active, ...props }: IconProps & { active?: boolean }) {
+export function CaptionsIcon({ active, ...props }: MediaIconProps & { active?: boolean }) {
   const maskId = `cc${React.useId().replace(/[^\w-]/g, "")}`
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -111,7 +111,7 @@ export function CaptionsIcon({ active, ...props }: IconProps & { active?: boolea
   )
 }
 
-export function SettingsIcon(props: IconProps) {
+export function SettingsIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
@@ -121,7 +121,7 @@ export function SettingsIcon(props: IconProps) {
   )
 }
 
-export function RetryIcon(props: IconProps) {
+export function RetryIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1" />
@@ -130,7 +130,7 @@ export function RetryIcon(props: IconProps) {
   )
 }
 
-export function CheckIcon(props: IconProps) {
+export function CheckIcon(props: MediaIconProps) {
   return (
     <svg {...base} fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round" {...props}>
       <path d="m5 12.5 4.5 4.5L19 7.5" />
@@ -138,7 +138,7 @@ export function CheckIcon(props: IconProps) {
   )
 }
 
-export function SeekIcon({ direction, ...props }: IconProps & { direction: "back" | "forward" }) {
+export function SeekIcon({ direction, ...props }: MediaIconProps & { direction: "back" | "forward" }) {
   return (
     <svg {...base} fill="currentColor" {...props} style={{ transform: direction === "back" ? "scaleX(-1)" : undefined, ...props.style }}>
       <path d="M3 6.7v10.6a1 1 0 0 0 1.55.83L12 13.2v4.1a1 1 0 0 0 1.55.83l7.9-5.3a1 1 0 0 0 0-1.66l-7.9-5.3A1 1 0 0 0 12 6.7v4.1L4.55 5.87A1 1 0 0 0 3 6.7Z" />
