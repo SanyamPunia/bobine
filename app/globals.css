@@ -2,7 +2,22 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-@custom-variant dark (&:is(.dark *));
+/**
+ * `dark:` follows the same two switches as the tokens below: a `.dark` class,
+ * or the system preference when `html` is not forced `.light`. Keyed on the
+ * class alone, it never fired for visitors on system dark, so the registry
+ * components' `dark:` styles (the outline button's fill, for one) were lost.
+ */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not(.light), :root:not(.light) *) {
+      @slot;
+    }
+  }
+}
 
 @theme inline {
   /* site tokens, see CLAUDE.md */
