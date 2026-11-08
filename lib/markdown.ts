@@ -1,4 +1,17 @@
-import { agentPrompt, installCommands, intro, keyLabels, parts, sections, shortcuts, usage } from "@/lib/docs"
+import {
+  agentPrompt,
+  audioProps,
+  installCommands,
+  intro,
+  keyLabels,
+  parts,
+  type Prop,
+  sections,
+  shortcuts,
+  SKILL_INSTALL,
+  usage,
+  videoProps,
+} from "@/lib/docs"
 import { landing } from "@/lib/landing"
 
 /**
@@ -7,6 +20,16 @@ import { landing } from "@/lib/landing"
  */
 
 const fence = (code: string, lang = "tsx") => `\`\`\`${lang}\n${code}\n\`\`\``
+
+const propsTable = (component: string, props: readonly Prop[]) =>
+  [
+    `### ${component}`,
+    [
+      "| Prop | Type | Description |",
+      "| --- | --- | --- |",
+      ...props.map((p) => `| \`${p.name}\` | \`${p.type}\` | ${p.description} |`),
+    ].join("\n"),
+  ].join("\n\n")
 
 export const WHEN_TO_USE = `Use reel when a React app needs a video or audio player that keeps the native element's props, matches the app's shadcn theme, and lives in the repo as editable source. It covers MP4, WebM, MP3, captions (WebVTT), picture-in-picture, fullscreen, keyboard shortcuts and HLS streams through hls.js.
 
@@ -35,13 +58,23 @@ export function docsMarkdown(origin: string): string {
     s.streaming.description,
     fence(cmd.hls, "bash"),
     fence(usage.hls),
+    `## ${s.loader.title}`,
+    s.loader.description,
+    fence(usage.loader, "ts"),
     `## ${s.package.title}`,
     s.package.description,
     fence(cmd.package, "bash"),
     fence(usage.package),
+    `## ${s.api.title}`,
+    s.api.description,
+    propsTable("VideoPlayer", videoProps),
+    propsTable("AudioPlayer", audioProps),
     `## ${s.parts.title}`,
     s.parts.description.replace(/(components\/\S+\.tsx)/, "`$1`"),
     parts.map(([name, description]) => `- \`${name}\`: ${description}`).join("\n"),
+    `## ${s.theming.title}`,
+    s.theming.description,
+    fence(usage.theming, "css"),
     `## ${s.keyboard.title}`,
     s.keyboard.description,
     [
@@ -49,6 +82,9 @@ export function docsMarkdown(origin: string): string {
       "| --- | --- |",
       ...shortcuts.map(({ keys, action }) => `| ${keys.map((k) => keyLabels[k] ?? k).join(", ")} | ${action} |`),
     ].join("\n"),
+    `## ${s.agents.title}`,
+    s.agents.description,
+    fence(SKILL_INSTALL, "bash"),
     `## Prompt for coding agents`,
     "Paste this into an agent to install reel in a project.",
     fence(agentPrompt(origin), "text"),
@@ -96,6 +132,7 @@ export function llmsIndex(origin: string): string {
     ].join("\n"),
     `## Optional`,
     [
+      `- [Agent skill](https://github.com/SanyamPunia/reel/tree/main/skills/reel): install with \`${SKILL_INSTALL}\``,
       `- [npm package](https://www.npmjs.com/package/reel-media): reel-media, the same components as a dependency`,
       `- [Sitemap](${origin}/sitemap.xml)`,
     ].join("\n"),

@@ -46,6 +46,22 @@ import { VideoPlayer } from "@/components/ui/video-player"
 import { hlsLoader } from "@/lib/media-hls"
 
 <VideoPlayer src="https://example.com/stream.m3u8" loader={hlsLoader} />`,
+  loader: `import type { MediaSourceLoader } from "@/components/ui/media"
+
+export const dashLoader: MediaSourceLoader = (media, src) => {
+  if (!src.endsWith(".mpd")) {
+    // not a DASH source: hand it to the browser
+    media.src = src
+    return () => media.removeAttribute("src")
+  }
+  const player = attachYourDashPlayer(media, src)
+  return () => player.destroy()
+}`,
+  theming: `/* globals.css: constant across light and dark */
+:root {
+  --media-foreground: oklch(1 0 0); /* icons and text over video */
+  --media-scrim: oklch(0 0 0); /* video ground and control glass */
+}`,
   package: `/* globals.css */
 @import "tailwindcss";
 @import "reel-media/styles.css";
@@ -98,6 +114,29 @@ export const sections = {
     description:
       "Prefer a dependency over owning the source? The same components ship as reel-media, with a framework-agnostic core.",
   },
+  loader: {
+    id: "loader",
+    title: "Custom loaders",
+    description:
+      "A loader attaches a source the browser cannot play natively, such as DASH. When you pass one, reel leaves src off the element, so the loader must set media.src itself for any source it does not handle. Return a cleanup function. It runs when src changes or the player unmounts.",
+  },
+  theming: {
+    id: "theming",
+    title: "Theming",
+    description:
+      "The players read your shadcn theme tokens (background, foreground, muted, primary, border), so they follow your light and dark mode. Video controls use two more tokens that stay the same in both modes. Requires React 19 and Tailwind CSS 4.",
+  },
+  api: {
+    id: "api",
+    title: "API",
+    description: "Each player takes every native prop of the element it wraps, except controls. These are the extra props.",
+  },
+  agents: {
+    id: "agents",
+    title: "Use with agents",
+    description:
+      "Install the reel skill so your coding agent knows the components, props and pitfalls. The full docs are also plain text at /llms-full.txt.",
+  },
   parts: {
     id: "parts",
     title: "Parts",
@@ -117,13 +156,49 @@ export const parts: readonly (readonly [name: string, description: string])[] = 
   ["MediaControls", "Reveals on pointer activity, pause, or keyboard focus."],
   ["MediaSeek / MediaVolume", "Accessible sliders with scrubbing, buffering and keyboard steps."],
   ["MediaTime", "current, duration or remaining."],
-  ["Media*Button", "Play, Mute, Captions, Fullscreen, PictureInPicture, PlaybackRate."],
+  ["MediaButton", "The base button the others are built from. Use it for your own controls."],
+  [
+    "Media*Button",
+    "MediaPlayButton, MediaMuteButton, MediaCaptionsButton, MediaFullscreenButton, MediaPictureInPictureButton, MediaPlaybackRateButton.",
+  ],
   ["MediaSettings", "Speed and caption track menu."],
   ["MediaCaptions", "Renders the active cue with your styles instead of the browser's."],
   ["MediaLoading / MediaErrorMessage", "Buffering indicator and a retryable error state."],
   ["useMedia(selector)", "Subscribe to any slice of state. Re-renders only when it changes."],
   ["useMediaStore()", "Imperative access: play, seek, setVolume, setTextTrack and more."],
 ]
+
+export type Prop = { name: string; type: string; description: string }
+
+export const videoProps: readonly Prop[] = [
+  { name: "className", type: "string", description: "Classes for the <video> element itself." },
+  { name: "frameClassName", type: "string", description: "Classes for the outer frame. Use this for size, radius and placement." },
+  {
+    name: "tracks",
+    type: "VideoTrack[]",
+    description: "WebVTT caption or subtitle files: { src, label, srcLang, kind?, default? }.",
+  },
+  { name: "loader", type: "MediaSourceLoader", description: "Adapter for sources the browser cannot play natively, such as HLS." },
+  {
+    name: "metadata",
+    type: "MediaInfo",
+    description: "Title, artist, album and artwork for lock screens and OS media controls.",
+  },
+  { name: "persistKey", type: "string", description: "Remember volume, mute and speed in localStorage under this key." },
+]
+
+export const audioProps: readonly Prop[] = [
+  { name: "title", type: "ReactNode", description: "The main line beside the controls." },
+  { name: "description", type: "ReactNode", description: "The muted line after the title." },
+  { name: "artwork", type: "string", description: "Cover image beside the controls and in OS media controls." },
+  { name: "showSpeed", type: "boolean", description: "Show a playback speed toggle, for podcasts and voice notes." },
+  { name: "frameClassName", type: "string", description: "Classes for the outer frame. className targets the <audio> element." },
+  { name: "loader", type: "MediaSourceLoader", description: "Same as on VideoPlayer." },
+  { name: "metadata", type: "MediaInfo", description: "Overrides the metadata built from title, description and artwork." },
+  { name: "persistKey", type: "string", description: "Same as on VideoPlayer." },
+]
+
+export const SKILL_INSTALL = "npx skills add SanyamPunia/reel"
 
 /** Readable names for keys the page draws as icons. */
 export const keyLabels: Record<string, string> = {
