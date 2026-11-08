@@ -7,12 +7,14 @@ import type { MediaInfo } from "@/lib/media-store"
 import {
   MediaAudio,
   MediaErrorMessage,
+  MediaLoading,
   MediaMuteButton,
   MediaPlayButton,
   MediaPlaybackRateButton,
   MediaRoot,
   MediaSeek,
   MediaTime,
+  MediaVolume,
   type MediaSourceLoader,
 } from "@/components/ui/media"
 
@@ -23,6 +25,8 @@ type AudioPlayerProps = Omit<React.ComponentProps<"audio">, "controls" | "title"
   artwork?: string
   /** Show a playback speed toggle. Useful for podcasts and voice notes. */
   showSpeed?: boolean
+  /** Small labels with shortcuts over the controls on hover and focus. On by default. */
+  tooltips?: boolean
   /** Classes for the outer frame. `className` targets the <audio> element. */
   frameClassName?: string
   /** Adapter for sources the browser can't play natively, e.g. HLS. */
@@ -33,11 +37,22 @@ type AudioPlayerProps = Omit<React.ComponentProps<"audio">, "controls" | "title"
   persistKey?: string
 }
 
+const muted = "text-muted-foreground hover:text-foreground"
+
+/**
+ * The volume popover opens on hover or keyboard focus, never on a click, so the
+ * mute button keeps its one job. `has-focus-visible` rather than focus-within,
+ * so a mouse click on mute does not pin it open.
+ */
+const volumeOpen =
+  "group-hover/volume-menu:pointer-events-auto group-hover/volume-menu:translate-y-0 group-hover/volume-menu:opacity-100 group-has-focus-visible/volume-menu:pointer-events-auto group-has-focus-visible/volume-menu:translate-y-0 group-has-focus-visible/volume-menu:opacity-100"
+
 function AudioPlayer({
   title,
   description,
   artwork,
   showSpeed,
+  tooltips = true,
   className,
   frameClassName,
   loader,
@@ -55,48 +70,100 @@ function AudioPlayer({
         }
       : undefined)
 
+  const hasInfo = Boolean(title || description)
+
   return (
     <MediaRoot
       persistKey={persistKey}
       metadata={sessionInfo}
+      tooltips={tooltips}
       className={cn(
-        "flex w-full items-center gap-3 rounded-xl border bg-card p-2.5 pr-3 text-card-foreground",
+        "@container/audio grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 rounded-xl border bg-card p-2.5 pr-3 text-card-foreground",
         frameClassName
       )}
     >
       <MediaAudio className={className} loader={loader} {...props} />
 
-      {artwork ? (
-        <span className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-muted">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={artwork} alt="" className="size-full object-cover" />
-          <MediaPlayButton className="absolute inset-0 size-full rounded-none bg-foreground/0 text-background opacity-0 hover:bg-foreground/40 hover:opacity-100 focus-visible:bg-foreground/40 focus-visible:opacity-100 group-data-playing/media:bg-foreground/40 group-data-playing/media:opacity-100 [&_svg]:size-4" />
+      {/* with a title, the info stacks over the seek row and the controls
+          span both. Below 24rem the controls take the first row, then the
+          title and the seek row each get the full width */}
+      <div className={cn("flex items-center", hasInfo && "row-span-2 @max-sm/audio:row-span-1")}>
+        <span className="relative shrink-0">
+          {artwork ? (
+            /**
+             * The tile presses as one piece. Scaling the button alone pulled
+             * its scrim in from the edges and bared a band of the image. No
+             * overflow-hidden, so the play tooltip is not clipped.
+             */
+            <span className="relative block size-11 rounded-lg bg-muted transition-[scale] duration-150 ease-media motion-safe:has-[button:enabled:active]:scale-[0.96] motion-reduce:transition-none">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={artwork}
+                alt=""
+                className="size-full rounded-lg object-cover outline outline-black/10 -outline-offset-1 dark:outline-white/10"
+              />
+              <MediaPlayButton
+                tooltipAlign="start"
+                className="absolute inset-0 size-full rounded-lg motion-safe:enabled:active:scale-100 bg-media-scrim/15 text-media-foreground hover:bg-media-scrim/35 focus-visible:bg-media-scrim/35 group-data-playing/media:bg-media-scrim/35 [&_svg]:size-4 [&_svg]:drop-shadow-sm"
+              />
+            </span>
+          ) : (
+            <MediaPlayButton
+              tooltipAlign="start"
+              className="size-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 [&_svg]:size-4"
+            />
+          )}
+          {/* while the stream buffers: a ring around the round button, or a
+              spinner on the cover, since a spinning square would look broken */}
+          <MediaLoading
+            className={
+              artwork
+                ? "absolute inset-0 m-auto size-5 text-background"
+                : "absolute -inset-1 size-auto border-current/15 border-t-current text-foreground"
+            }
+          />
         </span>
-      ) : (
-        <MediaPlayButton className="size-10 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 [&_svg]:size-4" />
-      )}
-
-      <div className="flex min-w-0 grow flex-col gap-0.5">
-        {(title || description) && (
-          <div className="flex min-w-0 items-baseline gap-2 text-sm leading-5">
-            {title && <span className="truncate font-medium">{title}</span>}
-            {description && <span className="truncate text-muted-foreground">{description}</span>}
-          </div>
-        )}
-        <div className="flex items-center gap-2.5 text-muted-foreground">
-          <MediaTime className="min-w-9" />
-          <MediaSeek className="text-foreground" />
-          <MediaTime type="duration" className="min-w-9 text-right" />
-        </div>
       </div>
 
-      {showSpeed && (
-        <MediaPlaybackRateButton
-          rates={[1, 1.5, 2, 0.75]}
-          className="text-muted-foreground hover:text-foreground"
-        />
+      {hasInfo && (
+        <div className="col-start-2 flex min-w-0 items-baseline gap-2 self-end text-sm leading-5 @max-sm/audio:col-span-3 @max-sm/audio:col-start-1 @max-sm/audio:row-start-2 @max-sm/audio:pt-1">
+          {title && <span className="truncate font-medium">{title}</span>}
+          {description && <span className="truncate text-muted-foreground">{description}</span>}
+        </div>
       )}
-      <MediaMuteButton className="text-muted-foreground hover:text-foreground" />
+
+      <div
+        className={cn(
+          "col-start-2 flex items-center gap-2.5 text-muted-foreground",
+          hasInfo && "row-start-2 self-start @max-sm/audio:col-span-3 @max-sm/audio:col-start-1 @max-sm/audio:row-start-3"
+        )}
+      >
+        <MediaTime className="min-w-9" />
+        <MediaSeek className="text-foreground" />
+        <MediaTime type="duration" toggle className="min-w-9 text-right" />
+      </div>
+
+      <div className={cn("col-start-3 flex items-center gap-0.5", hasInfo && "row-span-2 row-start-1 @max-sm/audio:row-span-1")}>
+        {showSpeed && <MediaPlaybackRateButton rates={[1, 1.5, 2, 0.75]} className={muted} />}
+
+        {/* a vertical slider above mute. Fine pointers only: phones set
+            volume with their own buttons, and iOS ignores it from the page */}
+        <div className="group/volume-menu relative">
+          {/* no tooltip: the volume popover opens in the same spot */}
+          <MediaMuteButton tooltip={false} className={muted} />
+          <div
+            className={cn(
+              "pointer-events-none absolute bottom-full left-1/2 z-10 hidden -translate-x-1/2 translate-y-1 pb-2 opacity-0 pointer-fine:block",
+              "transition-[opacity,translate] duration-150 ease-media motion-reduce:transition-none",
+              volumeOpen
+            )}
+          >
+            <div className="flex h-24 w-7 justify-center rounded-full bg-popover py-3 text-popover-foreground shadow-md ring-1 ring-foreground/10">
+              <MediaVolume orientation="vertical" className="h-full" />
+            </div>
+          </div>
+        </div>
+      </div>
 
       <MediaErrorMessage className="absolute inset-0 flex-row gap-4 rounded-[inherit] bg-card/95 px-4 text-card-foreground" />
     </MediaRoot>

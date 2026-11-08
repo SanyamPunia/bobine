@@ -810,9 +810,11 @@ function MediaVolume({ orientation = "horizontal", className, ...props }: MediaV
 
 type MediaTimeProps = React.ComponentProps<"span"> & {
   type?: "current" | "duration" | "remaining"
-  /** Click to switch between elapsed and remaining time. */
+  /** Click to show remaining time and back. "remaining" swaps with elapsed. */
   toggle?: boolean
 }
+
+const timeNames = { current: "elapsed", duration: "duration", remaining: "remaining" } as const
 
 function MediaTime({ type = "current", toggle = false, className, ...props }: MediaTimeProps) {
   const [picked, setPicked] = React.useState(type)
@@ -823,18 +825,20 @@ function MediaTime({ type = "current", toggle = false, className, ...props }: Me
     return Math.floor(s.currentTime)
   })
   const text = shown === "remaining" ? `-${formatTime(value)}` : formatTime(value)
+  const other = type === "remaining" ? "current" : "remaining"
+  const next = shown === type ? other : type
 
   return (
     <span data-slot="media-time" className={cn("font-mono text-xs tabular-nums", className)} {...props}>
       {toggle ? (
         <button
           type="button"
-          aria-label={`${shown === "remaining" ? "Time remaining" : "Time elapsed"} ${formatTime(value)}`}
-          onClick={() => setPicked(shown === "remaining" ? "current" : "remaining")}
+          aria-label={`${shown === "remaining" ? "Time remaining" : shown === "duration" ? "Duration" : "Time elapsed"} ${formatTime(value)}`}
+          onClick={() => setPicked(next)}
           className="group/media-button relative cursor-pointer rounded-sm outline-none transition-colors duration-150 ease-media hover:text-current focus-visible:ring-2 focus-visible:ring-current/60"
         >
           {text}
-          <MediaTooltip label={shown === "remaining" ? "Show elapsed" : "Show remaining"} />
+          <MediaTooltip label={`Show ${timeNames[next]}`} />
         </button>
       ) : (
         text

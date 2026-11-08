@@ -41,6 +41,7 @@ npx shadcn@latest add <docs-host>/r/media-hls.json      # hlsLoader for .m3u8
 - `className` styles the media element. `frameClassName` styles the outer frame. Put size, radius and layout classes on `frameClassName`.
 - `metadata` sets the title, artist, album and artwork in OS media controls and lock screens.
 - `persistKey` remembers volume, mute and speed in localStorage.
+- `tooltips={false}` turns off the small labels with shortcuts over the controls. They are on by default.
 - `AudioPlayer` also takes `title`, `description`, `artwork` and `showSpeed`.
 
 ## Streams and loaders

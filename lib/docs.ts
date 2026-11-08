@@ -155,7 +155,7 @@ export const parts: readonly (readonly [name: string, description: string])[] = 
   ["MediaSurface", "Full-bleed click target. First tap on touch reveals controls."],
   ["MediaControls", "Reveals on pointer activity, pause, or keyboard focus."],
   ["MediaSeek / MediaVolume", "Accessible sliders with scrubbing, buffering and keyboard steps. MediaVolume takes orientation=\"vertical\" for a popover."],
-  ["MediaTime", "current, duration or remaining. toggle lets a click switch between elapsed and remaining."],
+  ["MediaTime", "current, duration or remaining. toggle lets a click switch to remaining time and back."],
   ["MediaButton", "The base button the others are built from. Use it for your own controls."],
   [
     "Media*Button",
@@ -231,6 +231,7 @@ export const audioProps: readonly Prop[] = [
   { name: "description", type: "ReactNode", description: "The muted line after the title." },
   { name: "artwork", type: "string", description: "Cover image beside the controls and in OS media controls." },
   { name: "showSpeed", type: "boolean", description: "Show a playback speed toggle, for podcasts and voice notes." },
+  { name: "tooltips", type: "boolean", description: "Same as on VideoPlayer. On by default." },
   { name: "frameClassName", type: "string", description: "Classes for the outer frame. className targets the <audio> element." },
   { name: "loader", type: "MediaSourceLoader", description: "Same as on VideoPlayer." },
   { name: "metadata", type: "MediaInfo", description: "Overrides the metadata built from title, description and artwork." },
