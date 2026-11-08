@@ -112,6 +112,24 @@ tailwind-merge reads it as a colour. Add a new size in both places.
 - `CodeBlock` highlights with `sugar-high` on the server. Shell commands
   (`prompt`) skip the highlighter.
 
+## Social metadata
+
+Every page builds its metadata with `pageMetadata()` in `lib/metadata.ts`:
+title, description, canonical URL, Open Graph and the X card. Next merges
+metadata shallowly, so a page that set `openGraph` by hand would drop the
+site name and the image. The root layout sets `metadataBase` from `SITE_URL`,
+which turns the relative canonical, og:url and image paths into absolute
+`https://bobine.fyi` URLs. Production needs `NEXT_PUBLIC_SITE_URL` set, or
+they resolve to the Vercel domain.
+
+The social card is `public/og.jpg` (1200 by 630, under X's 5MB limit), set on
+every page by the helper. It is not an `opengraph-image` file, because a page
+that sets its own `openGraph` loses an image inherited from a parent segment.
+It is deliberately minimal: the real paused player on the dark ground, with
+the orb, the wordmark and one muted line centred in its frame and the control
+bar at the bottom. Re-render it from the live player when the mark, that line
+or the controls change.
+
 ## Icon
 
 `app/icon.svg` is the mark: a soft gradient orb. It is the favicon through the
