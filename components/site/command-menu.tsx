@@ -56,10 +56,12 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
+      {/* a circle on phones, where only the icon shows; a pill with the label and
+          shortcut from `sm` up */}
       <Tooltip label="Search docs (⌘ K)">
         <Dialog.Trigger
           aria-label="Search docs"
-          className="flex cursor-pointer items-center gap-2 rounded-full bg-fill py-1 pr-1.5 pl-2.5 text-action text-text-secondary transition-all duration-150 hover:bg-fill-hover hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98] aria-expanded:bg-fill-hover"
+          className="flex size-8 cursor-pointer items-center justify-center gap-2 rounded-full bg-fill text-action sm:h-auto sm:w-auto sm:justify-start sm:py-1 sm:pr-1.5 sm:pl-2.5 text-text-secondary transition-all duration-150 hover:bg-fill-hover hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] aria-expanded:bg-fill-hover"
         >
           <MagnifyingGlassIcon aria-hidden="true" className="size-3.5" />
           <span className="hidden sm:inline">Search</span>

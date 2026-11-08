@@ -67,7 +67,7 @@ export default function Page() {
                   height. Arbitrary values: no utility draws repeating rules. */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 border-b border-stroke bg-[linear-gradient(to_bottom,var(--stroke)_1px,transparent_1px)] bg-size-[100%_1lh] [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]"
+                className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 hidden w-screen -translate-x-1/2 border-b border-stroke sm:block bg-[linear-gradient(to_bottom,var(--stroke)_1px,transparent_1px)] bg-size-[100%_1lh] [mask-image:linear-gradient(to_right,transparent,black_30%,black_70%,transparent)]"
               />
               The media player your browser should have{" "}
               <em className="font-serif text-[1.15em] font-normal">
