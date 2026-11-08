@@ -1,6 +1,6 @@
 /**
  * Every word and snippet on /examples. The page renders it and
- * lib/markdown.ts turns the same data into /examples.md, so the two never
+ * lib/markdown.ts turns the same data into /docs/examples.md, so the two never
  * drift. The live players exist in the page alone.
  */
 

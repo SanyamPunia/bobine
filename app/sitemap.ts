@@ -9,6 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: SITE_URL, priority: 1 },
     ...docPages.map((page) => ({ url: `${SITE_URL}${page.href}`, priority: 0.8 })),
-    { url: `${SITE_URL}/examples`, priority: 0.5 },
+    { url: `${SITE_URL}/docs/examples`, priority: 0.5 },
   ]
 }

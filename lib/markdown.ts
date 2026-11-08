@@ -81,7 +81,7 @@ export function docPageMarkdown(page: DocPage, origin: string): string {
   const blocks = sectionMarkdown(origin)
   const lead =
     page.href === "/docs"
-      ? [`> ${intro.title} Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`, `## Install`, fence(installCommands(`${origin}/r`).video, "bash")]
+      ? [`> Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`, `## Install`, fence(installCommands(`${origin}/r`).video, "bash")]
       : [`> ${page.description}`]
   const others = docPages
     .filter((p) => p.href !== page.href)
@@ -136,7 +136,7 @@ export function examplesMarkdown(origin: string): string {
       `# ${examplesIntro.title}`,
       `> ${examplesIntro.description} ${examplesIntro.lede}`,
       `## ${s.playground.title}`,
-      `${s.playground.description} Open [the examples page](${origin}/examples) to use it.`,
+      `${s.playground.description} Open [the examples page](${origin}/docs/examples) to use it.`,
       `## ${s.video.title}`,
       s.video.description,
       ...Object.values(videoRecipes).flatMap(recipeMarkdown),
@@ -157,7 +157,7 @@ export function llmsIndex(origin: string): string {
       ...docPages.map((page) => `- [${page.title}](${origin}${page.md}): ${page.description}`),
       `- [Full docs in one file](${origin}/llms-full.txt): every page above, for loading into context`,
       `- [Overview](${origin}/index.md): what reel is and what it does`,
-      `- [Examples](${origin}/examples.md): recipes for common jobs, each with its code`,
+      `- [Examples](${origin}/docs/examples.md): recipes for common jobs, each with its code`,
     ].join("\n"),
     `## Registry`,
     [

@@ -9,7 +9,7 @@ import { docPages } from "@/lib/docs"
  */
 const markdown: Record<string, string> = {
   "/": "/index.md",
-  "/examples": "/examples.md",
+  "/docs/examples": "/docs/examples.md",
   ...Object.fromEntries(docPages.map((page) => [page.href, page.md])),
 }
 
@@ -25,4 +25,4 @@ export function proxy(request: NextRequest) {
 }
 
 // a static list, because Next reads the matcher at build time
-export const config = { matcher: ["/", "/docs", "/docs/guides", "/docs/reference", "/examples"] }
+export const config = { matcher: ["/", "/docs", "/docs/guides", "/docs/reference", "/docs/examples"] }

@@ -15,7 +15,6 @@ import reelPackage from "@/packages/reel/package.json"
  */
 const links = [
   { href: "/docs", label: "Docs" },
-  { href: "/examples", label: "Examples" },
 ]
 
 const link =

@@ -5,13 +5,9 @@ import { MediaPlayButton, MediaRoot, MediaSeek, MediaSurface, MediaVideo } from 
 import { VideoPlayer } from "@/components/ui/video-player"
 import { CodeBlock } from "@/components/site/code-block"
 import { Demo } from "@/components/site/demo"
-import { DocsNav } from "@/components/site/docs-nav"
 import { PageRail } from "@/components/site/page-rail"
 import { Playground } from "@/components/site/playground"
 import { Section } from "@/components/site/section"
-import { SiteFooter } from "@/components/site/site-footer"
-import { SiteHeader } from "@/components/site/site-header"
-import { TooltipProvider } from "@/components/site/tooltip"
 import { TrackList } from "@/components/site/track-list"
 import { CONTENT_WIDTH } from "@/lib/constants"
 import { audioRecipes, examplesIntro, examplesSections as s, videoRecipes, type Recipe } from "@/lib/examples"
@@ -20,7 +16,7 @@ import { cn } from "@/lib/utils"
 export const metadata: Metadata = {
   title: examplesIntro.title,
   description: examplesIntro.description,
-  alternates: { types: { "text/markdown": "/examples.md" } },
+  alternates: { types: { "text/markdown": "/docs/examples.md" } },
 }
 
 const tracks = [{ src: "/media/flower.en.vtt", label: "English", srcLang: "en", default: true }]
@@ -47,10 +43,8 @@ export default function Page() {
   const a = audioRecipes
 
   return (
-    <TooltipProvider delay={300}>
-      <SiteHeader current="/examples" />
-      {/* the docs sidebar lists this page, so it stays on screen here too */}
-      <DocsNav />
+    <>
+      {/* the docs layout supplies the header, sidebar and footer */}
       <PageRail />
 
       <main id="content" className={cn("mx-auto flex w-full flex-col gap-20 px-5 pt-10 pb-24 md:pt-16", CONTENT_WIDTH)}>
@@ -117,7 +111,6 @@ export default function Page() {
         </Section>
       </main>
 
-      <SiteFooter />
-    </TooltipProvider>
+    </>
   )
 }
