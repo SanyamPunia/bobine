@@ -184,7 +184,9 @@ markdown drift apart. Only the live demos exist in the pages alone.
   `page.tsx`, its `.md` route, and its path in the proxy `matcher`, which Next
   reads at build time and so cannot be derived.
 - `DocsNav` takes the left margin and `PageRail` the right, both from the
-  `rail` breakpoint. Below it, `DocsNav` becomes a row of pills.
+  `rail` breakpoint. Below it, a bar naming the current page opens the same
+  list as a left drawer (Base UI `Dialog`). Both render one `NavLinks`, so
+  the two lists cannot drift.
 - Code blocks are a double bezel (`fill` tray, `bg` panel with
   `--shadow-well`). The label shows a language mark from `public/brands/`.
 
@@ -210,8 +212,10 @@ content for agents. Add those when real examples land.
 
 The header holds the site's sections (Docs, Examples), search and a GitHub
 icon, nothing else. Registry is in the footer and search, npm only in search.
-Below `sm` the version pill and the GitHub icon hide, so a phone shows the
-logo, two links and the search icon. Anything hidden on phones must stay
+Below `sm` the version pill, the GitHub icon and the divider hide, and the
+search trigger becomes a 32px circle, so a phone shows the logo, two links
+and search. Decorative lines (column guides, title rules, header divider)
+are all off below `sm`. Anything hidden on phones must stay
 reachable through search.
 
 The docs sidebar lists Examples below a divider (`extras` in `DocsNav`), and
