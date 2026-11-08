@@ -37,7 +37,7 @@ block above is managed by `next dev`; leave it as it is.
 ## Directories
 
 ```
-app/                 landing (`/`), docs (`/docs`, `/docs/guides`, `/docs/reference`), root layout, icons, the one stylesheet
+app/                 landing (`/`), docs (`/docs`, `/docs/guides`, `/docs/reference`, `/docs/examples`), root layout, icons, the one stylesheet
 components/ui/       registry components. These ship to consumers.
 components/site/     docs-page chrome. Never shipped.
 lib/                 media store and HLS loader (shipped), plus site helpers and page content
@@ -136,10 +136,10 @@ markdown drift apart. Only the live demos exist in the pages alone.
 | --- | --- |
 | `/llms.txt` | Index per llmstxt.org: when to use reel, then every doc and registry link |
 | `/llms-full.txt` | The full docs as one file |
-| `/docs.md`, `/index.md`, `/examples.md` | Markdown copies of the pages, `noindex` |
+| `/docs.md`, `/index.md`, `/docs/examples.md` | Markdown copies of the pages, `noindex` |
 | `/sitemap.xml`, `/robots.txt` | Generated from `app/sitemap.ts` and `app/robots.ts` |
 
-- `proxy.ts` rewrites `/`, the docs pages and `/examples` to their markdown
+- `proxy.ts` rewrites `/`, the docs pages and `/docs/examples` to their markdown
   copy when the request sends `Accept: text/markdown`. The HTML responses
   cannot carry `Vary: Accept`, because Next replaces Vary on App Router pages.
 - Absolute URLs use `SITE_URL` (see Docs page above). Set
@@ -209,19 +209,25 @@ and `body`).
 
 ## Examples page
 
-`/examples` has a playground and recipes. Its words and snippets live in
-`lib/examples.ts`, which the page, `/examples.md`, llms.txt and search all
+`/docs/examples` has a playground and recipes. It lives under the docs
+layout, so the layout supplies its header, sidebar and footer. Its words and
+snippets live in `lib/examples.ts`, which the page, `/docs/examples.md`,
+llms.txt and search all
 read, so a new recipe needs an entry there and its live player in the page.
 The playground (`components/site/playground.tsx`) builds its code from the
 same toggles it renders, so the two cannot disagree.
 
-The header holds the site's sections (Docs, Examples), search and a GitHub
-icon, nothing else. Registry is in the footer and search, npm only in search.
+The header holds Docs, search and a GitHub icon, nothing else. Examples is a
+docs page, reached from the sidebar and search. Registry is in the sidebar
+and search, npm only in search.
 Below `sm` the version pill, the GitHub icon and the divider hide, and the
-search trigger becomes a 32px circle, so a phone shows the logo, two links
-and search. Decorative lines (column guides, title rules, header divider)
+search trigger becomes a 32px circle, so a phone shows the logo, Docs and
+search. Decorative lines (column guides, title rules, header divider)
 are all off below `sm`. Anything hidden on phones must stay
 reachable through search.
 
-The docs sidebar lists Examples below a divider (`extras` in `DocsNav`), and
-`/examples` renders `DocsNav` too, so the sidebar does not vanish there.
+The docs sidebar lists Examples in the Docs group, after Reference (`extras`
+in `DocsNav`). A "Resources" group closes the sidebar: `registry.json`,
+`llms.txt` and `llms-full.txt`, which open in a new tab. The footer holds
+only the credit and the licence. The landing page has no sidebar, so all
+three files are also in search.
