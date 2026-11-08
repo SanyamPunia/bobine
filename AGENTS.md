@@ -11,8 +11,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # reel
 
 Drop-in media players for React, distributed as a shadcn registry and as the
-`reel-media` package. `app/page.tsx` is the landing page and
-`app/docs/page.tsx` is the docs and example page.
+`reel-media` package. `app/page.tsx` is the landing page. The docs are three
+pages under `app/docs/` (Getting started, Guides, Reference) sharing
+`app/docs/layout.tsx`.
 
 This file is the one source of project rules for every coding agent.
 `CLAUDE.md` only imports it, so edit the rules here and nowhere else. The
@@ -36,14 +37,14 @@ block above is managed by `next dev`; leave it as it is.
 ## Directories
 
 ```
-app/                 landing (`/`), docs (`/docs`), root layout, icons, the one stylesheet
+app/                 landing (`/`), docs (`/docs`, `/docs/guides`, `/docs/reference`), root layout, icons, the one stylesheet
 components/ui/       registry components. These ship to consumers.
 components/site/     docs-page chrome. Never shipped.
 lib/                 media store and HLS loader (shipped), plus site helpers and page content
 proxy.ts             serves markdown at / and /docs for Accept: text/markdown
 packages/reel/       the npm package build
 skills/reel/         the agent skill, installed with `npx skills add SanyamPunia/reel`. Update it when the API changes
-public/brands/       third-party marks from svgl.app (OpenAI, Claude) for the page actions menu
+public/brands/       third-party marks from svgl.app: OpenAI and Claude (page actions), TypeScript, CSS and Bash (code block labels), GitHub (header)
 public/team/         author avatars for the footer credit, 96px JPEGs cropped to the face
 public/media/        demo video, captions and audio
 ```
@@ -173,3 +174,45 @@ markdown drift apart. Only the live demos exist in the pages alone.
   `overflow-x: clip` (not `hidden`, which would break the sticky header).
 - The header shows the version from `packages/reel/package.json`. Bump it
   there on release. Nothing else stores the version.
+
+## Docs structure
+
+- `docPages` in `lib/docs.ts` is the page list: href, markdown path, title,
+  description and section ids. The sidebar (`DocsNav`), the pager
+  (`DocsPager`), the `.md` routes, the proxy map, the sitemap, llms.txt and
+  the search index all read it. A new page needs an entry there, its
+  `page.tsx`, its `.md` route, and its path in the proxy `matcher`, which Next
+  reads at build time and so cannot be derived.
+- `DocsNav` takes the left margin and `PageRail` the right, both from the
+  `rail` breakpoint. Below it, `DocsNav` becomes a row of pills.
+- Code blocks are a double bezel (`fill` tray, `bg` panel with
+  `--shadow-well`). The label shows a language mark from `public/brands/`.
+
+## Search
+
+`CommandMenu` (Cmd+K / Ctrl+K, and the header button) uses `cmdk` for
+filtering inside Base UI's `Dialog`, not cmdk's built-in Radix dialog, so the
+site keeps one dialog system. `searchItems()` in `lib/search.ts` builds the
+index on the server from `docPages`, so new sections appear without changes.
+The filter is word matching, not cmdk's fuzzy default: pages match on their
+title only, because a page description names every topic and outranked the
+section the reader typed. The backdrop uses the `scrim` token, 30% black in
+light and 60% in dark.
+
+Overscroll bounce is off site-wide (`overscroll-behavior: none` on `html`
+and `body`).
+
+## Examples page
+
+`/examples` is a placeholder with an empty state and no examples yet. It is in
+the sitemap but not in llms.txt or the markdown routes, since it has no
+content for agents. Add those when real examples land.
+
+The header holds the site's sections (Docs, Examples), search and a GitHub
+icon, nothing else. Registry is in the footer and search, npm only in search.
+Below `sm` the version pill and the GitHub icon hide, so a phone shows the
+logo, two links and the search icon. Anything hidden on phones must stay
+reachable through search.
+
+The docs sidebar lists Examples below a divider (`extras` in `DocsNav`), and
+`/examples` renders `DocsNav` too, so the sidebar does not vanish there.
