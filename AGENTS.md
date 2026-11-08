@@ -199,7 +199,9 @@ markdown drift apart. Only the live demos exist in the pages alone.
 filtering inside Base UI's `Dialog`, not cmdk's built-in Radix dialog, so the
 site keeps one dialog system. `searchItems()` in `lib/search.ts` builds the
 index on the server from `docPages`, so new sections appear without changes.
-The filter is word matching, not cmdk's fuzzy default: pages match on their
+The palette is a double bezel like the code blocks: a `fill` tray with an
+inset panel (`--shadow-well`), lifted by `--shadow-overlay`, with framed icon
+tiles and a key hint strip in the tray. The filter is word matching, not cmdk's fuzzy default: pages match on their
 title only, because a page description names every topic and outranked the
 section the reader typed. The backdrop uses the `scrim` token, 30% black in
 light and 60% in dark.

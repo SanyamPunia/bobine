@@ -4,7 +4,15 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Command } from "cmdk"
 import { Dialog } from "@base-ui/react/dialog"
-import { ArrowSquareOutIcon, FileTextIcon, HashIcon, MagnifyingGlassIcon } from "@phosphor-icons/react"
+import {
+  ArrowDownIcon,
+  ArrowSquareOutIcon,
+  ArrowUpIcon,
+  FileTextIcon,
+  HashIcon,
+  KeyReturnIcon,
+  MagnifyingGlassIcon,
+} from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import type { SearchItem } from "@/lib/search"
@@ -27,6 +35,15 @@ function filter(value: string, search: string, keywords?: string[]): number {
   const all = [title, ...(keywords ?? [])].join(" ").toLowerCase()
   if (!words.every((word) => all.includes(word))) return 0
   return words.every((word) => title.includes(word)) ? 1 : 0.5
+}
+
+/* one key in the hint strip under the results */
+function Key({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="inline-flex h-5 min-w-5 items-center justify-center rounded-md bg-bg px-1 font-mono text-meta text-text-muted shadow-frame">
+      {children}
+    </kbd>
+  )
 }
 
 /**
@@ -99,9 +116,19 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
             chose.current = false
             return restore
           }}
-          className="fixed top-[15vh] left-1/2 z-50 flex max-h-[min(30rem,70svh)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl bg-popover shadow-frame transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-[0.98] motion-safe:data-starting-style:scale-[0.98]">
+          className="fixed top-[15vh] left-1/2 z-50 flex max-h-[min(30rem,70svh)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-3xl bg-fill p-1 shadow-overlay transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-[0.98] motion-safe:data-starting-style:scale-[0.98]">
           <Dialog.Title className="sr-only">Search docs</Dialog.Title>
-          <Command loop filter={filter} className="flex min-h-0 flex-col">
+          {/**
+           * A double bezel, like the code blocks: a `fill` tray holds the hint
+           * strip, and the search sits in an inset panel. The tray's
+           * `rounded-3xl` is the panel's `rounded-2xl` plus the 4px gap, so the
+           * corners stay concentric.
+           */}
+          <Command
+            loop
+            filter={filter}
+            className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl bg-popover shadow-well"
+          >
             <div className="flex items-center gap-2.5 border-b border-stroke-soft px-4">
               <MagnifyingGlassIcon aria-hidden="true" className="size-4 shrink-0 text-text-muted" />
               {/* no focus ring: the open palette is itself the focused surface,
@@ -111,7 +138,6 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
                 placeholder="Search pages and sections"
                 className="h-12 w-full bg-transparent text-body text-text-primary outline-none placeholder:text-body placeholder:text-text-muted"
               />
-              <kbd className="shrink-0 rounded-md bg-fill px-1.5 font-mono text-meta text-text-muted">esc</kbd>
             </div>
             <Command.List className="min-h-0 overflow-y-auto overscroll-contain p-1.5 **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2.5 **:[[cmdk-group-heading]]:pb-1.5 **:[[cmdk-group-heading]]:text-meta **:[[cmdk-group-heading]]:text-text-muted">
               <Command.Empty className="px-2.5 py-8 text-center text-action text-text-muted">No results</Command.Empty>
@@ -129,7 +155,9 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
                           onSelect={() => go(item)}
                           className="flex cursor-pointer items-center gap-3 rounded-lg px-2.5 py-2 select-none data-[selected=true]:bg-fill-hover"
                         >
-                          <Icon aria-hidden="true" className="size-4 shrink-0 text-text-muted" />
+                          <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-surface text-text-muted shadow-frame">
+                            <Icon aria-hidden="true" className="size-3.5" />
+                          </span>
                           <span className="flex min-w-0 flex-col">
                             <span className="truncate text-action text-text-primary">{item.title}</span>
                             <span className="truncate text-meta text-text-muted">{item.hint}</span>
@@ -141,6 +169,27 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
               })}
             </Command.List>
           </Command>
+          <div aria-hidden="true" className="flex items-center gap-4 px-3 pt-2 pb-1.5 text-meta text-text-muted">
+            <span className="flex items-center gap-1.5">
+              <Key>
+                <ArrowUpIcon className="size-3" />
+              </Key>
+              <Key>
+                <ArrowDownIcon className="size-3" />
+              </Key>
+              navigate
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Key>
+                <KeyReturnIcon className="size-3" />
+              </Key>
+              open
+            </span>
+            <span className="ml-auto flex items-center gap-1.5">
+              <Key>esc</Key>
+              close
+            </span>
+          </div>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>

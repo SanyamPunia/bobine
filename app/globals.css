@@ -97,6 +97,15 @@
   --shadow-well: 0 0 0 1px var(--stroke), inset 0 1px 2px rgb(0 0 0 / 0.06);
 
   /*
+   * A floating surface above a scrim, such as the command menu. The stroke
+   * edge matches every border, and two black-alpha casts lift it off the page:
+   * a wide soft one for height and a short one for contact.
+   */
+  --shadow-overlay:
+    0 0 0 1px var(--stroke), 0 24px 48px -12px rgb(0 0 0 / 0.35),
+    0 8px 16px -8px rgb(0 0 0 / 0.15);
+
+  /*
    * The rail is 12rem wide and sits 16rem clear of the column's half width.
    * With a 40rem column its left edge is 36rem from centre, so the viewport
    * needs 72rem plus the page gutter before the rail fits.
