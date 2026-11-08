@@ -32,8 +32,18 @@ function RecipeBlock({ recipe, bleed, children }: { recipe: Recipe; bleed?: bool
         </h3>
         <p className="text-action text-pretty text-text-secondary">{recipe.description}</p>
       </div>
-      <Demo bleed={bleed}>{children}</Demo>
-      <CodeBlock code={recipe.code} />
+
+      {/**
+       * One card per example: the live player on top, its code below, split by
+       * a single border and the change of tone. The card clips both, so the
+       * stage and the code tray drop their own radius and shadow.
+       */}
+      <div className="overflow-hidden rounded-2xl shadow-frame">
+        <Demo bleed={bleed} className="rounded-none shadow-none">
+          {children}
+        </Demo>
+        <CodeBlock code={recipe.code} className="rounded-none border-t border-stroke shadow-none" />
+      </div>
     </article>
   )
 }
