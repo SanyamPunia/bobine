@@ -1,4 +1,5 @@
 import { docPages, sections } from "@/lib/docs"
+import { audioRecipes, examplesIntro, examplesSections, videoRecipes } from "@/lib/examples"
 
 export type SearchItem = {
   group: "Pages" | "Sections" | "Links"
@@ -37,6 +38,32 @@ export function searchItems(): SearchItem[] {
     }))
   )
 
+  const examplesPage: SearchItem = {
+    group: "Pages",
+    title: examplesIntro.title,
+    hint: examplesIntro.description,
+    href: "/examples",
+    keywords: [],
+  }
+
+  /* the examples page's sections, then each recipe on it */
+  const exampleItems: SearchItem[] = [
+    ...Object.values(examplesSections).map((section) => ({
+      group: "Sections" as const,
+      title: section.title,
+      hint: examplesIntro.title,
+      href: `/examples#${section.id}`,
+      keywords: [section.description, examplesIntro.title],
+    })),
+    ...[...Object.values(videoRecipes), ...Object.values(audioRecipes)].map((recipe) => ({
+      group: "Sections" as const,
+      title: recipe.title,
+      hint: examplesIntro.title,
+      href: `/examples#${recipe.id}`,
+      keywords: [recipe.description, "example", "recipe"],
+    })),
+  ]
+
   const links: SearchItem[] = [
     { group: "Links", title: "Registry", hint: "registry.json", href: "/r/registry.json", keywords: ["shadcn", "install"], external: true },
     { group: "Links", title: "npm", hint: "reel-media", href: "https://www.npmjs.com/package/reel-media", keywords: ["package", "install"], external: true },
@@ -44,5 +71,5 @@ export function searchItems(): SearchItem[] {
     { group: "Links", title: "llms.txt", hint: "Docs index for agents", href: "/llms.txt", keywords: ["ai", "agent", "markdown"], external: true },
   ]
 
-  return [...pages, ...sectionItems, ...links]
+  return [...pages, examplesPage, ...sectionItems, ...exampleItems, ...links]
 }

@@ -125,8 +125,8 @@ changes.
 
 ## Content source
 
-`lib/docs.ts` and `lib/landing.ts` hold every word and snippet the two pages
-show. The pages render them, and `lib/markdown.ts` turns the same data into
+`lib/docs.ts`, `lib/landing.ts` and `lib/examples.ts` hold every word and
+snippet the pages show. The pages render them, and `lib/markdown.ts` turns the same data into
 markdown. Edit copy there, never inline in a page, or the HTML and the
 markdown drift apart. Only the live demos exist in the pages alone.
 
@@ -136,12 +136,12 @@ markdown drift apart. Only the live demos exist in the pages alone.
 | --- | --- |
 | `/llms.txt` | Index per llmstxt.org: when to use reel, then every doc and registry link |
 | `/llms-full.txt` | The full docs as one file |
-| `/docs.md`, `/index.md` | Markdown copies of the two pages, `noindex` |
+| `/docs.md`, `/index.md`, `/examples.md` | Markdown copies of the pages, `noindex` |
 | `/sitemap.xml`, `/robots.txt` | Generated from `app/sitemap.ts` and `app/robots.ts` |
 
-- `proxy.ts` rewrites `/` and `/docs` to their markdown copy when the request
-  sends `Accept: text/markdown`. The HTML responses cannot carry
-  `Vary: Accept`, because Next replaces Vary on App Router pages.
+- `proxy.ts` rewrites `/`, the docs pages and `/examples` to their markdown
+  copy when the request sends `Accept: text/markdown`. The HTML responses
+  cannot carry `Vary: Accept`, because Next replaces Vary on App Router pages.
 - Absolute URLs use `SITE_URL` (see Docs page above). Set
   `NEXT_PUBLIC_SITE_URL` on the host if the domain is not Vercel's production
   domain.
@@ -209,9 +209,11 @@ and `body`).
 
 ## Examples page
 
-`/examples` is a placeholder with an empty state and no examples yet. It is in
-the sitemap but not in llms.txt or the markdown routes, since it has no
-content for agents. Add those when real examples land.
+`/examples` has a playground and recipes. Its words and snippets live in
+`lib/examples.ts`, which the page, `/examples.md`, llms.txt and search all
+read, so a new recipe needs an entry there and its live player in the page.
+The playground (`components/site/playground.tsx`) builds its code from the
+same toggles it renders, so the two cannot disagree.
 
 The header holds the site's sections (Docs, Examples), search and a GitHub
 icon, nothing else. Registry is in the footer and search, npm only in search.
