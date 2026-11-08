@@ -42,8 +42,12 @@ export function SiteFooter() {
             </span>
           ))}
         </p>
-        <nav aria-label="Project" className="flex items-center gap-1.5">
+        <nav aria-label="Project" className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
           <span>MIT licensed</span>
+          {dot}
+          <a href="/r/registry.json" className={cn(link, "font-mono")}>
+            registry.json
+          </a>
           {dot}
           <a href="/llms.txt" className={cn(link, "font-mono")}>
             llms.txt

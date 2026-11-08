@@ -2,13 +2,17 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import { CONTENT_WIDTH } from "@/lib/constants"
+import { searchItems } from "@/lib/search"
+import { CommandMenu } from "@/components/site/command-menu"
+import { Tooltip } from "@/components/site/tooltip"
 // the published package's version, so the header always shows what ships
 import reelPackage from "@/packages/reel/package.json"
 
+// the site's sections only. Registry and npm live in the command menu and the
+// footer, so the header stays at two links, search and the repo
 const links = [
-  { href: "/docs", label: "Docs", route: true },
-  { href: "/r/registry.json", label: "Registry" },
-  { href: "https://www.npmjs.com/package/reel-media", label: "npm" },
+  { href: "/docs", label: "Docs" },
+  { href: "/examples", label: "Examples" },
 ]
 
 const link =
@@ -36,27 +40,48 @@ export function SiteHeader({ current }: { current?: string }) {
             <img src="/icon.svg" alt="" draggable={false} className="size-5 select-none" />
             reel
           </Link>
-          <span className="rounded-full bg-fill px-1.5 py-px font-mono text-meta text-text-muted">
+          <span className="hidden rounded-full bg-fill px-1.5 py-px font-mono text-meta text-text-muted sm:inline">
             v{reelPackage.version}
           </span>
         </div>
-        <nav aria-label="Main">
-          <ul className="flex items-center gap-5">
-            {links.map((item) => (
-              <li key={item.href}>
-                {item.route ? (
-                  <Link href={item.href} aria-current={current === item.href ? "page" : undefined} className={link}>
+        <div className="flex items-center gap-4 sm:gap-5">
+          <nav aria-label="Main">
+            <ul className="flex items-center gap-4 sm:gap-5">
+              {links.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={current?.startsWith(item.href) ? "page" : undefined}
+                    className={link}
+                  >
                     {item.label}
                   </Link>
-                ) : (
-                  <a href={item.href} className={link}>
-                    {item.label}
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </nav>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <span aria-hidden="true" className="h-4 w-px bg-stroke" />
+          <div className="flex items-center gap-1.5">
+            <CommandMenu items={searchItems()} />
+            {/* hidden on phones, where it does not fit; GitHub is in search */}
+            <Tooltip label="GitHub repository">
+              <a
+                href="https://github.com/SanyamPunia/reel"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="GitHub repository"
+                className="hidden size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-all duration-150 hover:bg-fill hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98] sm:grid"
+              >
+                {/* svgl's GitHub mark as a mask, so it takes the text colour */}
+                <span
+                  aria-hidden="true"
+                  className="size-4 bg-current"
+                  style={{ mask: "url(/brands/github.svg) center / contain no-repeat" }}
+                />
+              </a>
+            </Tooltip>
+          </div>
+        </div>
       </header>
     </div>
   )
