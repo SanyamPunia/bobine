@@ -41,6 +41,7 @@ app/                 landing (`/`), docs (`/docs`, `/docs/guides`, `/docs/refere
 components/ui/       registry components. These ship to consumers.
 components/site/     docs-page chrome. Never shipped.
 lib/                 media store and HLS loader (shipped), plus site helpers and page content
+hooks/               React hooks for the site (`useCopy`, `useIsApple`). Never shipped; the players' hooks stay in `components/ui/media.tsx`
 proxy.ts             serves markdown at / and /docs for Accept: text/markdown
 packages/reel/       the npm package build
 skills/reel/         the agent skill, installed with `npx skills add SanyamPunia/reel`. Update it when the API changes
@@ -104,6 +105,8 @@ tailwind-merge reads it as a colour. Add a new size in both places.
 - Absolute URLs come from `SITE_URL` in `lib/site.ts`, fixed at build time.
   Never read the request host in a page: it makes the page dynamic, which
   disables prefetch and makes every click wait on a server render.
+- Every page's `<main>` carries `id="content"`. The root layout's "Skip to
+  content" link targets it, past the header and the docs sidebar.
 - `SiteHeader` takes `current`, the href of the page rendering it, to mark
   the active link.
 - `CodeBlock` highlights with `sugar-high` on the server. Shell commands
