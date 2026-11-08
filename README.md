@@ -30,6 +30,14 @@ Full docs, live demos, parts and keyboard shortcuts are at `/docs`. Package deta
 
 ## For agents
 
+Install the skill so your coding agent knows the components, props and common mistakes:
+
+```bash
+npx skills add SanyamPunia/reel
+```
+
+The skill lives in [skills/reel](skills/reel/SKILL.md). The site also serves:
+
 - `/llms.txt`: index of the docs and registry
 - `/llms-full.txt`: the full docs in one file
 - `/docs.md`: the docs page as Markdown
