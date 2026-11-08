@@ -5,6 +5,7 @@ import { Menu } from "@base-ui/react/menu"
 import { ArrowSquareOutIcon, CaretDownIcon, CopyIcon, FileTextIcon, RobotIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
+import { useCopy } from "@/hooks/use-copy"
 import { Button } from "@/components/ui/button"
 import { CopySwapIcon } from "@/components/site/copy-swap-icon"
 import { MorphLabel } from "@/components/site/morph-label"
@@ -50,8 +51,8 @@ function ItemBody({ icon, title, hint, external }: { icon: React.ReactNode; titl
  * The docs page's agent actions, as one small split button beside the title:
  * "Copy page" on the left, the rest in a menu. It matches the pattern most
  * docs sites use, and it keeps the actions from competing with the page title.
+ * `mdPath` is this page's markdown copy, such as "/docs/guides.md".
  */
-/** `mdPath` is this page's markdown copy, such as "/docs/guides.md". */
 export function PageActions({
   markdown,
   prompt,
@@ -63,22 +64,7 @@ export function PageActions({
   origin: string
   mdPath: string
 }) {
-  const [copied, setCopied] = React.useState(false)
-  const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined)
-
-  React.useEffect(() => () => clearTimeout(timer.current), [])
-
-  const copy = async (value: string) => {
-    try {
-      await navigator.clipboard.writeText(value)
-    } catch {
-      // clipboard blocked by permissions or an insecure context, nothing to recover
-      return
-    }
-    setCopied(true)
-    clearTimeout(timer.current)
-    timer.current = setTimeout(() => setCopied(false), 1500)
-  }
+  const { copied, copy } = useCopy()
 
   const ask = encodeURIComponent(`Read ${origin}${mdPath} so I can ask questions about reel, the React media player.`)
 
@@ -111,7 +97,7 @@ export function PageActions({
         </Tooltip>
         <Menu.Portal>
           <Menu.Positioner align="end" sideOffset={6} collisionPadding={12} className="z-50">
-            <Menu.Popup className="flex w-64 origin-(--transform-origin) flex-col rounded-xl bg-popover p-1 shadow-frame transition-[opacity,transform] duration-150 ease-media data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
+            <Menu.Popup className="flex w-64 origin-(--transform-origin) flex-col rounded-xl bg-popover p-1 shadow-frame transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-95 motion-safe:data-starting-style:scale-95">
               <Menu.Item className={item} onClick={() => copy(markdown)}>
                 <ItemBody icon={<CopyIcon aria-hidden="true" className={glyph} />} title="Copy page" hint="This page as Markdown for LLMs" />
               </Menu.Item>

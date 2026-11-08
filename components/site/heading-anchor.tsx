@@ -1,10 +1,10 @@
 "use client"
 
-import * as React from "react"
 import { CheckIcon, HashIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { isPlainClick, scrollToSection } from "@/lib/scroll"
+import { useCopy } from "@/hooks/use-copy"
 import { swapIcon } from "@/components/site/copy-swap-icon"
 import { Tooltip } from "@/components/site/tooltip"
 
@@ -18,10 +18,7 @@ import { Tooltip } from "@/components/site/tooltip"
  * because the scroll moves the heading out from under the pointer.
  */
 export function HeadingAnchor({ id }: { id: string }) {
-  const [copied, setCopied] = React.useState(false)
-  const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined)
-
-  React.useEffect(() => () => clearTimeout(timer.current), [])
+  const { copied, copy } = useCopy()
 
   return (
     <Tooltip label={copied ? "Link copied" : "Copy link to section"}>
@@ -30,14 +27,7 @@ export function HeadingAnchor({ id }: { id: string }) {
         aria-label={copied ? "Link copied" : "Copy link to this section"}
         onClick={(event) => {
           const url = `${window.location.origin}${window.location.pathname}#${id}`
-          navigator.clipboard
-            .writeText(url)
-            .then(() => {
-              setCopied(true)
-              clearTimeout(timer.current)
-              timer.current = setTimeout(() => setCopied(false), 1500)
-            })
-            .catch(() => {})
+          copy(url)
           if (isPlainClick(event) && scrollToSection(id)) event.preventDefault()
         }}
         className={cn(
