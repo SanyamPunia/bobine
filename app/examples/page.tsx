@@ -45,7 +45,7 @@ export default function Page() {
             </h2>
             <p className="text-action text-text-secondary">The first ones are on the way. The docs cover every part until then.</p>
           </div>
-          <Link href="/docs" className={cn(buttonVariants({ variant: "outline" }), "cursor-pointer active:scale-[0.98]")}>
+          <Link href="/docs" className={cn(buttonVariants({ variant: "outline" }), "cursor-pointer motion-safe:active:scale-[0.98]")}>
             Read the docs
             <ArrowRightIcon data-icon="inline-end" aria-hidden="true" />
           </Link>

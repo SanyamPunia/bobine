@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { docPages, type DocPage } from "@/lib/docs"
 
 const card =
-  "group flex cursor-pointer flex-col gap-1 rounded-xl bg-surface p-4 shadow-frame transition-all duration-150 hover:bg-fill focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98]"
+  "group flex cursor-pointer flex-col gap-1 rounded-xl bg-surface p-4 shadow-frame transition-all duration-150 hover:bg-fill focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98]"
 
 /** Previous and next docs page, in the order of `docPages`. */
 export function DocsPager({ current }: { current: DocPage["href"] }) {
