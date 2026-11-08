@@ -216,7 +216,9 @@ layout, so the layout supplies its header, sidebar and footer. Its words and
 snippets live in `lib/examples.ts`, which the page, `/docs/examples.md`,
 llms.txt and search all
 read, so a new recipe needs an entry there and its live player in the page.
-The playground (`components/site/playground.tsx`) builds its code from the
+Each recipe is one card: the live player on top and its code below, split by
+a single border and the change of tone. The card clips both, so `Demo` and
+`CodeBlock` drop their own radius and shadow there. The playground (`components/site/playground.tsx`) builds its code from the
 same toggles it renders, so the two cannot disagree.
 
 The header holds Docs, search and a GitHub icon, nothing else. Examples is a
