@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon, HashIcon } from "lucide-react"
+import { CheckIcon, HashIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { isPlainClick, scrollToSection } from "@/lib/scroll"

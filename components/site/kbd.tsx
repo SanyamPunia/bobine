@@ -1,8 +1,10 @@
-import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon, type LucideIcon } from "lucide-react"
+// server component, so the SSR entry: the main one pulls in createContext
+import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon } from "@phosphor-icons/react/dist/ssr"
+import type { Icon } from "@phosphor-icons/react"
 
 import { keyLabels } from "@/lib/docs"
 
-const icons: Record<string, LucideIcon> = {
+const icons: Record<string, Icon> = {
   ArrowLeft: ArrowLeftIcon,
   ArrowRight: ArrowRightIcon,
   ArrowUp: ArrowUpIcon,

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { CheckIcon, CopyIcon } from "lucide-react"
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { Tooltip } from "@/components/site/tooltip"
