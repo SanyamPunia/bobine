@@ -417,16 +417,25 @@ function MediaPictureInPictureButton({ onClick, ...props }: MediaButtonProps) {
 function MediaPlaybackRateButton({
   rates = [1, 1.25, 1.5, 2, 0.75],
   className,
+  style,
   onClick,
   ...props
 }: MediaButtonProps & { rates?: number[] }) {
   const store = useMediaStore()
   const rate = useMedia((s) => s.playbackRate)
+
+  /**
+   * Sized for the longest label, so cycling 1x to 0.75x never moves the
+   * controls beside it. The font is mono, so characters measure exactly. A
+   * variable rather than an inline width, so a w-* class still overrides it.
+   */
+  const chars = Math.max(...[...rates, rate].map((r) => `${r}×`.length))
   return (
     <MediaButton
       aria-label={`Playback speed ${rate}x`}
       tooltip="Playback speed"
-      className={cn("w-auto min-w-7 px-1.5 font-mono text-xs tabular-nums", className)}
+      className={cn("w-(--media-rate-width) min-w-7 px-1.5 font-mono text-xs tabular-nums", className)}
+      style={{ "--media-rate-width": `calc(${chars}ch + 0.75rem)`, ...style } as React.CSSProperties}
       onClick={(event) => {
         onClick?.(event)
         const index = rates.indexOf(rate)
