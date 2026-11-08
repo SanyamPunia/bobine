@@ -15,6 +15,7 @@ import {
   usage,
   videoProps,
 } from "@/lib/docs"
+import { audioRecipes, examplesIntro, examplesSections, videoRecipes, type Recipe } from "@/lib/examples"
 import { landing } from "@/lib/landing"
 
 /**
@@ -125,6 +126,27 @@ export function landingMarkdown(origin: string): string {
   ].join("\n\n") + "\n"
 }
 
+const recipeMarkdown = (recipe: Recipe) => [`### ${recipe.title}`, recipe.description, fence(recipe.code)]
+
+/** The examples page. The playground is interactive, so only its purpose is described. */
+export function examplesMarkdown(origin: string): string {
+  const s = examplesSections
+  return (
+    [
+      `# ${examplesIntro.title}`,
+      `> ${examplesIntro.description} ${examplesIntro.lede}`,
+      `## ${s.playground.title}`,
+      `${s.playground.description} Open [the examples page](${origin}/examples) to use it.`,
+      `## ${s.video.title}`,
+      s.video.description,
+      ...Object.values(videoRecipes).flatMap(recipeMarkdown),
+      `## ${s.audio.title}`,
+      s.audio.description,
+      ...Object.values(audioRecipes).flatMap(recipeMarkdown),
+    ].join("\n\n") + "\n"
+  )
+}
+
 export function llmsIndex(origin: string): string {
   return [
     `# reel`,
@@ -135,6 +157,7 @@ export function llmsIndex(origin: string): string {
       ...docPages.map((page) => `- [${page.title}](${origin}${page.md}): ${page.description}`),
       `- [Full docs in one file](${origin}/llms-full.txt): every page above, for loading into context`,
       `- [Overview](${origin}/index.md): what reel is and what it does`,
+      `- [Examples](${origin}/examples.md): recipes for common jobs, each with its code`,
     ].join("\n"),
     `## Registry`,
     [
