@@ -7,17 +7,19 @@ import { Demo } from "@/components/site/demo"
 import { DocsMain } from "@/components/site/docs-main"
 import { PageActions } from "@/components/site/page-actions"
 import { Section } from "@/components/site/section"
+import { pageMetadata } from "@/lib/metadata"
 import { agentPrompt, docPage, installCommands, intro, sections, SKILL_INSTALL, usage } from "@/lib/docs"
 import { docPageMarkdown } from "@/lib/markdown"
 import { SITE_URL } from "@/lib/site"
 
 const page = docPage("/docs")
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: page.title,
   description: page.description,
-  alternates: { types: { "text/markdown": page.md } },
-}
+  path: page.href,
+  markdown: page.md,
+})
 
 const heroTracks = [{ src: "/media/flower.en.vtt", label: "English", srcLang: "en" }]
 

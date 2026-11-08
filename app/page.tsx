@@ -24,15 +24,14 @@ import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
 import { SketchUnderline } from "@/components/site/sketch-underline"
 import { TooltipProvider } from "@/components/site/tooltip"
+import { pageMetadata, SITE_DESCRIPTION } from "@/lib/metadata"
 import { CONTENT_WIDTH } from "@/lib/constants"
 import { agentPrompt, installCommands } from "@/lib/docs"
 import { landing, type FeatureKey } from "@/lib/landing"
 import { SITE_URL } from "@/lib/site"
 import { cn } from "@/lib/utils"
 
-export const metadata: Metadata = {
-  alternates: { types: { "text/markdown": "/index.md" } },
-}
+export const metadata: Metadata = pageMetadata({ description: SITE_DESCRIPTION, path: "/", markdown: "/index.md" })
 
 const featureIcons: Record<FeatureKey, Icon> = {
   props: CodeIcon,

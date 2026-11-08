@@ -2,6 +2,8 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist_Mono, Instrument_Serif, Inter } from 'next/font/google'
 import { ColumnGuides } from '@/components/site/column-guides'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from '@/lib/metadata'
+import { SITE_URL } from '@/lib/site'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -15,12 +17,13 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export const metadata: Metadata = {
+  /* resolves every relative metadata URL (canonical, og:url, og:image) to the real domain */
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'bobine, drop-in media players for React',
-    template: '%s | bobine',
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    'Swap <video> and <audio> for minimal, accessible players you own. Distributed as a shadcn registry.',
+  description: SITE_DESCRIPTION,
 }
 
 export const viewport: Viewport = {

@@ -5,15 +5,17 @@ import { DocsPageHeader } from "@/components/site/docs-page-header"
 import { Kbd } from "@/components/site/kbd"
 import { PropsTable } from "@/components/site/props-table"
 import { Section } from "@/components/site/section"
+import { pageMetadata } from "@/lib/metadata"
 import { audioProps, docPage, MEDIA_FILE, parts, sections, shortcuts, videoProps } from "@/lib/docs"
 
 const page = docPage("/docs/reference")
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: page.title,
   description: page.description,
-  alternates: { types: { "text/markdown": page.md } },
-}
+  path: page.href,
+  markdown: page.md,
+})
 
 const code = "rounded-md bg-fill px-1 py-0.5 font-mono text-code text-text-primary"
 

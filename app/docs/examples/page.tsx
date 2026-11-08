@@ -9,15 +9,17 @@ import { PageRail } from "@/components/site/page-rail"
 import { Playground } from "@/components/site/playground"
 import { Section } from "@/components/site/section"
 import { TrackList } from "@/components/site/track-list"
+import { pageMetadata } from "@/lib/metadata"
 import { CONTENT_WIDTH } from "@/lib/constants"
 import { audioRecipes, examplesIntro, examplesSections as s, videoRecipes, type Recipe } from "@/lib/examples"
 import { cn } from "@/lib/utils"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: examplesIntro.title,
   description: examplesIntro.description,
-  alternates: { types: { "text/markdown": "/docs/examples.md" } },
-}
+  path: "/docs/examples",
+  markdown: "/docs/examples.md",
+})
 
 const tracks = [{ src: "/media/flower.en.vtt", label: "English", srcLang: "en", default: true }]
 const flower = "Demo video of a blooming flower"

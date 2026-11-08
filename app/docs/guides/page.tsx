@@ -7,16 +7,18 @@ import { DocsMain } from "@/components/site/docs-main"
 import { DocsPageHeader } from "@/components/site/docs-page-header"
 import { HlsDemo } from "@/components/site/hls-demo"
 import { Section } from "@/components/site/section"
+import { pageMetadata } from "@/lib/metadata"
 import { docPage, installCommands, sections, usage } from "@/lib/docs"
 import { SITE_URL } from "@/lib/site"
 
 const page = docPage("/docs/guides")
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: page.title,
   description: page.description,
-  alternates: { types: { "text/markdown": page.md } },
-}
+  path: page.href,
+  markdown: page.md,
+})
 
 export default function Page() {
   const cmd = installCommands(`${SITE_URL}/r`)
