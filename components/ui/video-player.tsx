@@ -13,6 +13,7 @@ import {
   MediaFullscreenButton,
   MediaLoading,
   MediaMuteButton,
+  MediaPictureInPictureButton,
   MediaPlayButton,
   MediaRoot,
   MediaSeek,
@@ -20,6 +21,7 @@ import {
   MediaSurface,
   MediaTime,
   MediaVideo,
+  MediaVolume,
   type MediaSourceLoader,
 } from "@/components/ui/media"
 
@@ -44,10 +46,18 @@ type VideoPlayerProps = Omit<React.ComponentProps<"video">, "controls"> & {
   persistKey?: string
 }
 
-const reveal = "transition-[opacity,transform] duration-200 ease-media motion-reduce:transition-none"
+const reveal = "transition-[opacity,scale] duration-200 ease-media motion-reduce:transition-none"
 const visibleWithControls =
   "group-data-active/media:opacity-100 group-has-focus-visible/media:opacity-100 group-data-paused/media:group-data-started/media:opacity-100"
 const glass = "bg-media-scrim/70 text-media-foreground ring-1 ring-media-foreground/10 backdrop-blur-xl"
+
+/**
+ * The volume popover opens on hover or keyboard focus, never on a click, so the
+ * mute button keeps its one job. `has-focus-visible` rather than focus-within,
+ * so a mouse click on mute does not pin it open.
+ */
+const volumeOpen =
+  "group-hover/volume-menu:pointer-events-auto group-hover/volume-menu:translate-y-0 group-hover/volume-menu:opacity-100 group-has-focus-visible/volume-menu:pointer-events-auto group-has-focus-visible/volume-menu:translate-y-0 group-has-focus-visible/volume-menu:opacity-100"
 
 function VideoPlayer({
   className,
@@ -65,7 +75,7 @@ function VideoPlayer({
       persistKey={persistKey}
       metadata={metadata}
       className={cn(
-        "aspect-video w-full overflow-hidden rounded-xl bg-media-scrim text-media-foreground data-fullscreen:rounded-none",
+        "@container/player aspect-video w-full overflow-hidden rounded-xl bg-media-scrim text-media-foreground data-fullscreen:rounded-none",
         frameClassName
       )}
     >
@@ -125,10 +135,30 @@ function VideoPlayer({
       <MediaControls className="absolute inset-x-2 bottom-2 h-9 gap-1 px-1">
         <MediaPlayButton />
         <MediaSeek className="mx-2" previewClassName="bg-media-foreground text-media-scrim" />
-        <MediaTime type="remaining" className="min-w-10 text-right text-media-foreground/80" />
-        <MediaMuteButton />
+        <MediaTime type="remaining" toggle className="min-w-10 text-right text-media-foreground/80" />
+
+        {/* a vertical slider above mute, so opening it never squeezes the seek
+            bar. Fine pointers only: phones set volume with their own buttons,
+            and iOS ignores volume changes from the page */}
+        <div className="group/volume-menu relative">
+          <MediaMuteButton />
+          <div
+            className={cn(
+              "pointer-events-none absolute bottom-full left-1/2 hidden -translate-x-1/2 translate-y-1 pb-2 opacity-0 pointer-fine:block",
+              "transition-[opacity,translate] duration-150 ease-media motion-reduce:transition-none",
+              volumeOpen
+            )}
+          >
+            <div className={cn("flex h-24 w-7 justify-center rounded-full py-3", glass)}>
+              <MediaVolume orientation="vertical" className="h-full" />
+            </div>
+          </div>
+        </div>
+
         <MediaCaptionsButton />
         <MediaSettings panelClassName={glass} />
+        {/* only where the bar has room for it; the I key works at any size */}
+        <MediaPictureInPictureButton className="hidden @sm/player:inline-grid" />
         <MediaFullscreenButton />
       </MediaControls>
 

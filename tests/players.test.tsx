@@ -12,6 +12,13 @@ describe("server rendering", () => {
     expect(html).toMatch(/role="slider"/)
   })
 
+  it("renders VideoPlayer with a volume slider and a time toggle", () => {
+    const html = renderToString(<VideoPlayer src="/clip.mp4" />)
+    expect(html).toMatch(/aria-label="Volume"/)
+    expect(html).toMatch(/aria-orientation="vertical"/)
+    expect(html).toMatch(/aria-label="Time remaining 0:00"/)
+  })
+
   it("renders AudioPlayer with title and description", () => {
     const html = renderToString(<AudioPlayer src="/song.mp3" title="Song" description="Artist" />)
     expect(html).toContain("<audio")

@@ -257,7 +257,7 @@ function MediaAudio({ ref, src, loader, ...props }: MediaElementProps<React.Comp
 /* -------------------------------- Controls -------------------------------- */
 
 const buttonClass =
-  "relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,transform,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 active:scale-[0.92] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
+  "relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,scale,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:enabled:active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
 function MediaButton({ className, type = "button", ...props }: React.ComponentProps<"button">) {
   return <button type={type} data-slot="media-button" className={cn(buttonClass, className)} {...props} />
@@ -265,7 +265,7 @@ function MediaButton({ className, type = "button", ...props }: React.ComponentPr
 
 function IconSwap({ show, a, b }: { show: "a" | "b"; a: React.ReactNode; b: React.ReactNode }) {
   const layer =
-    "col-start-1 row-start-1 grid place-items-center transition-[opacity,transform,filter] duration-200 ease-media motion-reduce:transition-none"
+    "col-start-1 row-start-1 grid place-items-center transition-[opacity,scale,filter] duration-200 ease-media motion-reduce:transition-none"
   return (
     <span className="grid">
       <span className={cn(layer, show === "a" ? "opacity-100" : "scale-50 opacity-0 blur-[2px]")}>{a}</span>
@@ -386,7 +386,7 @@ function MediaControls({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="media-controls"
       className={cn(
-        "flex items-center transition-[opacity,transform] duration-200 ease-media motion-reduce:transition-none",
+        "flex items-center transition-[opacity,translate] duration-200 ease-media motion-reduce:transition-none",
         "pointer-events-none translate-y-2 opacity-0",
         "group-data-active/media:pointer-events-auto group-data-active/media:translate-y-0 group-data-active/media:opacity-100",
         "group-has-focus-visible/media:pointer-events-auto group-has-focus-visible/media:translate-y-0 group-has-focus-visible/media:opacity-100",
@@ -502,7 +502,7 @@ function MediaSurface({
               key={side}
               data-show={flash?.side === side || undefined}
               className={cn(
-                "flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-xs tabular-nums opacity-0 scale-90 transition-[opacity,transform] duration-200 ease-media data-show:scale-100 data-show:opacity-100 motion-reduce:transition-none",
+                "flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-xs tabular-nums opacity-0 scale-90 transition-[opacity,scale] duration-200 ease-media data-show:scale-100 data-show:opacity-100 motion-reduce:transition-none",
                 side === "forward" && "flex-row-reverse",
                 indicatorClassName
               )}
@@ -652,14 +652,22 @@ function MediaSeek({
 
 /* --------------------------------- Volume --------------------------------- */
 
-function MediaVolume({ className, ...props }: Omit<React.ComponentProps<"div">, "children">) {
+type MediaVolumeProps = Omit<React.ComponentProps<"div">, "children"> & {
+  /** "vertical" fills from the bottom, for a slider in a popover. */
+  orientation?: "horizontal" | "vertical"
+}
+
+function MediaVolume({ orientation = "horizontal", className, ...props }: MediaVolumeProps) {
   const store = useMediaStore()
   const volume = useMedia((s) => (s.muted ? 0 : s.volume))
   const dragging = React.useRef(false)
+  const vertical = orientation === "vertical"
 
   const setFromEvent = (event: React.PointerEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
-    store.setVolume(clamp((event.clientX - rect.left) / rect.width))
+    store.setVolume(
+      clamp(vertical ? (rect.bottom - event.clientY) / rect.height : (event.clientX - rect.left) / rect.width)
+    )
   }
 
   return (
@@ -671,8 +679,13 @@ function MediaVolume({ className, ...props }: Omit<React.ComponentProps<"div">, 
       aria-valuemax={100}
       aria-valuenow={Math.round(volume * 100)}
       aria-valuetext={`${Math.round(volume * 100)}%`}
+      aria-orientation={orientation}
       data-slot="media-volume"
-      className={cn("group/volume relative flex h-5 w-16 shrink-0 cursor-pointer touch-none items-center outline-none select-none", className)}
+      className={cn(
+        "group/volume relative flex shrink-0 cursor-pointer touch-none outline-none select-none",
+        vertical ? "h-16 w-5 justify-center" : "h-5 w-16 items-center",
+        className
+      )}
       onPointerDown={(event) => {
         if (event.button !== 0) return
         event.currentTarget.setPointerCapture(event.pointerId)
@@ -685,16 +698,35 @@ function MediaVolume({ className, ...props }: Omit<React.ComponentProps<"div">, 
         event.currentTarget.releasePointerCapture(event.pointerId)
       }}
       onKeyDown={(event) => {
-        const delta = { ArrowLeft: -0.1, ArrowDown: -0.1, ArrowRight: 0.1, ArrowUp: 0.1 }[event.key]
-        if (delta === undefined) return
+        const moves: Record<string, number> = {
+          ArrowLeft: volume - 0.1,
+          ArrowDown: volume - 0.1,
+          ArrowRight: volume + 0.1,
+          ArrowUp: volume + 0.1,
+          PageDown: volume - 0.25,
+          PageUp: volume + 0.25,
+          Home: 0,
+          End: 1,
+        }
+        if (!(event.key in moves)) return
         event.preventDefault()
         event.stopPropagation()
-        store.setVolume(volume + delta)
+        store.setVolume(moves[event.key])
       }}
       {...props}
     >
-      <div className="relative h-1 w-full overflow-hidden rounded-full bg-current/25 transition-[height] duration-150 ease-media group-hover/volume:h-1.5 group-focus-visible/volume:h-1.5">
-        <div className="absolute inset-0 origin-left bg-current" style={{ transform: `scaleX(${volume})` }} />
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-full bg-current/25 duration-150 ease-media motion-reduce:transition-none",
+          vertical
+            ? "h-full w-1 transition-[width] group-hover/volume:w-1.5 group-focus-visible/volume:w-1.5"
+            : "h-1 w-full transition-[height] group-hover/volume:h-1.5 group-focus-visible/volume:h-1.5"
+        )}
+      >
+        <div
+          className={cn("absolute inset-0 bg-current", vertical ? "origin-bottom" : "origin-left")}
+          style={{ transform: vertical ? `scaleY(${volume})` : `scaleX(${volume})` }}
+        />
       </div>
       <span className="pointer-events-none absolute inset-0 rounded-full ring-current/60 group-focus-visible/volume:ring-2" />
     </div>
@@ -703,19 +735,37 @@ function MediaVolume({ className, ...props }: Omit<React.ComponentProps<"div">, 
 
 /* ---------------------------------- Time ---------------------------------- */
 
-function MediaTime({
-  type = "current",
-  className,
-  ...props
-}: React.ComponentProps<"span"> & { type?: "current" | "duration" | "remaining" }) {
+type MediaTimeProps = React.ComponentProps<"span"> & {
+  type?: "current" | "duration" | "remaining"
+  /** Click to switch between elapsed and remaining time. */
+  toggle?: boolean
+}
+
+function MediaTime({ type = "current", toggle = false, className, ...props }: MediaTimeProps) {
+  const [picked, setPicked] = React.useState(type)
+  const shown = toggle ? picked : type
   const value = useMedia((s) => {
-    if (type === "duration") return Math.floor(s.duration)
-    if (type === "remaining") return Math.ceil(Math.max(s.duration - s.currentTime, 0))
+    if (shown === "duration") return Math.floor(s.duration)
+    if (shown === "remaining") return Math.ceil(Math.max(s.duration - s.currentTime, 0))
     return Math.floor(s.currentTime)
   })
+  const text = shown === "remaining" ? `-${formatTime(value)}` : formatTime(value)
+
   return (
     <span data-slot="media-time" className={cn("font-mono text-xs tabular-nums", className)} {...props}>
-      {type === "remaining" ? `-${formatTime(value)}` : formatTime(value)}
+      {toggle ? (
+        <button
+          type="button"
+          aria-label={`${shown === "remaining" ? "Time remaining" : "Time elapsed"} ${formatTime(value)}`}
+          title={shown === "remaining" ? "Show elapsed time" : "Show remaining time"}
+          onClick={() => setPicked(shown === "remaining" ? "current" : "remaining")}
+          className="cursor-pointer rounded-sm outline-none transition-colors duration-150 ease-media hover:text-current focus-visible:ring-2 focus-visible:ring-current/60"
+        >
+          {text}
+        </button>
+      ) : (
+        text
+      )}
     </span>
   )
 }
@@ -882,7 +932,7 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
         onKeyDown={onPanelKeyDown}
         className={cn(
           "absolute right-0 bottom-full z-10 mb-2 flex max-h-72 w-44 origin-bottom-right flex-col gap-2 overflow-y-auto rounded-xl p-1.5",
-          "transition-[opacity,transform] duration-150 ease-media starting:translate-y-1 starting:scale-95 starting:opacity-0 motion-reduce:transition-none",
+          "transition-[opacity,translate,scale] duration-150 ease-media starting:translate-y-1 starting:scale-95 starting:opacity-0 motion-reduce:transition-none",
           panelClassName
         )}
       >
@@ -946,7 +996,7 @@ function MediaErrorMessage({ className, message, ...props }: MediaErrorMessagePr
       <button
         type="button"
         onClick={() => store.retry()}
-        className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm outline-none ring-1 ring-current/25 transition-[background-color,transform] duration-150 ease-media hover:bg-current/10 focus-visible:ring-2 focus-visible:ring-current/60 active:scale-[0.96]"
+        className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm outline-none ring-1 ring-current/25 transition-[background-color,scale] duration-150 ease-media hover:bg-current/10 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:active:scale-[0.96]"
       >
         <RetryIcon className="size-3.5" />
         Try again

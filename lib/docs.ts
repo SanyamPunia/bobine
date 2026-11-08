@@ -154,8 +154,8 @@ export const parts: readonly (readonly [name: string, description: string])[] = 
   ["MediaVideo / MediaAudio", "The native element. Every native prop passes through."],
   ["MediaSurface", "Full-bleed click target. First tap on touch reveals controls."],
   ["MediaControls", "Reveals on pointer activity, pause, or keyboard focus."],
-  ["MediaSeek / MediaVolume", "Accessible sliders with scrubbing, buffering and keyboard steps."],
-  ["MediaTime", "current, duration or remaining."],
+  ["MediaSeek / MediaVolume", "Accessible sliders with scrubbing, buffering and keyboard steps. MediaVolume takes orientation=\"vertical\" for a popover."],
+  ["MediaTime", "current, duration or remaining. toggle lets a click switch between elapsed and remaining."],
   ["MediaButton", "The base button the others are built from. Use it for your own controls."],
   [
     "Media*Button",
