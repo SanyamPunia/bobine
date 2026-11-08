@@ -13,6 +13,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { MorphLabel } from "@/components/site/morph-label"
 import { Tooltip } from "@/components/site/tooltip"
 
 const item =
@@ -85,13 +86,7 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
         className="cursor-pointer rounded-r-none active:scale-[0.98]"
       >
         {copied ? <CheckIcon data-icon="inline-start" aria-hidden="true" /> : <CopyIcon data-icon="inline-start" aria-hidden="true" />}
-        {/* both labels share one grid cell, so the button keeps the longer
-            label's width and the title beside it never re-wraps */}
-        <span className="grid *:col-start-1 *:row-start-1">
-          <span aria-hidden="true" className={cn(!copied && "invisible")}>Copied</span>
-          <span aria-hidden="true" className={cn(copied && "invisible")}>Copy page</span>
-        </span>
-        <span aria-live="polite" className="sr-only">{copied ? "Copied" : "Copy page"}</span>
+        <MorphLabel text={copied ? "Copied" : "Copy page"} labels={["Copy page", "Copied"]} />
       </Button>
 
       <Menu.Root>

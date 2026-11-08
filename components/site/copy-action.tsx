@@ -5,6 +5,7 @@ import { BotIcon, CheckIcon, FileTextIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { MorphLabel } from "@/components/site/morph-label"
 
 // an icon name, not a component: this renders from server pages, and a
 // component is a function, which cannot cross the server/client boundary
@@ -49,12 +50,7 @@ export function CopyAction({
       }}
     >
       {copied ? <CheckIcon data-icon="inline-start" aria-hidden="true" /> : <Icon data-icon="inline-start" aria-hidden="true" />}
-      {/* both labels share one grid cell, so the width never changes on copy */}
-      <span className="grid *:col-start-1 *:row-start-1">
-        <span aria-hidden="true" className={cn(!copied && "invisible")}>Copied</span>
-        <span aria-hidden="true" className={cn(copied && "invisible")}>{label}</span>
-      </span>
-      <span aria-live="polite" className="sr-only">{copied ? "Copied" : label}</span>
+      <MorphLabel text={copied ? "Copied" : label} labels={[label, "Copied"]} />
     </Button>
   )
 }

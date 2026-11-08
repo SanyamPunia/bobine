@@ -116,3 +116,6 @@ markdown drift apart. Only the live demos exist in the pages alone.
   with a reduced-motion override. The browser back button runs no transition.
 - `SketchUnderline` draws two pencil strokes under the hero word on every
   render. The strokes are `text-primary`, so they are white in dark mode.
+- Copy buttons morph their label with `torph` through `MorphLabel`. It
+  reserves the longest label's width, so the button never resizes. Tooltips
+  do not morph, because Base UI closes a tooltip when its trigger is clicked.
