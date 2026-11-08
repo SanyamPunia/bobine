@@ -9,7 +9,7 @@ export function DocsMain({ current, children }: { current: DocPage["href"]; chil
   return (
     <>
       <PageRail />
-      <main className={cn("mx-auto flex w-full flex-col gap-20 px-5 pt-10 pb-24 md:pt-16", CONTENT_WIDTH)}>
+      <main id="content" className={cn("mx-auto flex w-full flex-col gap-20 px-5 pt-10 pb-24 md:pt-16", CONTENT_WIDTH)}>
         {children}
         <DocsPager current={current} />
       </main>
