@@ -8,8 +8,12 @@ import { isPlainClick, scrollToSection } from "@/lib/scroll"
 
 type Entry = { id: string; title: string }
 
-/** Where the reading line rests, just below the sections' `scroll-mt-16`. */
-const THRESHOLD = 80
+/**
+ * Where the reading line rests: below the sticky header and its 24px fade
+ * (about 84px) and below the sections' `scroll-mt-24` (96px), so a section
+ * jumped to marks itself.
+ */
+const THRESHOLD = 112
 
 /**
  * The reading line in viewport coordinates. It rests at `THRESHOLD`, then

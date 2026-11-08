@@ -206,6 +206,9 @@
   }
   body {
     @apply bg-bg text-text-primary;
+    /* the hero's title rules run past the column. clip, not hidden, so the
+       sticky header keeps working */
+    overflow-x: clip;
   }
   ::selection {
     @apply bg-text-primary text-bg;
@@ -240,34 +243,6 @@
   color: var(--sh-comment);
 }
 
-/*
- * Page transitions, driven by `PageTransition`. The old page fades out fast so
- * it does not compete with the new one, which fades in just after it. React
- * names only the page body, so the header stays in the root snapshot, and root
- * keeps no animation so the header does not flash.
- */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-}
-::view-transition-old(.page-fade) {
-  animation: 150ms ease-in both vt-fade-out;
-}
-::view-transition-new(.page-fade) {
-  animation: 200ms ease-out 100ms both vt-fade-in;
-}
-
-@keyframes vt-fade-out {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes vt-fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
 /* the pencil strokes under the hero word, see `SketchUnderline` */
 .sketch-stroke {
   stroke-dasharray: 1;
@@ -282,11 +257,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
   .sketch-stroke {
     animation: none;
     stroke-dashoffset: 0;

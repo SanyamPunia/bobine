@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist_Mono, Instrument_Serif, Inter } from 'next/font/google'
+import { ColumnGuides } from '@/components/site/column-guides'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -38,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${geistMono.variable} ${instrumentSerif.variable} bg-bg`}>
       <body className="font-sans antialiased">
+        <ColumnGuides />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

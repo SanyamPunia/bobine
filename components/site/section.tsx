@@ -18,7 +18,7 @@ export function Section({
   children: React.ReactNode
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="flex scroll-mt-16 flex-col gap-5">
+    <section id={id} aria-labelledby={`${id}-title`} className="flex scroll-mt-24 flex-col gap-5">
       <div className="flex flex-col gap-2">
         <h2 id={`${id}-title`} className="group/heading flex items-center gap-2 text-body font-medium text-text-primary">
           <span className="min-w-0 text-balance">{title}</span>
