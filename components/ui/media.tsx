@@ -27,6 +27,9 @@ import {
 
 const MediaContext = React.createContext<MediaStore | null>(null)
 
+/** Root options the parts read: whether to show tooltips and shortcut hints. */
+const MediaOptionsContext = React.createContext({ tooltips: false, hotkeys: false })
+
 function useMediaStore() {
   const store = React.useContext(MediaContext)
   if (!store) throw new Error("Media components must be rendered inside <MediaRoot>.")
@@ -77,6 +80,8 @@ type MediaRootProps = React.ComponentProps<"div"> & {
   metadata?: MediaInfo
   /** Enable keyboard shortcuts while focus is inside the player. */
   hotkeys?: boolean
+  /** Small labels over the buttons on hover and keyboard focus, with their shortcut. */
+  tooltips?: boolean
 }
 
 // Keep the controls awake while the pointer rests on them or a menu is open.
@@ -88,6 +93,7 @@ function MediaRoot({
   persistKey,
   metadata,
   hotkeys = true,
+  tooltips = false,
   onPointerMove,
   onPointerDown,
   onPointerLeave,
@@ -102,6 +108,7 @@ function MediaRoot({
 
   const state = React.useSyncExternalStore(store.subscribe, store.getState, store.getServerState)
   const rootRef = useComposedRefs(ref, rootEl, store.setContainer)
+  const options = React.useMemo(() => ({ tooltips, hotkeys }), [tooltips, hotkeys])
 
   React.useEffect(() => () => clearTimeout(timer.current), [])
 
@@ -161,35 +168,37 @@ function MediaRoot({
 
   return (
     <MediaContext.Provider value={store}>
-      <div
-        ref={rootRef}
-        data-slot="media-root"
-        data-paused={state.paused || undefined}
-        data-playing={!state.paused || undefined}
-        data-started={state.started || undefined}
-        data-waiting={state.waiting || undefined}
-        data-fullscreen={state.fullscreen || undefined}
-        data-error={state.error ? "" : undefined}
-        data-captions={state.textTrack !== -1 && state.cues.length > 0 ? "" : undefined}
-        data-idle={idle || undefined}
-        data-active={active || undefined}
-        className={cn("group/media relative isolate", idle && "cursor-none", className)}
-        onPointerMove={(event) => {
-          onPointerMove?.(event)
-          if (event.pointerType === "mouse") wake()
-        }}
-        onPointerDown={(event) => {
-          onPointerDown?.(event)
-          wake()
-        }}
-        onPointerLeave={(event) => {
-          onPointerLeave?.(event)
-          clearTimeout(timer.current)
-          setActive(false)
-        }}
-        onKeyDown={handleKeyDown}
-        {...props}
-      />
+      <MediaOptionsContext.Provider value={options}>
+        <div
+          ref={rootRef}
+          data-slot="media-root"
+          data-paused={state.paused || undefined}
+          data-playing={!state.paused || undefined}
+          data-started={state.started || undefined}
+          data-waiting={state.waiting || undefined}
+          data-fullscreen={state.fullscreen || undefined}
+          data-error={state.error ? "" : undefined}
+          data-captions={state.textTrack !== -1 && state.cues.length > 0 ? "" : undefined}
+          data-idle={idle || undefined}
+          data-active={active || undefined}
+          className={cn("group/media relative isolate", idle && "cursor-none", className)}
+          onPointerMove={(event) => {
+            onPointerMove?.(event)
+            if (event.pointerType === "mouse") wake()
+          }}
+          onPointerDown={(event) => {
+            onPointerDown?.(event)
+            wake()
+          }}
+          onPointerLeave={(event) => {
+            onPointerLeave?.(event)
+            clearTimeout(timer.current)
+            setActive(false)
+          }}
+          onKeyDown={handleKeyDown}
+          {...props}
+        />
+      </MediaOptionsContext.Provider>
     </MediaContext.Provider>
   )
 }
@@ -257,10 +266,56 @@ function MediaAudio({ ref, src, loader, ...props }: MediaElementProps<React.Comp
 /* -------------------------------- Controls -------------------------------- */
 
 const buttonClass =
-  "relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,scale,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:enabled:active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
+  "group/media-button relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,scale,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:enabled:active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
-function MediaButton({ className, type = "button", ...props }: React.ComponentProps<"button">) {
-  return <button type={type} data-slot="media-button" className={cn(buttonClass, className)} {...props} />
+type TooltipAlign = "start" | "center" | "end"
+
+/**
+ * The label over a control. Decorative: the control already carries the same
+ * text as its accessible name. Hover shows it after a short delay and hides it
+ * at once; keyboard focus shows it straight away. Touch never shows it, since
+ * the hover variants only apply to pointers that can hover.
+ */
+function MediaTooltip({ label, shortcut, align = "center" }: { label: React.ReactNode; shortcut?: string; align?: TooltipAlign }) {
+  const { tooltips, hotkeys } = React.useContext(MediaOptionsContext)
+  if (!tooltips || !label) return null
+  return (
+    <span
+      aria-hidden="true"
+      data-slot="media-tooltip"
+      className={cn(
+        "pointer-events-none absolute bottom-full mb-2 flex items-center gap-1.5 rounded-md bg-foreground px-1.5 py-0.5 text-[11px] leading-4 font-medium whitespace-nowrap text-background opacity-0",
+        "transition-[opacity,translate] duration-150 ease-media motion-safe:translate-y-0.5 motion-reduce:transition-none",
+        "group-hover/media-button:translate-y-0 group-hover/media-button:opacity-100 group-hover/media-button:delay-300",
+        "group-focus-visible/media-button:translate-y-0 group-focus-visible/media-button:opacity-100",
+        "group-aria-expanded/media-button:hidden",
+        align === "start" && "left-0",
+        align === "center" && "left-1/2 -translate-x-1/2",
+        align === "end" && "right-0"
+      )}
+    >
+      {label}
+      {hotkeys && shortcut && <kbd className="font-mono opacity-60">{shortcut}</kbd>}
+    </span>
+  )
+}
+
+type MediaButtonProps = React.ComponentProps<"button"> & {
+  /** Tooltip text, shown when the root has `tooltips`. `false` hides it. */
+  tooltip?: React.ReactNode
+  /** Shortcut shown beside the tooltip when the root has `hotkeys`. */
+  shortcut?: string
+  /** Pin the tooltip to an edge for buttons at either end of a bar. */
+  tooltipAlign?: TooltipAlign
+}
+
+function MediaButton({ className, type = "button", tooltip, shortcut, tooltipAlign, children, ...props }: MediaButtonProps) {
+  return (
+    <button type={type} data-slot="media-button" className={cn(buttonClass, className)} {...props}>
+      {children}
+      <MediaTooltip label={tooltip} shortcut={shortcut} align={tooltipAlign} />
+    </button>
+  )
 }
 
 function IconSwap({ show, a, b }: { show: "a" | "b"; a: React.ReactNode; b: React.ReactNode }) {
@@ -274,12 +329,14 @@ function IconSwap({ show, a, b }: { show: "a" | "b"; a: React.ReactNode; b: Reac
   )
 }
 
-function MediaPlayButton({ onClick, ...props }: React.ComponentProps<"button">) {
+function MediaPlayButton({ onClick, ...props }: MediaButtonProps) {
   const store = useMediaStore()
   const paused = useMedia((s) => s.paused)
   return (
     <MediaButton
       aria-label={paused ? "Play" : "Pause"}
+      tooltip={paused ? "Play" : "Pause"}
+      shortcut="K"
       onClick={(event) => {
         onClick?.(event)
         store.toggle()
@@ -291,12 +348,14 @@ function MediaPlayButton({ onClick, ...props }: React.ComponentProps<"button">) 
   )
 }
 
-function MediaMuteButton({ onClick, ...props }: React.ComponentProps<"button">) {
+function MediaMuteButton({ onClick, ...props }: MediaButtonProps) {
   const store = useMediaStore()
   const muted = useMedia((s) => s.muted || s.volume === 0)
   return (
     <MediaButton
       aria-label={muted ? "Unmute" : "Mute"}
+      tooltip={muted ? "Unmute" : "Mute"}
+      shortcut="M"
       onClick={(event) => {
         onClick?.(event)
         store.toggleMute()
@@ -308,12 +367,14 @@ function MediaMuteButton({ onClick, ...props }: React.ComponentProps<"button">) 
   )
 }
 
-function MediaFullscreenButton({ onClick, ...props }: React.ComponentProps<"button">) {
+function MediaFullscreenButton({ onClick, ...props }: MediaButtonProps) {
   const store = useMediaStore()
   const fullscreen = useMedia((s) => s.fullscreen)
   return (
     <MediaButton
       aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+      tooltip={fullscreen ? "Exit fullscreen" : "Fullscreen"}
+      shortcut="F"
       onClick={(event) => {
         onClick?.(event)
         store.toggleFullscreen()
@@ -327,7 +388,7 @@ function MediaFullscreenButton({ onClick, ...props }: React.ComponentProps<"butt
 
 const subscribeNoop = () => () => {}
 
-function MediaPictureInPictureButton({ onClick, ...props }: React.ComponentProps<"button">) {
+function MediaPictureInPictureButton({ onClick, ...props }: MediaButtonProps) {
   const store = useMediaStore()
   const active = useMedia((s) => s.pictureInPicture)
   const supported = React.useSyncExternalStore(
@@ -340,6 +401,8 @@ function MediaPictureInPictureButton({ onClick, ...props }: React.ComponentProps
     <MediaButton
       aria-label={active ? "Exit picture in picture" : "Enter picture in picture"}
       aria-pressed={active}
+      tooltip={active ? "Exit picture in picture" : "Picture in picture"}
+      shortcut="I"
       onClick={(event) => {
         onClick?.(event)
         store.togglePictureInPicture()
@@ -356,12 +419,13 @@ function MediaPlaybackRateButton({
   className,
   onClick,
   ...props
-}: React.ComponentProps<"button"> & { rates?: number[] }) {
+}: MediaButtonProps & { rates?: number[] }) {
   const store = useMediaStore()
   const rate = useMedia((s) => s.playbackRate)
   return (
     <MediaButton
       aria-label={`Playback speed ${rate}x`}
+      tooltip="Playback speed"
       className={cn("w-auto min-w-7 px-1.5 font-mono text-xs tabular-nums", className)}
       onClick={(event) => {
         onClick?.(event)
@@ -757,11 +821,11 @@ function MediaTime({ type = "current", toggle = false, className, ...props }: Me
         <button
           type="button"
           aria-label={`${shown === "remaining" ? "Time remaining" : "Time elapsed"} ${formatTime(value)}`}
-          title={shown === "remaining" ? "Show elapsed time" : "Show remaining time"}
           onClick={() => setPicked(shown === "remaining" ? "current" : "remaining")}
-          className="cursor-pointer rounded-sm outline-none transition-colors duration-150 ease-media hover:text-current focus-visible:ring-2 focus-visible:ring-current/60"
+          className="group/media-button relative cursor-pointer rounded-sm outline-none transition-colors duration-150 ease-media hover:text-current focus-visible:ring-2 focus-visible:ring-current/60"
         >
           {text}
+          <MediaTooltip label={shown === "remaining" ? "Show elapsed" : "Show remaining"} />
         </button>
       ) : (
         text
@@ -815,7 +879,7 @@ function MediaCaptions({ className, ...props }: React.ComponentProps<"div">) {
 
 const emptyCues: string[] = []
 
-function MediaCaptionsButton({ onClick, ...props }: React.ComponentProps<"button">) {
+function MediaCaptionsButton({ onClick, ...props }: MediaButtonProps) {
   const store = useMediaStore()
   const available = useMedia((s) => s.textTracks.length > 0)
   const on = useMedia((s) => s.textTrack !== -1)
@@ -824,6 +888,8 @@ function MediaCaptionsButton({ onClick, ...props }: React.ComponentProps<"button
     <MediaButton
       aria-label="Captions"
       aria-pressed={on}
+      tooltip={on ? "Captions off" : "Captions"}
+      shortcut="C"
       onClick={(event) => {
         onClick?.(event)
         store.toggleCaptions()
@@ -917,6 +983,7 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
       <MediaButton
         ref={triggerEl}
         aria-label="Settings"
+        tooltip="Settings"
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={open ? panelId : undefined}
@@ -1028,4 +1095,4 @@ export {
   useMedia,
   useMediaStore,
 }
-export type { MediaSourceLoader, MediaRootProps }
+export type { MediaSourceLoader, MediaRootProps, MediaButtonProps }

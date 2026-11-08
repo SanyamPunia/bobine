@@ -223,6 +223,7 @@ export const videoProps: readonly Prop[] = [
     description: "Title, artist, album and artwork for lock screens and OS media controls.",
   },
   { name: "persistKey", type: "string", description: "Remember volume, mute and speed in localStorage under this key." },
+  { name: "tooltips", type: "boolean", description: "Small labels with their shortcut over the controls on hover and focus. On by default." },
 ]
 
 export const audioProps: readonly Prop[] = [

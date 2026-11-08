@@ -44,6 +44,8 @@ type VideoPlayerProps = Omit<React.ComponentProps<"video">, "controls"> & {
   metadata?: MediaInfo
   /** Remember volume, mute and speed under this localStorage key. */
   persistKey?: string
+  /** Small labels with shortcuts over the controls on hover and focus. On by default. */
+  tooltips?: boolean
 }
 
 const reveal = "transition-[opacity,scale] duration-200 ease-media motion-reduce:transition-none"
@@ -66,6 +68,7 @@ function VideoPlayer({
   loader,
   metadata,
   persistKey,
+  tooltips = true,
   children,
   crossOrigin,
   ...props
@@ -74,6 +77,7 @@ function VideoPlayer({
     <MediaRoot
       persistKey={persistKey}
       metadata={metadata}
+      tooltips={tooltips}
       className={cn(
         "@container/player aspect-video w-full overflow-hidden rounded-xl bg-media-scrim text-media-foreground data-fullscreen:rounded-none",
         frameClassName
@@ -132,8 +136,9 @@ function VideoPlayer({
         )}
       />
 
-      <MediaControls className="absolute inset-x-2 bottom-2 h-9 gap-1 px-1">
-        <MediaPlayButton />
+      {/* tooltips match the seek preview: light on the dark bar */}
+      <MediaControls className="absolute inset-x-2 bottom-2 h-9 gap-1 px-1 **:data-[slot=media-tooltip]:bg-media-foreground **:data-[slot=media-tooltip]:text-media-scrim">
+        <MediaPlayButton tooltipAlign="start" />
         <MediaSeek className="mx-2" previewClassName="bg-media-foreground text-media-scrim" />
         <MediaTime type="remaining" toggle className="min-w-10 text-right text-media-foreground/80" />
 
@@ -141,7 +146,8 @@ function VideoPlayer({
             bar. Fine pointers only: phones set volume with their own buttons,
             and iOS ignores volume changes from the page */}
         <div className="group/volume-menu relative">
-          <MediaMuteButton />
+          {/* no tooltip: the volume popover opens in the same spot */}
+          <MediaMuteButton tooltip={false} />
           <div
             className={cn(
               "pointer-events-none absolute bottom-full left-1/2 hidden -translate-x-1/2 translate-y-1 pb-2 opacity-0 pointer-fine:block",
@@ -158,8 +164,8 @@ function VideoPlayer({
         <MediaCaptionsButton />
         <MediaSettings panelClassName={glass} />
         {/* only where the bar has room for it; the I key works at any size */}
-        <MediaPictureInPictureButton className="hidden @sm/player:inline-grid" />
-        <MediaFullscreenButton />
+        <MediaPictureInPictureButton tooltipAlign="end" className="hidden @sm/player:inline-grid" />
+        <MediaFullscreenButton tooltipAlign="end" />
       </MediaControls>
 
       <MediaErrorMessage className="absolute inset-0 bg-media-scrim/85 px-6 text-media-foreground backdrop-blur-sm" />

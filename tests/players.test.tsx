@@ -19,6 +19,11 @@ describe("server rendering", () => {
     expect(html).toMatch(/aria-label="Time remaining 0:00"/)
   })
 
+  it("renders VideoPlayer tooltips by default, and none with tooltips off", () => {
+    expect(renderToString(<VideoPlayer src="/clip.mp4" />)).toContain('data-slot="media-tooltip"')
+    expect(renderToString(<VideoPlayer src="/clip.mp4" tooltips={false} />)).not.toContain('data-slot="media-tooltip"')
+  })
+
   it("renders AudioPlayer with title and description", () => {
     const html = renderToString(<AudioPlayer src="/song.mp3" title="Song" description="Artist" />)
     expect(html).toContain("<audio")
