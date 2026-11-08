@@ -37,7 +37,7 @@ export function CopyAction({
     <Button
       variant="outline"
       size={size}
-      className={cn("cursor-pointer active:scale-[0.98]", className)}
+      className={cn("cursor-pointer motion-safe:active:scale-[0.98]", className)}
       onClick={async () => {
         try {
           await navigator.clipboard.writeText(value)

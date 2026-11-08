@@ -45,7 +45,7 @@ const featureIcons: Record<FeatureKey, Icon> = {
 
 const heroTracks = [{ src: "/media/flower.en.vtt", label: "English", srcLang: "en" }]
 
-const action = "cursor-pointer active:scale-[0.98]"
+const action = "cursor-pointer motion-safe:active:scale-[0.98]"
 
 export default function Page() {
   const origin = SITE_URL
@@ -58,7 +58,8 @@ export default function Page() {
 
       <main className={cn("mx-auto flex w-full flex-col gap-20 px-5 pt-12 pb-24 md:pt-20", CONTENT_WIDTH)}>
         <header className="flex flex-col gap-10">
-          <div className="flex flex-col gap-5">
+          {/* title and lede are one group, the actions sit apart */}
+          <div className="flex flex-col gap-4">
             {/* the serif has a smaller x-height than Inter, so 1.15em matches it optically */}
             <h1 className="relative isolate text-display font-medium tracking-tight text-balance text-text-primary">
               {/* blueprint rules on each line box, wider than the viewport and
@@ -75,7 +76,7 @@ export default function Page() {
               .
             </h1>
             <p className="max-w-lg text-body text-pretty text-text-secondary">{landing.lede}</p>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 pt-3">
               <Link href="/docs" className={cn(buttonVariants({ size: "lg" }), action)}>
                 Read the docs
                 <ArrowRightIcon data-icon="inline-end" aria-hidden="true" />
@@ -108,10 +109,10 @@ export default function Page() {
             {features.items.map(({ key, title, description }) => {
               const FeatureIcon = featureIcons[key]
               return (
-                <li key={key} className="flex flex-col gap-2 bg-surface p-5">
-                  <FeatureIcon aria-hidden="true" className="size-4 text-text-muted" />
+                <li key={key} className="flex flex-col gap-1 bg-surface p-5">
+                  <FeatureIcon aria-hidden="true" className="mb-2 size-4 text-text-muted" />
                   <span className="text-action font-medium text-text-primary">{title}</span>
-                  <span className="text-action text-text-secondary">{description}</span>
+                  <span className="text-action text-pretty text-text-secondary">{description}</span>
                 </li>
               )
             })}
