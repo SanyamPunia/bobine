@@ -2,17 +2,11 @@
 
 import * as React from "react"
 import { Menu } from "@base-ui/react/menu"
-import {
-  BotIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  CopyIcon,
-  ExternalLinkIcon,
-  FileTextIcon,
-} from "lucide-react"
+import { ArrowSquareOutIcon, CaretDownIcon, CopyIcon, FileTextIcon, RobotIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { CopySwapIcon } from "@/components/site/copy-swap-icon"
 import { MorphLabel } from "@/components/site/morph-label"
 import { Tooltip } from "@/components/site/tooltip"
 
@@ -44,7 +38,7 @@ function ItemBody({ icon, title, hint, external }: { icon: React.ReactNode; titl
       <span className="flex min-w-0 grow flex-col">
         <span className="flex items-center gap-1 text-action text-text-primary">
           {title}
-          {external && <ExternalLinkIcon aria-hidden="true" className="size-3 text-text-muted" />}
+          {external && <ArrowSquareOutIcon aria-hidden="true" className="size-3 text-text-muted" />}
         </span>
         <span className="text-meta text-text-muted">{hint}</span>
       </span>
@@ -85,8 +79,8 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
         onClick={() => copy(markdown)}
         className="cursor-pointer rounded-r-none active:scale-[0.98]"
       >
-        {copied ? <CheckIcon data-icon="inline-start" aria-hidden="true" /> : <CopyIcon data-icon="inline-start" aria-hidden="true" />}
-        <MorphLabel text={copied ? "Copied" : "Copy page"} labels={["Copy page", "Copied"]} />
+        <CopySwapIcon icon={CopyIcon} copied={copied} />
+        <MorphLabel text={copied ? "Copied" : "Copy page"} />
       </Button>
 
       <Menu.Root>
@@ -101,17 +95,17 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
               />
             }
           >
-            <ChevronDownIcon aria-hidden="true" />
+            <CaretDownIcon aria-hidden="true" />
           </Menu.Trigger>
         </Tooltip>
         <Menu.Portal>
-          <Menu.Positioner align="end" sideOffset={6} collisionPadding={12}>
+          <Menu.Positioner align="end" sideOffset={6} collisionPadding={12} className="z-50">
             <Menu.Popup className="flex w-64 origin-(--transform-origin) flex-col rounded-xl bg-popover p-1 shadow-frame transition-[opacity,transform] duration-150 ease-media data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0">
               <Menu.Item className={item} onClick={() => copy(markdown)}>
                 <ItemBody icon={<CopyIcon aria-hidden="true" className={glyph} />} title="Copy page" hint="This page as Markdown for LLMs" />
               </Menu.Item>
               <Menu.Item className={item} onClick={() => copy(prompt)}>
-                <ItemBody icon={<BotIcon aria-hidden="true" className={glyph} />} title="Copy prompt" hint="Install reel with a coding agent" />
+                <ItemBody icon={<RobotIcon aria-hidden="true" className={glyph} />} title="Copy prompt" hint="Install reel with a coding agent" />
               </Menu.Item>
               <Menu.LinkItem className={item} href="/docs.md" target="_blank" rel="noreferrer">
                 <ItemBody icon={<FileTextIcon aria-hidden="true" className={glyph} />} title="View as Markdown" hint="Open this page as plain text" external />

@@ -1,15 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { BotIcon, CheckIcon, FileTextIcon } from "lucide-react"
+import { FileTextIcon, RobotIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { CopySwapIcon } from "@/components/site/copy-swap-icon"
 import { MorphLabel } from "@/components/site/morph-label"
 
 // an icon name, not a component: this renders from server pages, and a
 // component is a function, which cannot cross the server/client boundary
-const icons = { page: FileTextIcon, prompt: BotIcon }
+const icons = { page: FileTextIcon, prompt: RobotIcon }
 
 /** A labelled copy button: "Copy page", "Copy prompt". The icon and label swap to "Copied". */
 export function CopyAction({
@@ -49,8 +50,8 @@ export function CopyAction({
         timer.current = setTimeout(() => setCopied(false), 1500)
       }}
     >
-      {copied ? <CheckIcon data-icon="inline-start" aria-hidden="true" /> : <Icon data-icon="inline-start" aria-hidden="true" />}
-      <MorphLabel text={copied ? "Copied" : label} labels={[label, "Copied"]} />
+      <CopySwapIcon icon={Icon} copied={copied} />
+      <MorphLabel text={copied ? "Copied" : label} />
     </Button>
   )
 }
