@@ -135,3 +135,5 @@ markdown drift apart. Only the live demos exist in the pages alone.
   `sm` up. The landing title carries faded blueprint rules on each line box,
   pitched with `1lh`. They run past the column, so `body` has
   `overflow-x: clip` (not `hidden`, which would break the sticky header).
+- The header shows the version from `packages/reel/package.json`. Bump it
+  there on release. Nothing else stores the version.
