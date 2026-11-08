@@ -1,0 +1,174 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "reel",
+  "homepage": "https://reel.dev",
+  "items": [
+    {
+      "name": "video-player",
+      "type": "registry:ui",
+      "title": "Video Player",
+      "description": "Drop-in <VideoPlayer src /> with minimal, auto-hiding controls.",
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "lib/media-store.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/media-icons.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/media.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/video-player.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-media-foreground": "var(--media-foreground)",
+          "color-media-scrim": "var(--media-scrim)",
+          "ease-media": "cubic-bezier(0.22, 1, 0.36, 1)"
+        },
+        "light": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        },
+        "dark": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        }
+      }
+    },
+    {
+      "name": "audio-player",
+      "type": "registry:ui",
+      "title": "Audio Player",
+      "description": "Drop-in <AudioPlayer src /> that follows your theme tokens.",
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "lib/media-store.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/media-icons.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/media.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/audio-player.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-media-foreground": "var(--media-foreground)",
+          "color-media-scrim": "var(--media-scrim)",
+          "ease-media": "cubic-bezier(0.22, 1, 0.36, 1)"
+        },
+        "light": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        },
+        "dark": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        }
+      }
+    },
+    {
+      "name": "media",
+      "type": "registry:ui",
+      "title": "Media Primitives",
+      "description": "Headless store and unstyled parts for composing your own player.",
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "lib/media-store.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/media-icons.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/media.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-media-foreground": "var(--media-foreground)",
+          "color-media-scrim": "var(--media-scrim)",
+          "ease-media": "cubic-bezier(0.22, 1, 0.36, 1)"
+        },
+        "light": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        },
+        "dark": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        }
+      }
+    },
+    {
+      "name": "media-hls",
+      "type": "registry:lib",
+      "title": "HLS Loader",
+      "description": "Adds .m3u8 streaming to any Reel player. hls.js is lazy-loaded; Safari plays natively.",
+      "dependencies": [
+        "hls.js"
+      ],
+      "registryDependencies": [
+        "utils"
+      ],
+      "files": [
+        {
+          "path": "lib/media-store.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "components/ui/media-icons.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "components/ui/media.tsx",
+          "type": "registry:ui"
+        },
+        {
+          "path": "lib/media-hls.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-media-foreground": "var(--media-foreground)",
+          "color-media-scrim": "var(--media-scrim)",
+          "ease-media": "cubic-bezier(0.22, 1, 0.36, 1)"
+        },
+        "light": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        },
+        "dark": {
+          "media-foreground": "oklch(1 0 0)",
+          "media-scrim": "oklch(0 0 0)"
+        }
+      }
+    }
+  ]
+}
