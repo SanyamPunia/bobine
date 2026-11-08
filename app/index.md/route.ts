@@ -1,7 +1,10 @@
 import { landingMarkdown } from "@/lib/markdown"
-import { getOrigin } from "@/lib/registry"
+import { SITE_URL } from "@/lib/site"
 import { textResponse } from "@/lib/text-response"
 
-export async function GET() {
-  return textResponse(landingMarkdown(await getOrigin()), "markdown")
+// built once: the content only changes on deploy
+export const dynamic = "force-static"
+
+export function GET() {
+  return textResponse(landingMarkdown(SITE_URL), "markdown")
 }
