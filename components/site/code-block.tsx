@@ -52,13 +52,14 @@ export function CodeBlock({
   className?: string
 }) {
   return (
-    <figure className={cn("rounded-2xl bg-fill p-1 shadow-frame", className)}>
+    <figure className={cn("flex flex-col gap-1 rounded-2xl bg-fill p-1 shadow-frame", className)}>
       <div className="flex items-center justify-between gap-2 py-0.5 pr-0.5 pl-3">
         <figcaption className="flex items-center gap-1.5 font-mono text-meta text-text-muted">
           <LanguageMark label={label ?? "tsx"} prompt={prompt} plain={plain} />
           {label ?? (prompt ? "terminal" : "tsx")}
         </figcaption>
-        <CopyButton value={code} />
+        {/* inset 6px on three sides, so its radius is the tray's less 6px */}
+        <CopyButton value={code} className="rounded-[calc(var(--radius-2xl)-0.375rem)]" />
       </div>
       <pre
         className={cn(

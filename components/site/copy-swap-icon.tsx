@@ -1,4 +1,4 @@
-import { CheckIcon, type Icon } from "@phosphor-icons/react"
+import { CheckIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 
@@ -20,7 +20,7 @@ export function swapIcon(shown: boolean) {
  * The leading icon of a labelled copy button. The idle icon and the check
  * cross-fade in one grid cell, alongside the label morph beside them.
  */
-export function CopySwapIcon({ icon: Idle, copied }: { icon: Icon; copied: boolean }) {
+export function CopySwapIcon({ icon: Idle, copied }: { icon: React.ComponentType<{ className?: string }>; copied: boolean }) {
   return (
     <span data-icon="inline-start" aria-hidden="true" className="grid *:col-start-1 *:row-start-1">
       <CheckIcon className={cn("size-4", swapIcon(copied))} />

@@ -1,9 +1,10 @@
 "use client"
 
-import { CheckIcon, CopyIcon } from "@phosphor-icons/react"
+import { CheckIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { useCopy } from "@/hooks/use-copy"
+import { CopyIcon } from "@/components/site/copy-icon"
 import { swapIcon } from "@/components/site/copy-swap-icon"
 import { Tooltip } from "@/components/site/tooltip"
 

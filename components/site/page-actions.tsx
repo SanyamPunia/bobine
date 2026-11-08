@@ -2,11 +2,12 @@
 
 import * as React from "react"
 import { Menu } from "@base-ui/react/menu"
-import { ArrowSquareOutIcon, CaretDownIcon, CopyIcon, FileTextIcon, RobotIcon } from "@phosphor-icons/react"
+import { ArrowSquareOutIcon, CaretDownIcon, FileTextIcon, RobotIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { useCopy } from "@/hooks/use-copy"
 import { Button } from "@/components/ui/button"
+import { CopyIcon } from "@/components/site/copy-icon"
 import { CopySwapIcon } from "@/components/site/copy-swap-icon"
 import { MorphLabel } from "@/components/site/morph-label"
 import { Tooltip } from "@/components/site/tooltip"
@@ -99,7 +100,7 @@ export function PageActions({
           <Menu.Positioner align="end" sideOffset={6} collisionPadding={12} className="z-50">
             <Menu.Popup className="flex w-64 origin-(--transform-origin) flex-col rounded-xl bg-popover p-1 shadow-frame transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-95 motion-safe:data-starting-style:scale-95">
               <Menu.Item className={item} onClick={() => copy(markdown)}>
-                <ItemBody icon={<CopyIcon aria-hidden="true" className={glyph} />} title="Copy page" hint="This page as Markdown for LLMs" />
+                <ItemBody icon={<CopyIcon className={glyph} />} title="Copy page" hint="This page as Markdown for LLMs" />
               </Menu.Item>
               <Menu.Item className={item} onClick={() => copy(prompt)}>
                 <ItemBody icon={<RobotIcon aria-hidden="true" className={glyph} />} title="Copy prompt" hint="Install reel with a coding agent" />
