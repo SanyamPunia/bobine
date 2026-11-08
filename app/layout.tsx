@@ -16,8 +16,8 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: 'reel, drop-in media players for React',
-    template: '%s | reel',
+    default: 'bobine, drop-in media players for React',
+    template: '%s | bobine',
   },
   description:
     'Swap <video> and <audio> for minimal, accessible players you own. Distributed as a shadcn registry.',

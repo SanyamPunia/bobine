@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "reel",
-  "homepage": "https://reel.dev",
+  "name": "bobine",
+  "homepage": "https://bobine.fyi",
   "items": [
     {
       "name": "video-player",
@@ -129,7 +129,7 @@
       "name": "media-hls",
       "type": "registry:lib",
       "title": "HLS Loader",
-      "description": "Adds .m3u8 streaming to any Reel player. hls.js is lazy-loaded; Safari plays natively.",
+      "description": "Adds .m3u8 streaming to any Bobine player. hls.js is lazy-loaded; Safari plays natively.",
       "dependencies": [
         "hls.js"
       ],

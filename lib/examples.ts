@@ -6,7 +6,7 @@
 
 export const examplesIntro = {
   title: "Examples",
-  description: "Players built with reel, from a single prop to fully composed controls.",
+  description: "Players built with bobine, from a single prop to fully composed controls.",
   lede: "Try prop combinations in the playground, or copy a recipe that already fits.",
 }
 
@@ -182,7 +182,7 @@ export function videoPlaygroundCode(on: Record<VideoToggleKey, boolean>): string
   const native = flags.filter(Boolean).join(" ")
   if (native) lines.push(`  ${native}`)
   if (!on.tooltips) lines.push(`  tooltips={false}`)
-  if (on.persistKey) lines.push(`  persistKey="reel"`)
+  if (on.persistKey) lines.push(`  persistKey="bobine"`)
   if (on.square) lines.push(`  frameClassName="aspect-square max-w-sm"`, `  className="object-cover"`)
   return `<VideoPlayer\n${lines.join("\n")}\n/>`
 }
@@ -195,7 +195,7 @@ export function audioPlaygroundCode(on: Record<AudioToggleKey, boolean>): string
   if (on.showSpeed) lines.push(`  showSpeed`)
   if (on.loop) lines.push(`  loop`)
   if (!on.tooltips) lines.push(`  tooltips={false}`)
-  if (on.persistKey) lines.push(`  persistKey="reel"`)
+  if (on.persistKey) lines.push(`  persistKey="bobine"`)
   if (on.compact) lines.push(`  frameClassName="max-w-xs"`)
   return `<AudioPlayer\n${lines.join("\n")}\n/>`
 }

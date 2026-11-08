@@ -1,5 +1,5 @@
 {
-  "name": "reel",
+  "name": "bobine-site",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@12.3.4",
@@ -8,7 +8,7 @@
     "build": "shadcn build && next build",
     "start": "next start",
     "registry:build": "shadcn build",
-    "package:build": "cd packages/reel && pnpm build",
+    "package:build": "cd packages/bobine && pnpm build",
     "test": "vitest run"
   },
   "dependencies": {

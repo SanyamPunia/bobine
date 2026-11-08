@@ -8,10 +8,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# reel
+# bobine
 
 Drop-in media players for React, distributed as a shadcn registry and as the
-`reel-media` package. `app/page.tsx` is the landing page. The docs are three
+`bobine` package. `app/page.tsx` is the landing page. The docs are three
 pages under `app/docs/` (Getting started, Guides, Reference) sharing
 `app/docs/layout.tsx`.
 
@@ -43,8 +43,8 @@ components/site/     docs-page chrome. Never shipped.
 lib/                 media store and HLS loader (shipped), plus site helpers and page content
 hooks/               React hooks for the site (`useCopy`, `useIsApple`). Never shipped; the players' hooks stay in `components/ui/media.tsx`
 proxy.ts             serves markdown at / and /docs for Accept: text/markdown
-packages/reel/       the npm package build
-skills/reel/         the agent skill, installed with `npx skills add SanyamPunia/reel`. Update it when the API changes
+packages/bobine/       the npm package build
+skills/bobine/         the agent skill, installed with `npx skills add SanyamPunia/bobine`. Update it when the API changes
 public/brands/       third-party marks from svgl.app: OpenAI and Claude (page actions), TypeScript, CSS and Bash (code block labels), GitHub (header)
 public/team/         author avatars for the footer credit, 96px JPEGs cropped to the face
 public/media/        demo video, captions and audio
@@ -134,7 +134,7 @@ markdown drift apart. Only the live demos exist in the pages alone.
 
 | Path | Serves |
 | --- | --- |
-| `/llms.txt` | Index per llmstxt.org: when to use reel, then every doc and registry link |
+| `/llms.txt` | Index per llmstxt.org: when to use bobine, then every doc and registry link |
 | `/llms-full.txt` | The full docs as one file |
 | `/docs.md`, `/index.md`, `/docs/examples.md` | Markdown copies of the pages, `noindex` |
 | `/sitemap.xml`, `/robots.txt` | Generated from `app/sitemap.ts` and `app/robots.ts` |
@@ -175,7 +175,7 @@ markdown drift apart. Only the live demos exist in the pages alone.
   `sm` up. The landing title carries faded blueprint rules on each line box,
   pitched with `1lh`. They run past the column, so `body` has
   `overflow-x: clip` (not `hidden`, which would break the sticky header).
-- The header shows the version from `packages/reel/package.json`. Bump it
+- The header shows the version from `packages/bobine/package.json`. Bump it
   there on release. Nothing else stores the version.
 
 ## Docs structure

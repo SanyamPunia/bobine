@@ -115,7 +115,7 @@ describe("createMediaStore", () => {
   })
 
   it("persists and restores preferences when persistKey is set", () => {
-    const first = createMediaStore({ persistKey: "reel-test" })
+    const first = createMediaStore({ persistKey: "bobine-test" })
     const a = fakeMedia()
     first.attach(a)
     first.setVolume(0.4)
@@ -123,7 +123,7 @@ describe("createMediaStore", () => {
     a.dispatchEvent(new Event("volumechange"))
     a.dispatchEvent(new Event("ratechange"))
 
-    const second = createMediaStore({ persistKey: "reel-test" })
+    const second = createMediaStore({ persistKey: "bobine-test" })
     const b = fakeMedia()
     second.attach(b)
     expect(b.volume).toBeCloseTo(0.4)
@@ -131,8 +131,8 @@ describe("createMediaStore", () => {
   })
 
   it("ignores corrupted persisted preferences", () => {
-    localStorage.setItem("reel-bad", "{not json")
-    const store = createMediaStore({ persistKey: "reel-bad" })
+    localStorage.setItem("bobine-bad", "{not json")
+    const store = createMediaStore({ persistKey: "bobine-bad" })
     expect(() => store.attach(fakeMedia())).not.toThrow()
   })
 

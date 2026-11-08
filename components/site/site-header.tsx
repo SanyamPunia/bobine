@@ -7,7 +7,7 @@ import { CommandMenu } from "@/components/site/command-menu"
 import { Tooltip } from "@/components/site/tooltip"
 
 /* the published package's version, so the header always shows what ships */
-import reelPackage from "@/packages/reel/package.json"
+import bobinePackage from "@/packages/bobine/package.json"
 
 /**
  * The site's sections only. Registry and npm live in the command menu and the
@@ -40,10 +40,10 @@ export function SiteHeader({ current }: { current?: string }) {
           <Link href="/" className={cn(link, "flex items-center gap-2 font-mono font-medium text-text-primary")}>
             {/* app/icon.svg, the favicon, served at /icon.svg. Decorative: the wordmark names the link. */}
             <img src="/icon.svg" alt="" draggable={false} className="size-5 select-none" />
-            reel
+            bobine
           </Link>
           <span className="hidden rounded-full bg-fill px-1.5 py-px font-mono text-meta text-text-muted sm:inline">
-            v{reelPackage.version}
+            v{bobinePackage.version}
           </span>
         </div>
         <div className="flex items-center gap-4 sm:gap-5">
@@ -68,7 +68,7 @@ export function SiteHeader({ current }: { current?: string }) {
             {/* hidden on phones, where it does not fit; GitHub is in search */}
             <Tooltip label="GitHub repository">
               <a
-                href="https://github.com/SanyamPunia/reel"
+                href="https://github.com/SanyamPunia/bobine"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub repository"

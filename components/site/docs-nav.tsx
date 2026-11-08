@@ -121,7 +121,7 @@ export function DocsNav() {
               <div className="flex items-center justify-between">
                 {/* the wordmark is decorative here; the dialog is named for its content */}
                 <span aria-hidden="true" className="font-mono text-action font-medium text-text-primary">
-                  reel
+                  bobine
                 </span>
                 <Dialog.Title className="sr-only">Docs menu</Dialog.Title>
                 <Tooltip label="Close menu">

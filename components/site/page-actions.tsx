@@ -67,7 +67,7 @@ export function PageActions({
 }) {
   const { copied, copy } = useCopy()
 
-  const ask = encodeURIComponent(`Read ${origin}${mdPath} so I can ask questions about reel, the React media player.`)
+  const ask = encodeURIComponent(`Read ${origin}${mdPath} so I can ask questions about bobine, the React media player.`)
 
   return (
     <div className="flex shrink-0 items-center">
@@ -103,7 +103,7 @@ export function PageActions({
                 <ItemBody icon={<CopyIcon className={glyph} />} title="Copy page" hint="This page as Markdown for LLMs" />
               </Menu.Item>
               <Menu.Item className={item} onClick={() => copy(prompt)}>
-                <ItemBody icon={<RobotIcon aria-hidden="true" className={glyph} />} title="Copy prompt" hint="Install reel with a coding agent" />
+                <ItemBody icon={<RobotIcon aria-hidden="true" className={glyph} />} title="Copy prompt" hint="Install bobine with a coding agent" />
               </Menu.Item>
               <Menu.LinkItem className={item} href={mdPath} target="_blank" rel="noreferrer">
                 <ItemBody icon={<FileTextIcon aria-hidden="true" className={glyph} />} title="View as Markdown" hint="Open this page as plain text" external />

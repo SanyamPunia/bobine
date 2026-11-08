@@ -127,7 +127,7 @@ export function Playground() {
             loop={video.loop}
             playsInline={video.autoPlay}
             tooltips={video.tooltips}
-            persistKey={video.persistKey ? "reel-playground" : undefined}
+            persistKey={video.persistKey ? "bobine-playground" : undefined}
             frameClassName={video.square ? "aspect-square max-w-sm" : undefined}
             className={video.square ? "object-cover" : undefined}
           />
@@ -141,7 +141,7 @@ export function Playground() {
             showSpeed={audio.showSpeed}
             loop={audio.loop}
             tooltips={audio.tooltips}
-            persistKey={audio.persistKey ? "reel-playground" : undefined}
+            persistKey={audio.persistKey ? "bobine-playground" : undefined}
             frameClassName={cn("max-w-md bg-bg", audio.compact && "max-w-xs")}
           />
         </Demo>

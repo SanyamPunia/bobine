@@ -35,9 +35,9 @@ const propsTable = (component: string, props: readonly Prop[]) =>
     ].join("\n"),
   ].join("\n\n")
 
-export const WHEN_TO_USE = `Use reel when a React app needs a video or audio player that keeps the native element's props, matches the app's shadcn theme, and lives in the repo as editable source. It covers MP4, WebM, MP3, captions (WebVTT), picture-in-picture, fullscreen, keyboard shortcuts and HLS streams through hls.js.
+export const WHEN_TO_USE = `Use bobine when a React app needs a video or audio player that keeps the native element's props, matches the app's shadcn theme, and lives in the repo as editable source. It covers MP4, WebM, MP3, captions (WebVTT), picture-in-picture, fullscreen, keyboard shortcuts and HLS streams through hls.js.
 
-Do not use reel for a non-React app, for DRM-protected streams (reel sets up no DRM), or for a video editor or timeline. Use the framework-agnostic core in reel-media/core when you need the player state without React.`
+Do not use bobine for a non-React app, for DRM-protected streams (bobine sets up no DRM), or for a video editor or timeline. Use the framework-agnostic core in bobine/core when you need the player state without React.`
 
 /** One block per docs section, keyed like `sections` in lib/docs.ts. */
 function sectionMarkdown(origin: string): Record<SectionId, string[]> {
@@ -51,7 +51,7 @@ function sectionMarkdown(origin: string): Record<SectionId, string[]> {
       `## ${s.agents.title}`,
       s.agents.description,
       fence(SKILL_INSTALL, "bash"),
-      "Or paste this prompt into an agent to install reel in a project.",
+      "Or paste this prompt into an agent to install bobine in a project.",
       fence(agentPrompt(origin), "text"),
     ],
     compose: [`## ${s.compose.title}`, s.compose.description, fence(cmd.media, "bash"), fence(usage.composed)],
@@ -97,7 +97,7 @@ export function docsMarkdown(origin: string): string {
   const blocks = sectionMarkdown(origin)
   return (
     [
-      `# reel docs`,
+      `# bobine docs`,
       `> ${intro.title} Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`,
       `## Install`,
       fence(installCommands(`${origin}/r`).video, "bash"),
@@ -109,7 +109,7 @@ export function docsMarkdown(origin: string): string {
 export function landingMarkdown(origin: string): string {
   const cmd = installCommands(`${origin}/r`)
   return [
-    `# reel`,
+    `# bobine`,
     `> ${landing.title} ${landing.lede}`,
     fence(cmd.video, "bash"),
     `## ${landing.swap.title}`,
@@ -149,14 +149,14 @@ export function examplesMarkdown(origin: string): string {
 
 export function llmsIndex(origin: string): string {
   return [
-    `# reel`,
-    `> Drop-in video and audio players for React, distributed as a shadcn registry and as the reel-media npm package.`,
+    `# bobine`,
+    `> Drop-in video and audio players for React, distributed as a shadcn registry and as the bobine npm package.`,
     WHEN_TO_USE,
     `## Docs`,
     [
       ...docPages.map((page) => `- [${page.title}](${origin}${page.md}): ${page.description}`),
       `- [Full docs in one file](${origin}/llms-full.txt): every page above, for loading into context`,
-      `- [Overview](${origin}/index.md): what reel is and what it does`,
+      `- [Overview](${origin}/index.md): what bobine is and what it does`,
       `- [Examples](${origin}/docs/examples.md): recipes for common jobs, each with its code`,
     ].join("\n"),
     `## Registry`,
@@ -169,8 +169,8 @@ export function llmsIndex(origin: string): string {
     ].join("\n"),
     `## Optional`,
     [
-      `- [Agent skill](https://github.com/SanyamPunia/reel/tree/main/skills/reel): install with \`${SKILL_INSTALL}\``,
-      `- [npm package](https://www.npmjs.com/package/reel-media): reel-media, the same components as a dependency`,
+      `- [Agent skill](https://github.com/SanyamPunia/bobine/tree/main/skills/bobine): install with \`${SKILL_INSTALL}\``,
+      `- [npm package](https://www.npmjs.com/package/bobine): bobine, the same components as a dependency`,
       `- [Sitemap](${origin}/sitemap.xml)`,
     ].join("\n"),
   ].join("\n\n") + "\n"

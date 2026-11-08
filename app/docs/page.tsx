@@ -60,7 +60,7 @@ export default function Page() {
               loop
               tracks={heroTracks}
               aria-label="Demo video of a blooming flower"
-              metadata={{ title: "Bloom", artist: "reel" }}
+              metadata={{ title: "Bloom", artist: "bobine" }}
             />
           </Demo>
           <CodeBlock prompt code={cmd.video} />

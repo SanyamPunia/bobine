@@ -60,7 +60,7 @@ export default function Page() {
         <Section id={s.video.id} title={s.video.title} description={s.video.description}>
           <div className="flex flex-col gap-14">
             <RecipeBlock recipe={v.lesson} bleed>
-              <VideoPlayer src="/media/flower.mp4" aria-label={flower} tracks={tracks} persistKey="reel-examples-course" />
+              <VideoPlayer src="/media/flower.mp4" aria-label={flower} tracks={tracks} persistKey="bobine-examples-course" />
             </RecipeBlock>
 
             <RecipeBlock recipe={v.ambient} bleed>
@@ -95,7 +95,7 @@ export default function Page() {
                 title="Episode 12"
                 description="Field notes"
                 showSpeed
-                persistKey="reel-examples-podcast"
+                persistKey="bobine-examples-podcast"
                 frameClassName="max-w-md bg-bg"
               />
             </RecipeBlock>

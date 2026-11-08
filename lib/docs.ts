@@ -19,7 +19,7 @@ export const usage = {
   src="/clip.mp4"
   poster="/clip.jpg"
   tracks={[{ src: "/clip.en.vtt", label: "English", srcLang: "en" }]}
-  persistKey="reel"
+  persistKey="bobine"
 />`,
   audio: `import { AudioPlayer } from "@/components/ui/audio-player"
 
@@ -64,11 +64,11 @@ export const dashLoader: MediaSourceLoader = (media, src) => {
 }`,
   package: `/* globals.css */
 @import "tailwindcss";
-@import "reel-media/styles.css";
+@import "bobine/styles.css";
 
-import { VideoPlayer, AudioPlayer } from "reel-media"
-import { hlsLoader } from "reel-media/hls"
-import { createMediaStore } from "reel-media/core"`,
+import { VideoPlayer, AudioPlayer } from "bobine"
+import { hlsLoader } from "bobine/hls"
+import { createMediaStore } from "bobine/core"`,
 }
 
 /** One shadcn command per registry item. */
@@ -79,7 +79,7 @@ export function installCommands(registry: string) {
     audio: add("audio-player"),
     media: add("media"),
     hls: add("media-hls"),
-    package: "pnpm add reel-media",
+    package: "pnpm add bobine",
   }
 }
 
@@ -112,13 +112,13 @@ export const sections = {
     id: "package",
     title: "Or install the package",
     description:
-      "Prefer a dependency over owning the source? The same components ship as reel-media, with a framework-agnostic core.",
+      "Prefer a dependency over owning the source? The same components ship as bobine, with a framework-agnostic core.",
   },
   loader: {
     id: "loader",
     title: "Custom loaders",
     description:
-      "A loader attaches a source the browser cannot play natively, such as DASH. When you pass one, reel leaves src off the element, so the loader must set media.src itself for any source it does not handle. Return a cleanup function. It runs when src changes or the player unmounts.",
+      "A loader attaches a source the browser cannot play natively, such as DASH. When you pass one, bobine leaves src off the element, so the loader must set media.src itself for any source it does not handle. Return a cleanup function. It runs when src changes or the player unmounts.",
   },
   theming: {
     id: "theming",
@@ -135,7 +135,7 @@ export const sections = {
     id: "agents",
     title: "Use with agents",
     description:
-      "Install the reel skill so your coding agent knows the components, props and pitfalls. The full docs are also plain text at /llms-full.txt.",
+      "Install the bobine skill so your coding agent knows the components, props and pitfalls. The full docs are also plain text at /llms-full.txt.",
   },
   parts: {
     id: "parts",
@@ -180,7 +180,7 @@ export const docPages = [
     href: "/docs",
     md: "/docs.md",
     title: "Getting started",
-    description: "Install reel and swap your first video or audio element.",
+    description: "Install bobine and swap your first video or audio element.",
     sections: ["video", "audio", "package", "agents"],
   },
   {
@@ -238,7 +238,7 @@ export const audioProps: readonly Prop[] = [
   { name: "persistKey", type: "string", description: "Same as on VideoPlayer." },
 ]
 
-export const SKILL_INSTALL = "npx skills add SanyamPunia/reel"
+export const SKILL_INSTALL = "npx skills add SanyamPunia/bobine"
 
 /** Readable names for keys the page draws as icons. */
 export const keyLabels: Record<string, string> = {
@@ -268,9 +268,9 @@ export const shortcuts: readonly { keys: readonly string[]; action: string }[] =
  */
 export function agentPrompt(origin: string): string {
   const cmd = installCommands(`${origin}/r`)
-  return `Add reel media players to this React project.
+  return `Add bobine media players to this React project.
 
-1. Read ${origin}/llms-full.txt for the full reel docs before you change code.
+1. Read ${origin}/llms-full.txt for the full bobine docs before you change code.
 2. Install the video player with the shadcn CLI:
    ${cmd.video}
    For audio, also run: ${cmd.audio}

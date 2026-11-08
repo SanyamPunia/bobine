@@ -1,11 +1,11 @@
-# reel-media
+# bobine
 
 Drop-in video and audio players for React. Swap `<video>` for `<VideoPlayer>` and keep every native prop.
 
 Two ways to use it:
 
 - **Own the source** (recommended): `npx shadcn@latest add <your-domain>/r/video-player.json`
-- **Install the package**: `pnpm add reel-media`
+- **Install the package**: `pnpm add bobine`
 
 ## Package setup
 
@@ -13,19 +13,19 @@ Requires React 19 and Tailwind CSS v4 with shadcn-style theme tokens (`--backgro
 
 ```css
 @import "tailwindcss";
-@import "reel-media/styles.css";
+@import "bobine/styles.css";
 ```
 
 ## Usage
 
 ```tsx
-import { VideoPlayer, AudioPlayer } from "reel-media"
+import { VideoPlayer, AudioPlayer } from "bobine"
 
 <VideoPlayer
   src="/clip.mp4"
   poster="/clip.jpg"
   tracks={[{ src: "/clip.en.vtt", label: "English", srcLang: "en", default: true }]}
-  persistKey="reel"
+  persistKey="bobine"
 />
 
 <AudioPlayer src="/episode.mp3" title="Episode 12" description="Field notes" artwork="/cover.jpg" showSpeed />
@@ -35,8 +35,8 @@ import { VideoPlayer, AudioPlayer } from "reel-media"
 
 ```tsx
 "use client"
-import { VideoPlayer } from "reel-media"
-import { hlsLoader } from "reel-media/hls" // requires `hls.js`, loaded on demand
+import { VideoPlayer } from "bobine"
+import { hlsLoader } from "bobine/hls" // requires `hls.js`, loaded on demand
 
 <VideoPlayer src="https://example.com/stream.m3u8" loader={hlsLoader} />
 ```
@@ -44,7 +44,7 @@ import { hlsLoader } from "reel-media/hls" // requires `hls.js`, loaded on deman
 ### Compose your own
 
 ```tsx
-import { MediaRoot, MediaVideo, MediaSurface, MediaControls, MediaSeek, MediaPlayButton, MediaTime } from "reel-media"
+import { MediaRoot, MediaVideo, MediaSurface, MediaControls, MediaSeek, MediaPlayButton, MediaTime } from "bobine"
 
 <MediaRoot className="aspect-video bg-media-scrim text-media-foreground">
   <MediaVideo src="/clip.mp4" className="size-full" />
@@ -65,7 +65,7 @@ Every component exports its props type under its own name plus `Props`, so a
 wrapper can extend it.
 
 ```tsx
-import { AudioPlayer, type AudioPlayerProps } from "reel-media"
+import { AudioPlayer, type AudioPlayerProps } from "bobine"
 
 function EpisodePlayer(props: AudioPlayerProps) {
   return <AudioPlayer showSpeed persistKey="episodes" {...props} />
@@ -76,10 +76,10 @@ function EpisodePlayer(props: AudioPlayerProps) {
 
 ### Framework-agnostic core
 
-`reel-media/core` exports `createMediaStore()`, a dependency-free store you can `attach` to any `HTMLMediaElement`.
+`bobine/core` exports `createMediaStore()`, a dependency-free store you can `attach` to any `HTMLMediaElement`.
 
 ```ts
-import { createMediaStore } from "reel-media/core"
+import { createMediaStore } from "bobine/core"
 
 const store = createMediaStore()
 store.attach(document.querySelector("video")!)

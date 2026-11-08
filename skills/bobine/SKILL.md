@@ -1,28 +1,28 @@
 ---
-name: reel
-description: Add or change reel video and audio players in a React project. Use when replacing <video> or <audio> elements, installing reel with the shadcn CLI, composing a custom player from reel's Media* parts, playing HLS or other adaptive streams, or debugging a reel player.
+name: bobine
+description: Add or change bobine video and audio players in a React project. Use when replacing <video> or <audio> elements, installing bobine with the shadcn CLI, composing a custom player from bobine's Media* parts, playing HLS or other adaptive streams, or debugging a bobine player.
 ---
 
-# reel
+# bobine
 
-reel is a set of drop-in video and audio players for React. The shadcn CLI copies the source into the project, so the user owns and can edit every file. The players keep every native prop of `<video>` and `<audio>`.
+bobine is a set of drop-in video and audio players for React. The shadcn CLI copies the source into the project, so the user owns and can edit every file. The players keep every native prop of `<video>` and `<audio>`.
 
-The full docs are plain text at `<docs-host>/llms-full.txt`. Read that file before a large change. If you do not know the docs host, ask the user.
+The full docs are plain text at `https://bobine.fyi/llms-full.txt`. Read that file before a large change. If you do not know the docs host, ask the user.
 
 ## When to use it
 
 - The project uses React 19 and Tailwind CSS 4 with shadcn theme tokens.
 - The user wants a styled player that matches their theme in light and dark.
 
-Do not use reel for a non-React app, for DRM-protected streams, or for a video editor or timeline.
+Do not use bobine for a non-React app, for DRM-protected streams, or for a video editor or timeline.
 
 ## Install
 
 ```bash
-npx shadcn@latest add <docs-host>/r/video-player.json   # VideoPlayer
-npx shadcn@latest add <docs-host>/r/audio-player.json   # AudioPlayer
-npx shadcn@latest add <docs-host>/r/media.json          # unstyled Media* parts
-npx shadcn@latest add <docs-host>/r/media-hls.json      # hlsLoader for .m3u8
+npx shadcn@latest add https://bobine.fyi/r/video-player.json   # VideoPlayer
+npx shadcn@latest add https://bobine.fyi/r/audio-player.json   # AudioPlayer
+npx shadcn@latest add https://bobine.fyi/r/media.json          # unstyled Media* parts
+npx shadcn@latest add https://bobine.fyi/r/media-hls.json      # hlsLoader for .m3u8
 ```
 
 ## Replace a native element
@@ -47,7 +47,7 @@ npx shadcn@latest add <docs-host>/r/media-hls.json      # hlsLoader for .m3u8
 ## Streams and loaders
 
 - For `.m3u8`, pass `loader={hlsLoader}` from `@/lib/media-hls`. Use it in a client component (`"use client"`). hls.js loads only when an HLS source appears, and Safari plays HLS natively.
-- A custom loader has the type `MediaSourceLoader`: `(media, src) => cleanup | void`. When a loader is set, reel does not put `src` on the element. The loader must set `media.src` for any source it does not handle. Return a cleanup function.
+- A custom loader has the type `MediaSourceLoader`: `(media, src) => cleanup | void`. When a loader is set, bobine does not put `src` on the element. The loader must set `media.src` for any source it does not handle. Return a cleanup function.
 
 ## Compose a custom player
 
