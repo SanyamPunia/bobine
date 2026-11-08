@@ -30,7 +30,7 @@ function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () 
         onClick={onNavigate}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "-ml-2 cursor-pointer rounded-md px-2 py-1 text-action transition-all duration-150 hover:bg-fill hover:text-text-primary motion-safe:active:scale-[0.98]",
+          "-ml-2 cursor-pointer rounded-md px-2 py-1 text-action transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary motion-safe:active:scale-[0.98]",
           focus,
           active ? "bg-fill text-text-primary" : "text-text-secondary"
         )}
@@ -58,6 +58,9 @@ function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () 
 export function DocsNav() {
   const pathname = usePathname()
   const [open, setOpen] = React.useState(false)
+
+  /* the drawer opens on the current page, not on the close button's tooltip */
+  const popup = React.useRef<HTMLDivElement>(null)
   const current = [...docPages, ...extras].find((page) => page.href === pathname)
 
   return (
@@ -74,7 +77,7 @@ export function DocsNav() {
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger
             className={cn(
-              "flex w-full cursor-pointer items-center gap-2 rounded-xl bg-surface px-3 py-2 text-left shadow-frame transition-all duration-150 hover:bg-fill motion-safe:active:scale-[0.98] aria-expanded:bg-fill",
+              "flex w-full cursor-pointer items-center gap-2 rounded-xl bg-surface px-3 py-2 text-left shadow-frame transition-[background-color,scale] duration-150 hover:bg-fill motion-safe:active:scale-[0.98] aria-expanded:bg-fill",
               focus
             )}
           >
@@ -86,16 +89,21 @@ export function DocsNav() {
           <Dialog.Portal>
             <Dialog.Backdrop className="fixed inset-0 z-50 bg-scrim transition-opacity duration-200 data-ending-style:opacity-0 data-starting-style:opacity-0" />
             <Dialog.Popup
-              aria-label="Docs"
-              className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col gap-6 overflow-y-auto bg-bg px-5 pt-5 pb-8 shadow-frame transition-transform duration-200 ease-media data-ending-style:-translate-x-full data-starting-style:-translate-x-full motion-reduce:transition-none"
+              ref={popup}
+              initialFocus={() => popup.current?.querySelector<HTMLElement>("[aria-current=page]") ?? true}
+              className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col gap-6 overflow-y-auto bg-bg px-5 pt-5 pb-8 shadow-frame transition-[translate,opacity] duration-200 ease-media motion-safe:data-ending-style:-translate-x-full motion-safe:data-starting-style:-translate-x-full motion-reduce:data-ending-style:opacity-0 motion-reduce:data-starting-style:opacity-0"
             >
               <div className="flex items-center justify-between">
-                <Dialog.Title className="font-mono text-action font-medium text-text-primary">reel</Dialog.Title>
+                {/* the wordmark is decorative here; the dialog is named for its content */}
+                <span aria-hidden="true" className="font-mono text-action font-medium text-text-primary">
+                  reel
+                </span>
+                <Dialog.Title className="sr-only">Docs menu</Dialog.Title>
                 <Tooltip label="Close menu">
                   <Dialog.Close
                     aria-label="Close menu"
                     className={cn(
-                      "grid size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-all duration-150 hover:bg-fill hover:text-text-primary motion-safe:active:scale-[0.98]",
+                      "grid size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary motion-safe:active:scale-[0.98]",
                       focus
                     )}
                   >

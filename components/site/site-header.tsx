@@ -5,11 +5,14 @@ import { CONTENT_WIDTH } from "@/lib/constants"
 import { searchItems } from "@/lib/search"
 import { CommandMenu } from "@/components/site/command-menu"
 import { Tooltip } from "@/components/site/tooltip"
-// the published package's version, so the header always shows what ships
+
+/* the published package's version, so the header always shows what ships */
 import reelPackage from "@/packages/reel/package.json"
 
-// the site's sections only. Registry and npm live in the command menu and the
-// footer, so the header stays at two links, search and the repo
+/**
+ * The site's sections only. Registry and npm live in the command menu and the
+ * footer, so the header stays at two links, search and the repo.
+ */
 const links = [
   { href: "/docs", label: "Docs" },
   { href: "/examples", label: "Examples" },
@@ -70,7 +73,7 @@ export function SiteHeader({ current }: { current?: string }) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub repository"
-                className="hidden size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-all duration-150 hover:bg-fill hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] sm:grid"
+                className="hidden size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] sm:grid"
               >
                 {/* svgl's GitHub mark as a mask, so it takes the text colour */}
                 <span

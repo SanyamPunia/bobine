@@ -104,7 +104,7 @@ export function PageRail() {
           {bar && (
             <span
               aria-hidden="true"
-              className="absolute -left-px w-px bg-text-primary transition-all duration-150 ease-out motion-reduce:transition-none"
+              className="absolute -left-px w-px bg-text-primary transition-[top,height] duration-150 ease-out motion-reduce:transition-none"
               style={{ top: bar.top, height: bar.height }}
             />
           )}

@@ -6,7 +6,9 @@ import { Command } from "cmdk"
 import { Dialog } from "@base-ui/react/dialog"
 import { ArrowSquareOutIcon, FileTextIcon, HashIcon, MagnifyingGlassIcon } from "@phosphor-icons/react"
 
+import { cn } from "@/lib/utils"
 import type { SearchItem } from "@/lib/search"
+import { useIsApple } from "@/hooks/use-is-apple"
 import { Tooltip } from "@/components/site/tooltip"
 
 const groups: SearchItem["group"][] = ["Pages", "Sections", "Links"]
@@ -36,6 +38,8 @@ function filter(value: string, search: string, keywords?: string[]): number {
 export function CommandMenu({ items }: { items: SearchItem[] }) {
   const [open, setOpen] = React.useState(false)
   const router = useRouter()
+  const apple = useIsApple()
+  const mod = apple ? "⌘" : "Ctrl"
 
   React.useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -58,22 +62,30 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
     <Dialog.Root open={open} onOpenChange={setOpen}>
       {/* a circle on phones, where only the icon shows; a pill with the label and
           shortcut from `sm` up */}
-      <Tooltip label="Search docs (⌘ K)">
+      <Tooltip label={apple === null ? "Search docs" : `Search docs (${apple ? "⌘K" : "Ctrl+K"})`}>
         <Dialog.Trigger
           aria-label="Search docs"
-          className="flex size-8 cursor-pointer items-center justify-center gap-2 rounded-full bg-fill text-action sm:h-auto sm:w-auto sm:justify-start sm:py-1 sm:pr-1.5 sm:pl-2.5 text-text-secondary transition-all duration-150 hover:bg-fill-hover hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] aria-expanded:bg-fill-hover"
+          aria-keyshortcuts="Control+K Meta+K"
+          className="flex size-8 cursor-pointer items-center justify-center gap-2 rounded-full bg-fill text-action text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill-hover hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] aria-expanded:bg-fill-hover sm:h-auto sm:w-auto sm:justify-start sm:py-1 sm:pr-1.5 sm:pl-2.5"
         >
           <MagnifyingGlassIcon aria-hidden="true" className="size-3.5" />
           <span className="hidden sm:inline">Search</span>
-          <kbd className="hidden items-center gap-0.5 rounded-full bg-bg px-1.5 font-mono text-meta text-text-muted sm:flex">
-            <span>⌘</span>
+
+          {/* hidden until the platform is known, so ⌘ never flashes on Windows */}
+          <kbd
+            className={cn(
+              "hidden items-center gap-0.5 rounded-full bg-bg px-1.5 font-mono text-meta text-text-muted transition-opacity duration-150 sm:flex",
+              apple === null && "opacity-0"
+            )}
+          >
+            <span>{mod}</span>
             <span>K</span>
           </kbd>
         </Dialog.Trigger>
       </Tooltip>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-scrim transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
-        <Dialog.Popup className="fixed top-[15vh] left-1/2 z-50 flex max-h-[min(30rem,70svh)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl bg-popover shadow-frame transition-[opacity,transform] duration-150 ease-media data-ending-style:scale-[0.98] data-ending-style:opacity-0 data-starting-style:scale-[0.98] data-starting-style:opacity-0">
+        <Dialog.Popup className="fixed top-[15vh] left-1/2 z-50 flex max-h-[min(30rem,70svh)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl bg-popover shadow-frame transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-[0.98] motion-safe:data-starting-style:scale-[0.98]">
           <Dialog.Title className="sr-only">Search docs</Dialog.Title>
           <Command loop filter={filter} className="flex min-h-0 flex-col">
             <div className="flex items-center gap-2.5 border-b border-stroke-soft px-4">
@@ -83,11 +95,11 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
               <Command.Input
                 autoFocus
                 placeholder="Search pages and sections"
-                className="h-12 w-full bg-transparent text-body text-text-primary transition-all duration-200 outline-none placeholder:text-body placeholder:text-text-muted"
+                className="h-12 w-full bg-transparent text-body text-text-primary outline-none placeholder:text-body placeholder:text-text-muted"
               />
               <kbd className="shrink-0 rounded-md bg-fill px-1.5 font-mono text-meta text-text-muted">esc</kbd>
             </div>
-            <Command.List className="min-h-0 overflow-y-auto overscroll-contain p-1.5 [&_[cmdk-group-heading]]:px-2.5 [&_[cmdk-group-heading]]:pt-2.5 [&_[cmdk-group-heading]]:pb-1.5 [&_[cmdk-group-heading]]:text-meta [&_[cmdk-group-heading]]:text-text-muted">
+            <Command.List className="min-h-0 overflow-y-auto overscroll-contain p-1.5 **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2.5 **:[[cmdk-group-heading]]:pb-1.5 **:[[cmdk-group-heading]]:text-meta **:[[cmdk-group-heading]]:text-text-muted">
               <Command.Empty className="px-2.5 py-8 text-center text-action text-text-muted">No results</Command.Empty>
               {groups.map((group) => {
                 const Icon = icons[group]
@@ -98,7 +110,6 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
                       .map((item) => (
                         <Command.Item
                           key={item.href}
-                          // titles are unique, so the title alone is the value
                           value={item.title}
                           keywords={[item.href, ...item.keywords]}
                           onSelect={() => go(item)}

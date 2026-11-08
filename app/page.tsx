@@ -56,7 +56,7 @@ export default function Page() {
     <TooltipProvider delay={300}>
       <SiteHeader current="/" />
 
-      <main className={cn("mx-auto flex w-full flex-col gap-20 px-5 pt-12 pb-24 md:pt-20", CONTENT_WIDTH)}>
+      <main id="content" className={cn("mx-auto flex w-full flex-col gap-20 px-5 pt-12 pb-24 md:pt-20", CONTENT_WIDTH)}>
         <header className="flex flex-col gap-10">
           {/* title and lede are one group, the actions sit apart */}
           <div className="flex flex-col gap-4">

@@ -24,7 +24,7 @@ export default function Page() {
       {/* the docs sidebar lists this page, so it stays on screen here too */}
       <DocsNav />
 
-      <main className={cn("mx-auto flex w-full flex-col gap-10 px-5 pt-10 pb-24 md:pt-16", CONTENT_WIDTH)}>
+      <main id="content" className={cn("mx-auto flex w-full flex-col gap-10 px-5 pt-10 pb-24 md:pt-16", CONTENT_WIDTH)}>
         <header className="flex flex-col gap-3">
           <h1 className="text-title font-medium tracking-tight text-text-primary">Examples</h1>
           <p className="text-body text-pretty text-text-secondary">
