@@ -52,7 +52,15 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
     return () => window.removeEventListener("keydown", onKey)
   }, [])
 
+  /**
+   * Set when a result closes the menu. Focus then stays with the destination
+   * instead of returning to the trigger, where it would also open the trigger's
+   * tooltip. Escape and outside clicks still hand focus back to the trigger.
+   */
+  const chose = React.useRef(false)
+
   const go = (item: SearchItem) => {
+    chose.current = true
     setOpen(false)
     if (item.external) window.open(item.href, "_blank", "noreferrer")
     else router.push(item.href)
@@ -85,7 +93,13 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
       </Tooltip>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-50 bg-scrim transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0" />
-        <Dialog.Popup className="fixed top-[15vh] left-1/2 z-50 flex max-h-[min(30rem,70svh)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl bg-popover shadow-frame transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-[0.98] motion-safe:data-starting-style:scale-[0.98]">
+        <Dialog.Popup
+          finalFocus={() => {
+            const restore = !chose.current
+            chose.current = false
+            return restore
+          }}
+          className="fixed top-[15vh] left-1/2 z-50 flex max-h-[min(30rem,70svh)] w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 flex-col overflow-hidden rounded-2xl bg-popover shadow-frame transition-[opacity,scale] duration-150 ease-media data-ending-style:opacity-0 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-[0.98] motion-safe:data-starting-style:scale-[0.98]">
           <Dialog.Title className="sr-only">Search docs</Dialog.Title>
           <Command loop filter={filter} className="flex min-h-0 flex-col">
             <div className="flex items-center gap-2.5 border-b border-stroke-soft px-4">
