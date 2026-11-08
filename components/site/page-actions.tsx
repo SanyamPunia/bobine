@@ -51,7 +51,18 @@ function ItemBody({ icon, title, hint, external }: { icon: React.ReactNode; titl
  * "Copy page" on the left, the rest in a menu. It matches the pattern most
  * docs sites use, and it keeps the actions from competing with the page title.
  */
-export function PageActions({ markdown, prompt, origin }: { markdown: string; prompt: string; origin: string }) {
+/** `mdPath` is this page's markdown copy, such as "/docs/guides.md". */
+export function PageActions({
+  markdown,
+  prompt,
+  origin,
+  mdPath,
+}: {
+  markdown: string
+  prompt: string
+  origin: string
+  mdPath: string
+}) {
   const [copied, setCopied] = React.useState(false)
   const timer = React.useRef<ReturnType<typeof setTimeout>>(undefined)
 
@@ -69,7 +80,7 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
     timer.current = setTimeout(() => setCopied(false), 1500)
   }
 
-  const ask = encodeURIComponent(`Read ${origin}/docs.md so I can ask questions about reel, the React media player.`)
+  const ask = encodeURIComponent(`Read ${origin}${mdPath} so I can ask questions about reel, the React media player.`)
 
   return (
     <div className="flex shrink-0 items-center">
@@ -107,7 +118,7 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
               <Menu.Item className={item} onClick={() => copy(prompt)}>
                 <ItemBody icon={<RobotIcon aria-hidden="true" className={glyph} />} title="Copy prompt" hint="Install reel with a coding agent" />
               </Menu.Item>
-              <Menu.LinkItem className={item} href="/docs.md" target="_blank" rel="noreferrer">
+              <Menu.LinkItem className={item} href={mdPath} target="_blank" rel="noreferrer">
                 <ItemBody icon={<FileTextIcon aria-hidden="true" className={glyph} />} title="View as Markdown" hint="Open this page as plain text" external />
               </Menu.LinkItem>
               <div aria-hidden="true" className="mx-2 my-1 h-px bg-stroke-soft" />

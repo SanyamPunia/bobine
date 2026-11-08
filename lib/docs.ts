@@ -168,6 +168,44 @@ export const parts: readonly (readonly [name: string, description: string])[] = 
   ["useMediaStore()", "Imperative access: play, seek, setVolume, setTextTrack and more."],
 ]
 
+export type SectionId = keyof typeof sections
+
+/**
+ * The docs pages, in reading order. The sidebar, the pager, the markdown
+ * routes, the sitemap and llms.txt all read this list, so adding a page here
+ * is the whole job outside its page.tsx.
+ */
+export const docPages = [
+  {
+    href: "/docs",
+    md: "/docs.md",
+    title: "Getting started",
+    description: "Install reel and swap your first video or audio element.",
+    sections: ["video", "audio", "package", "agents"],
+  },
+  {
+    href: "/docs/guides",
+    md: "/docs/guides.md",
+    title: "Guides",
+    description: "Compose your own player, play adaptive streams, write a loader and theme the controls.",
+    sections: ["compose", "streaming", "loader", "theming"],
+  },
+  {
+    href: "/docs/reference",
+    md: "/docs/reference.md",
+    title: "Reference",
+    description: "Every prop, part and keyboard shortcut.",
+    sections: ["api", "parts", "keyboard"],
+  },
+] as const satisfies readonly { href: string; md: string; title: string; description: string; sections: readonly SectionId[] }[]
+
+export type DocPage = (typeof docPages)[number]
+
+export function docPage(href: DocPage["href"]): DocPage {
+  // every href in the union exists in the list, so the find cannot miss
+  return docPages.find((page) => page.href === href) as DocPage
+}
+
 export type Prop = { name: string; type: string; description: string }
 
 export const videoProps: readonly Prop[] = [

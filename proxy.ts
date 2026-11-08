@@ -1,11 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server"
 
+import { docPages } from "@/lib/docs"
+
 /**
  * Content negotiation for agents. A client that asks for `text/markdown` at a
  * page URL gets that page's markdown copy, so it does not need to know the
  * `.md` paths. Browsers never send that header, so they get HTML as before.
  */
-const markdown: Record<string, string> = { "/": "/index.md", "/docs": "/docs.md" }
+const markdown: Record<string, string> = {
+  "/": "/index.md",
+  ...Object.fromEntries(docPages.map((page) => [page.href, page.md])),
+}
 
 export function proxy(request: NextRequest) {
   const target = markdown[request.nextUrl.pathname]
@@ -18,4 +23,5 @@ export function proxy(request: NextRequest) {
   return NextResponse.next()
 }
 
-export const config = { matcher: ["/", "/docs"] }
+// a static list, because Next reads the matcher at build time
+export const config = { matcher: ["/", "/docs", "/docs/guides", "/docs/reference"] }

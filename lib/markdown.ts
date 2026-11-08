@@ -1,5 +1,8 @@
 import {
   agentPrompt,
+  type DocPage,
+  docPages,
+  type SectionId,
   audioProps,
   installCommands,
   intro,
@@ -35,60 +38,71 @@ export const WHEN_TO_USE = `Use reel when a React app needs a video or audio pla
 
 Do not use reel for a non-React app, for DRM-protected streams (reel sets up no DRM), or for a video editor or timeline. Use the framework-agnostic core in reel-media/core when you need the player state without React.`
 
-export function docsMarkdown(origin: string): string {
+/** One block per docs section, keyed like `sections` in lib/docs.ts. */
+function sectionMarkdown(origin: string): Record<SectionId, string[]> {
   const cmd = installCommands(`${origin}/r`)
   const s = sections
-  return [
-    `# reel docs`,
-    `> ${intro.title} Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`,
-    `## Install`,
-    fence(cmd.video, "bash"),
-    `## ${s.video.title}`,
-    s.video.description,
-    fence(usage.video),
-    `## ${s.audio.title}`,
-    s.audio.description,
-    fence(cmd.audio, "bash"),
-    fence(usage.audio),
-    `## ${s.compose.title}`,
-    s.compose.description,
-    fence(cmd.media, "bash"),
-    fence(usage.composed),
-    `## ${s.streaming.title}`,
-    s.streaming.description,
-    fence(cmd.hls, "bash"),
-    fence(usage.hls),
-    `## ${s.loader.title}`,
-    s.loader.description,
-    fence(usage.loader, "ts"),
-    `## ${s.package.title}`,
-    s.package.description,
-    fence(cmd.package, "bash"),
-    fence(usage.package),
-    `## ${s.api.title}`,
-    s.api.description,
-    propsTable("VideoPlayer", videoProps),
-    propsTable("AudioPlayer", audioProps),
-    `## ${s.parts.title}`,
-    s.parts.description.replace(/(components\/\S+\.tsx)/, "`$1`"),
-    parts.map(([name, description]) => `- \`${name}\`: ${description}`).join("\n"),
-    `## ${s.theming.title}`,
-    s.theming.description,
-    fence(usage.theming, "css"),
-    `## ${s.keyboard.title}`,
-    s.keyboard.description,
+  return {
+    video: [`## ${s.video.title}`, s.video.description, fence(usage.video)],
+    audio: [`## ${s.audio.title}`, s.audio.description, fence(cmd.audio, "bash"), fence(usage.audio)],
+    package: [`## ${s.package.title}`, s.package.description, fence(cmd.package, "bash"), fence(usage.package)],
+    agents: [
+      `## ${s.agents.title}`,
+      s.agents.description,
+      fence(SKILL_INSTALL, "bash"),
+      "Or paste this prompt into an agent to install reel in a project.",
+      fence(agentPrompt(origin), "text"),
+    ],
+    compose: [`## ${s.compose.title}`, s.compose.description, fence(cmd.media, "bash"), fence(usage.composed)],
+    streaming: [`## ${s.streaming.title}`, s.streaming.description, fence(cmd.hls, "bash"), fence(usage.hls)],
+    loader: [`## ${s.loader.title}`, s.loader.description, fence(usage.loader, "ts")],
+    theming: [`## ${s.theming.title}`, s.theming.description, fence(usage.theming, "css")],
+    api: [`## ${s.api.title}`, s.api.description, propsTable("VideoPlayer", videoProps), propsTable("AudioPlayer", audioProps)],
+    parts: [
+      `## ${s.parts.title}`,
+      s.parts.description.replace(/(components\/\S+\.tsx)/, "`$1`"),
+      parts.map(([name, description]) => `- \`${name}\`: ${description}`).join("\n"),
+    ],
+    keyboard: [
+      `## ${s.keyboard.title}`,
+      s.keyboard.description,
+      [
+        "| Keys | Action |",
+        "| --- | --- |",
+        ...shortcuts.map(({ keys, action }) => `| ${keys.map((k) => keyLabels[k] ?? k).join(", ")} | ${action} |`),
+      ].join("\n"),
+    ],
+  }
+}
+
+/** One docs page as markdown: its title, description, sections, and links to the other pages. */
+export function docPageMarkdown(page: DocPage, origin: string): string {
+  const blocks = sectionMarkdown(origin)
+  const lead =
+    page.href === "/docs"
+      ? [`> ${intro.title} Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`, `## Install`, fence(installCommands(`${origin}/r`).video, "bash")]
+      : [`> ${page.description}`]
+  const others = docPages
+    .filter((p) => p.href !== page.href)
+    .map((p) => `- [${p.title}](${origin}${p.md}): ${p.description}`)
+    .join("\n")
+  return (
+    [`# ${page.title}`, ...lead, ...page.sections.flatMap((id) => blocks[id]), `## More docs`, others].join("\n\n") + "\n"
+  )
+}
+
+/** Every docs page in reading order, for llms-full.txt. */
+export function docsMarkdown(origin: string): string {
+  const blocks = sectionMarkdown(origin)
+  return (
     [
-      "| Keys | Action |",
-      "| --- | --- |",
-      ...shortcuts.map(({ keys, action }) => `| ${keys.map((k) => keyLabels[k] ?? k).join(", ")} | ${action} |`),
-    ].join("\n"),
-    `## ${s.agents.title}`,
-    s.agents.description,
-    fence(SKILL_INSTALL, "bash"),
-    `## Prompt for coding agents`,
-    "Paste this into an agent to install reel in a project.",
-    fence(agentPrompt(origin), "text"),
-  ].join("\n\n") + "\n"
+      `# reel docs`,
+      `> ${intro.title} Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`,
+      `## Install`,
+      fence(installCommands(`${origin}/r`).video, "bash"),
+      ...docPages.flatMap((page) => [`# ${page.title}`, ...page.sections.flatMap((id) => blocks[id])]),
+    ].join("\n\n") + "\n"
+  )
 }
 
 export function landingMarkdown(origin: string): string {
@@ -118,8 +132,8 @@ export function llmsIndex(origin: string): string {
     WHEN_TO_USE,
     `## Docs`,
     [
-      `- [Docs](${origin}/docs.md): install, usage, composition, streaming, parts and keyboard shortcuts`,
-      `- [Full docs in one file](${origin}/llms-full.txt): the docs above, for loading into context`,
+      ...docPages.map((page) => `- [${page.title}](${origin}${page.md}): ${page.description}`),
+      `- [Full docs in one file](${origin}/llms-full.txt): every page above, for loading into context`,
       `- [Overview](${origin}/index.md): what reel is and what it does`,
     ].join("\n"),
     `## Registry`,

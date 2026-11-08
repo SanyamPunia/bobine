@@ -1,4 +1,5 @@
-import { docsMarkdown } from "@/lib/markdown"
+import { docPage } from "@/lib/docs"
+import { docPageMarkdown } from "@/lib/markdown"
 import { SITE_URL } from "@/lib/site"
 import { textResponse } from "@/lib/text-response"
 
@@ -6,5 +7,5 @@ import { textResponse } from "@/lib/text-response"
 export const dynamic = "force-static"
 
 export function GET() {
-  return textResponse(docsMarkdown(SITE_URL), "markdown")
+  return textResponse(docPageMarkdown(docPage("/docs"), SITE_URL), "markdown")
 }

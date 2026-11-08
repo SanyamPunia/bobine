@@ -29,7 +29,8 @@ function readingLine(scrollable: number): number {
 }
 
 /**
- * "On this page" in the left margin, with the section being read marked.
+ * "On this page" in the right margin, with the section being read marked. The
+ * docs sidebar (`DocsNav`) takes the left margin at the same distance.
  *
  * It reads the rendered `section[id]` elements rather than a second list of
  * titles, so the rail and the anchors cannot disagree. It is `fixed`, so it
@@ -94,7 +95,7 @@ export function PageRail() {
   return (
     <aside
       className="fixed top-24 hidden max-h-[calc(100dvh-8rem)] w-48 animate-in overflow-y-auto pb-1 duration-300 fade-in rail:block"
-      style={{ left: `calc(50% - ${CONTENT_HALF_REM}rem - 16rem)` }}
+      style={{ left: `calc(50% + ${CONTENT_HALF_REM}rem + 4rem)` }}
     >
       <nav aria-label="On this page" className="flex flex-col gap-1">
         <span className="mb-1 text-meta text-text-muted">On this page</span>
