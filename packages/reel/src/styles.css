@@ -1,0 +1,17 @@
+/*
+ * Import after tailwindcss:
+ *   @import "tailwindcss";
+ *   @import "reel-media/styles.css";
+ */
+@source "./";
+
+@theme inline {
+  --color-media-foreground: var(--media-foreground);
+  --color-media-scrim: var(--media-scrim);
+  --ease-media: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --media-foreground: oklch(1 0 0);
+  --media-scrim: oklch(0 0 0);
+}
