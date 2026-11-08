@@ -10,10 +10,16 @@ const base = {
   "aria-hidden": true,
 } as const
 
+/**
+ * Optically centred: the filled area's centroid, not the bounding box, sits
+ * on the viewBox centre (x = 12), measured from the rendered shape. A
+ * box-centred triangle looks shifted right, because its weight is in the flat
+ * left side.
+ */
 export function PlayIcon(props: IconProps) {
   return (
     <svg {...base} fill="currentColor" {...props}>
-      <path d="M7 4.9v14.2a1.5 1.5 0 0 0 2.31 1.26l11.07-7.1a1.5 1.5 0 0 0 0-2.52L9.31 3.64A1.5 1.5 0 0 0 7 4.9Z" />
+      <path d="M6.87 4.9v14.2a1.5 1.5 0 0 0 2.31 1.26l11.07-7.1a1.5 1.5 0 0 0 0-2.52L9.18 3.64A1.5 1.5 0 0 0 6.87 4.9Z" />
     </svg>
   )
 }

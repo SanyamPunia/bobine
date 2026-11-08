@@ -98,7 +98,7 @@ function VideoPlayer({
           "group-data-started/media:scale-75 group-data-started/media:opacity-0"
         )}
       >
-        <PlayIcon className="size-5 translate-x-px" />
+        <PlayIcon className="size-5" />
       </span>
 
       <span className="pointer-events-none absolute inset-0 grid place-items-center">
