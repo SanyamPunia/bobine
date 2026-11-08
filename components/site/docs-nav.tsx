@@ -14,10 +14,20 @@ import { Tooltip } from "@/components/site/tooltip"
 const focus = "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 
 /**
- * Pages listed after the docs, below a divider. They are not docs pages: no
- * sections, markdown copy or pager position, so they stay out of `docPages`.
+ * Pages listed in the Docs group after the docs pages. They have no sections,
+ * markdown copy or pager position, so they stay out of `docPages`.
  */
-const extras = [{ href: "/examples", title: "Examples" }]
+const extras = [{ href: "/docs/examples", title: "Examples" }]
+
+/**
+ * Raw files for tools and agents, last in the sidebar. They open in a new tab
+ * because they are plain text and JSON, not pages.
+ */
+const resources = [
+  { href: "/r/registry.json", title: "registry.json" },
+  { href: "/llms.txt", title: "llms.txt" },
+  { href: "/llms-full.txt", title: "llms-full.txt" },
+]
 
 /** The sidebar's list, shared by the fixed desktop rail and the mobile drawer. */
 function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
@@ -44,8 +54,23 @@ function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () 
     <div className="flex flex-col gap-1">
       <span className="mb-1 text-meta text-text-muted">Docs</span>
       {docPages.map(item)}
-      <span aria-hidden="true" className="my-2 h-px w-full bg-stroke-soft" />
       {extras.map(item)}
+      <span aria-hidden="true" className="my-2 h-px w-full bg-stroke-soft" />
+      <span className="mb-1 text-meta text-text-muted">Resources</span>
+      {resources.map((file) => (
+        <a
+          key={file.href}
+          href={file.href}
+          target="_blank"
+          rel="noreferrer"
+          className={cn(
+            "-ml-2 cursor-pointer rounded-md px-2 py-1 font-mono text-meta text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary motion-safe:active:scale-[0.98]",
+            focus
+          )}
+        >
+          {file.title}
+        </a>
+      ))}
     </div>
   )
 }

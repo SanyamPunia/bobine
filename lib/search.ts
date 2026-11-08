@@ -42,7 +42,7 @@ export function searchItems(): SearchItem[] {
     group: "Pages",
     title: examplesIntro.title,
     hint: examplesIntro.description,
-    href: "/examples",
+    href: "/docs/examples",
     keywords: [],
   }
 
@@ -52,14 +52,14 @@ export function searchItems(): SearchItem[] {
       group: "Sections" as const,
       title: section.title,
       hint: examplesIntro.title,
-      href: `/examples#${section.id}`,
+      href: `/docs/examples#${section.id}`,
       keywords: [section.description, examplesIntro.title],
     })),
     ...[...Object.values(videoRecipes), ...Object.values(audioRecipes)].map((recipe) => ({
       group: "Sections" as const,
       title: recipe.title,
       hint: examplesIntro.title,
-      href: `/examples#${recipe.id}`,
+      href: `/docs/examples#${recipe.id}`,
       keywords: [recipe.description, "example", "recipe"],
     })),
   ]
@@ -69,6 +69,7 @@ export function searchItems(): SearchItem[] {
     { group: "Links", title: "npm", hint: "reel-media", href: "https://www.npmjs.com/package/reel-media", keywords: ["package", "install"], external: true },
     { group: "Links", title: "GitHub", hint: "SanyamPunia/reel", href: "https://github.com/SanyamPunia/reel", keywords: ["source", "repo"], external: true },
     { group: "Links", title: "llms.txt", hint: "Docs index for agents", href: "/llms.txt", keywords: ["ai", "agent", "markdown"], external: true },
+    { group: "Links", title: "llms-full.txt", hint: "Every docs page in one file", href: "/llms-full.txt", keywords: ["ai", "agent", "markdown"], external: true },
   ]
 
   return [...pages, examplesPage, ...sectionItems, ...exampleItems, ...links]

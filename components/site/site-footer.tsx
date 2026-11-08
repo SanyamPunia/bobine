@@ -6,11 +6,6 @@ const authors = [
   { name: "Aviral", href: "https://x.com/aviralj02", avatar: "/team/aviral.jpg" },
 ]
 
-const link =
-  "cursor-pointer rounded-xs transition-colors duration-150 hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-
-const dot = <span aria-hidden="true" className="inline-block size-1 shrink-0 rounded-full bg-stroke-strong" />
-
 export function SiteFooter() {
   return (
     <footer className={cn("mx-auto w-full px-5 pb-12", CONTENT_WIDTH)}>
@@ -42,21 +37,8 @@ export function SiteFooter() {
             </span>
           ))}
         </p>
-        <nav aria-label="Project" className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-          <span>MIT licensed</span>
-          {dot}
-          <a href="/r/registry.json" className={cn(link, "font-mono")}>
-            registry.json
-          </a>
-          {dot}
-          <a href="/llms.txt" className={cn(link, "font-mono")}>
-            llms.txt
-          </a>
-          {dot}
-          <a href="/llms-full.txt" className={cn(link, "font-mono")}>
-            llms-full.txt
-          </a>
-        </nav>
+        {/* registry.json and the llms files live in the docs sidebar */}
+        <p>MIT licensed</p>
       </div>
     </footer>
   )
