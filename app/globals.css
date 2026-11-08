@@ -1,0 +1,294 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* site tokens, see CLAUDE.md */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fill: var(--fill);
+  --color-fill-hover: var(--fill-hover);
+  --color-stroke-soft: var(--stroke-soft);
+  --color-stroke: var(--stroke);
+  --color-stroke-strong: var(--stroke-strong);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  /* shadcn names, kept because the registry components ship with them */
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* named type scale, see CLAUDE.md */
+  --text-display: 2rem;
+  --text-display--line-height: 1.15;
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.4;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.7;
+  --text-action: 0.8125rem;
+  --text-action--line-height: 1.5;
+  --text-meta: 0.75rem;
+  --text-meta--line-height: 1.6;
+  --text-code: 0.8125rem;
+  --text-code--line-height: 1.7;
+
+  /*
+   * A frame drawn as a shadow, for demo stages and code blocks. The 1px spread
+   * is the edge and uses the opaque stroke token, so it matches every other
+   * border in both themes. The two casts under it are black at alpha because
+   * a shadow darkens the ground, it is not a colour.
+   */
+  --shadow-frame:
+    0 0 0 1px var(--stroke), 0 1px 2px -1px rgb(0 0 0 / 0.06),
+    0 2px 4px 0 rgb(0 0 0 / 0.04);
+
+  /*
+   * The rail is 12rem wide and sits 16rem clear of the column's half width.
+   * With a 40rem column its left edge is 36rem from centre, so the viewport
+   * needs 72rem plus the page gutter before the rail fits.
+   */
+  --breakpoint-rail: 76rem;
+
+  --color-media-foreground: var(--media-foreground);
+  --color-media-scrim: var(--media-scrim);
+  --ease-media: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:root {
+  --media-foreground: oklch(1 0 0);
+  --media-scrim: oklch(0 0 0);
+}
+
+:root {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --surface: #fafafa;
+  --fill: #f4f4f5;
+  --fill-hover: #ebebec;
+  --stroke-soft: #f2f2f2;
+  --stroke: #ebebeb;
+  --stroke-strong: #dcdcdc;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b6b6b;
+  --text-muted: #9b9b9b;
+
+  /* syntax colours, read by sugar-high's `sh__*` classes */
+  --sh-keyword: #a626a4;
+  --sh-string: #3f8f3c;
+  --sh-class: #b07219;
+  --sh-jsxliterals: #b07219;
+  --sh-entity: #3a6fd8;
+  --sh-property: #0f7c9c;
+  --sh-identifier: #2f3237;
+  --sh-sign: #9b9b9b;
+  --sh-comment: #9b9b9b;
+
+  --background: var(--bg);
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--text-primary);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: var(--fill);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--fill);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--fill);
+  --accent-foreground: var(--text-primary);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--stroke);
+  --input: var(--stroke);
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --bg: #111111;
+  --surface: #161616;
+  --fill: #1b1b1b;
+  --fill-hover: #222222;
+  --stroke-soft: #1a1a1a;
+  --stroke: #262626;
+  --stroke-strong: #333333;
+  --text-primary: #ededed;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+
+  --sh-keyword: #d18fd0;
+  --sh-string: #8cc58a;
+  --sh-class: #e0b26e;
+  --sh-jsxliterals: #e0b26e;
+  --sh-entity: #85a8ef;
+  --sh-property: #6cc0d6;
+  --sh-identifier: #d4d4d4;
+  --sh-sign: #737373;
+  --sh-comment: #737373;
+
+  --popover: #1b1b1b;
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --ring: oklch(0.556 0 0);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    color-scheme: dark;
+
+    --bg: #111111;
+    --surface: #161616;
+    --fill: #1b1b1b;
+    --fill-hover: #222222;
+    --stroke-soft: #1a1a1a;
+    --stroke: #262626;
+    --stroke-strong: #333333;
+    --text-primary: #ededed;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+
+    --sh-keyword: #d18fd0;
+    --sh-string: #8cc58a;
+    --sh-class: #e0b26e;
+    --sh-jsxliterals: #e0b26e;
+    --sh-entity: #85a8ef;
+    --sh-property: #6cc0d6;
+    --sh-identifier: #d4d4d4;
+    --sh-sign: #737373;
+    --sh-comment: #737373;
+
+    --popover: #1b1b1b;
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --ring: oklch(0.556 0 0);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-bg text-text-primary;
+  }
+  ::selection {
+    @apply bg-text-primary text-bg;
+  }
+}
+
+.sh__token--keyword {
+  color: var(--sh-keyword);
+}
+.sh__token--string {
+  color: var(--sh-string);
+}
+.sh__token--class {
+  color: var(--sh-class);
+}
+.sh__token--jsxliterals {
+  color: var(--sh-jsxliterals);
+}
+.sh__token--entity {
+  color: var(--sh-entity);
+}
+.sh__token--property {
+  color: var(--sh-property);
+}
+.sh__token--identifier {
+  color: var(--sh-identifier);
+}
+.sh__token--sign {
+  color: var(--sh-sign);
+}
+.sh__token--comment {
+  color: var(--sh-comment);
+}
+
+/*
+ * Page transitions, driven by `PageTransition`. The old page fades out fast so
+ * it does not compete with the new one, which fades in just after it. React
+ * names only the page body, so the header stays in the root snapshot, and root
+ * keeps no animation so the header does not flash.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-old(.page-fade) {
+  animation: 150ms ease-in both vt-fade-out;
+}
+::view-transition-new(.page-fade) {
+  animation: 200ms ease-out 100ms both vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* the pencil strokes under the hero word, see `SketchUnderline` */
+.sketch-stroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sketch-draw 550ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes sketch-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  .sketch-stroke {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
