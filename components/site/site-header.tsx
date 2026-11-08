@@ -2,6 +2,8 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import { CONTENT_WIDTH } from "@/lib/constants"
+// the published package's version, so the header always shows what ships
+import reelPackage from "@/packages/reel/package.json"
 
 const links = [
   { href: "/docs", label: "Docs", route: true },
@@ -28,11 +30,16 @@ export function SiteHeader({ current }: { current?: string }) {
         className="pointer-events-none absolute inset-x-0 top-0 -bottom-6 -z-10 bg-bg/85 mask-b-from-70% backdrop-blur-md"
       />
       <header className={cn("mx-auto flex w-full items-center justify-between px-5 py-5", CONTENT_WIDTH)}>
-        <Link href="/" className={cn(link, "flex items-center gap-2 font-mono font-medium text-text-primary")}>
-          {/* app/icon.svg, the favicon, served at /icon.svg. Decorative: the wordmark names the link. */}
-          <img src="/icon.svg" alt="" draggable={false} className="size-5 select-none" />
-          reel
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/" className={cn(link, "flex items-center gap-2 font-mono font-medium text-text-primary")}>
+            {/* app/icon.svg, the favicon, served at /icon.svg. Decorative: the wordmark names the link. */}
+            <img src="/icon.svg" alt="" draggable={false} className="size-5 select-none" />
+            reel
+          </Link>
+          <span className="rounded-full bg-fill px-1.5 py-px font-mono text-meta text-text-muted">
+            v{reelPackage.version}
+          </span>
+        </div>
         <nav aria-label="Main">
           <ul className="flex items-center gap-5">
             {links.map((item) => (
