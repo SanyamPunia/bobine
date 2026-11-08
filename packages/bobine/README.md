@@ -4,7 +4,7 @@ Drop-in video and audio players for React. Swap `<video>` for `<VideoPlayer>` an
 
 Two ways to use it:
 
-- **Own the source** (recommended): `npx shadcn@latest add <your-domain>/r/video-player.json`
+- **Own the source** (recommended): `npx shadcn@latest add https://bobine.fyi/r/video-player.json`
 - **Install the package**: `pnpm add bobine`
 
 ## Package setup

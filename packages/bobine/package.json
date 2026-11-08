@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Drop-in video and audio players for React. Minimal, themeable, built on composable primitives.",
   "license": "MIT",
+  "homepage": "https://bobine.fyi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanyamPunia/bobine.git",
+    "directory": "packages/bobine"
+  },
+  "bugs": {
+    "url": "https://github.com/SanyamPunia/bobine/issues"
+  },
   "type": "module",
   "sideEffects": [
     "*.css"

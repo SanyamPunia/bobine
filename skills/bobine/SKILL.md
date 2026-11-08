@@ -7,7 +7,7 @@ description: Add or change bobine video and audio players in a React project. Us
 
 bobine is a set of drop-in video and audio players for React. The shadcn CLI copies the source into the project, so the user owns and can edit every file. The players keep every native prop of `<video>` and `<audio>`.
 
-The full docs are plain text at `https://bobine.fyi/llms-full.txt`. Read that file before a large change. If you do not know the docs host, ask the user.
+The full docs are plain text at `https://bobine.fyi/llms-full.txt`. Read that file before a large change.
 
 ## When to use it
 

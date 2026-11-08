@@ -26,7 +26,7 @@ import { VideoPlayer } from "@/components/ui/video-player"
 <VideoPlayer src="/clip.mp4" poster="/clip.jpg" />
 ```
 
-Full docs, live demos, parts and keyboard shortcuts are at `/docs`. Package details are in [packages/bobine](packages/bobine/README.md).
+Full docs, live demos, parts and keyboard shortcuts are at [bobine.fyi/docs](https://bobine.fyi/docs). Package details are in [packages/bobine](packages/bobine/README.md).
 
 ## For agents
 
@@ -38,9 +38,9 @@ npx skills add SanyamPunia/bobine
 
 The skill lives in [skills/bobine](skills/bobine/SKILL.md). The site also serves:
 
-- `/llms.txt`: index of the docs and registry
-- `/llms-full.txt`: the full docs in one file
-- `/docs.md`: the docs page as Markdown
+- [`/llms.txt`](https://bobine.fyi/llms.txt): index of the docs and registry
+- [`/llms-full.txt`](https://bobine.fyi/llms-full.txt): the full docs in one file
+- [`/docs.md`](https://bobine.fyi/docs.md): the docs page as Markdown
 
 ## Develop
 
