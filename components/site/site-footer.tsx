@@ -24,7 +24,7 @@ export function SiteFooter() {
                 href={author.href}
                 target="_blank"
                 rel="noreferrer"
-                className="group flex cursor-pointer items-center gap-1 rounded-full bg-fill py-0.5 pr-2 pl-0.5 transition-all duration-150 hover:bg-fill-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98]"
+                className="group flex cursor-pointer items-center gap-1 rounded-full bg-fill py-0.5 pr-2 pl-0.5 transition-[background-color,scale] duration-150 hover:bg-fill-hover focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98]"
               >
                 {/* decorative: the name beside it labels the link */}
                 <img
@@ -33,7 +33,7 @@ export function SiteFooter() {
                   width={16}
                   height={16}
                   draggable={false}
-                  className="size-4 shrink-0 rounded-full object-cover select-none"
+                  className="size-4 shrink-0 rounded-full object-cover outline outline-black/10 -outline-offset-1 select-none dark:outline-white/10"
                 />
                 <span className="text-text-secondary transition-colors duration-150 group-hover:text-text-primary">
                   {author.name}

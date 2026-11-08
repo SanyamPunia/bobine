@@ -77,7 +77,7 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
         variant="outline"
         size="sm"
         onClick={() => copy(markdown)}
-        className="cursor-pointer rounded-r-none active:scale-[0.98]"
+        className="cursor-pointer rounded-r-none motion-safe:active:scale-[0.98]"
       >
         <CopySwapIcon icon={CopyIcon} copied={copied} />
         <MorphLabel text={copied ? "Copied" : "Copy page"} />
@@ -91,7 +91,7 @@ export function PageActions({ markdown, prompt, origin }: { markdown: string; pr
                 variant="outline"
                 size="icon-sm"
                 aria-label="More page actions"
-                className="-ml-px cursor-pointer rounded-l-none active:scale-[0.98] data-popup-open:bg-muted data-popup-open:text-foreground dark:data-popup-open:bg-input/50"
+                className="-ml-px cursor-pointer rounded-l-none motion-safe:active:scale-[0.98] data-popup-open:bg-muted data-popup-open:text-foreground dark:data-popup-open:bg-input/50"
               />
             }
           >

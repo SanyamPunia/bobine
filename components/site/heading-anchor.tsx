@@ -5,6 +5,7 @@ import { CheckIcon, HashIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { isPlainClick, scrollToSection } from "@/lib/scroll"
+import { swapIcon } from "@/components/site/copy-swap-icon"
 import { Tooltip } from "@/components/site/tooltip"
 
 /**
@@ -40,23 +41,13 @@ export function HeadingAnchor({ id }: { id: string }) {
           if (isPlainClick(event) && scrollToSection(id)) event.preventDefault()
         }}
         className={cn(
-          "inline-grid size-6 shrink-0 cursor-pointer place-items-center rounded-md text-text-muted transition-all duration-150 select-none hover:bg-fill-hover hover:text-text-primary focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98] group-hover/heading:opacity-100",
+          "inline-grid size-6 shrink-0 cursor-pointer place-items-center rounded-md text-text-muted transition-[color,background-color,opacity,scale] duration-150 select-none hover:bg-fill-hover hover:text-text-primary focus-visible:opacity-100 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] group-hover/heading:opacity-100",
           copied ? "text-text-primary opacity-100" : "opacity-0"
         )}
       >
         <span aria-hidden="true" className="grid *:col-start-1 *:row-start-1">
-          <CheckIcon
-            className={cn(
-              "size-3.5 transition-[opacity,transform] duration-200 ease-media",
-              copied ? "opacity-100" : "scale-50 opacity-0"
-            )}
-          />
-          <HashIcon
-            className={cn(
-              "size-3.5 transition-[opacity,transform] duration-200 ease-media",
-              copied ? "scale-50 opacity-0" : "opacity-100"
-            )}
-          />
+          <CheckIcon className={cn("size-3.5", swapIcon(copied))} />
+          <HashIcon className={cn("size-3.5", swapIcon(!copied))} />
         </span>
       </a>
     </Tooltip>

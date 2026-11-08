@@ -4,6 +4,7 @@ import * as React from "react"
 import { CheckIcon, CopyIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
+import { swapIcon } from "@/components/site/copy-swap-icon"
 import { Tooltip } from "@/components/site/tooltip"
 
 export function CopyButton({ value, className }: { value: string; className?: string }) {
@@ -24,23 +25,13 @@ export function CopyButton({ value, className }: { value: string; className?: st
           timer.current = setTimeout(() => setCopied(false), 1500)
         }}
         className={cn(
-          "inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md text-text-muted transition-all duration-150 hover:bg-fill-hover hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none active:scale-[0.98]",
+          "inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md text-text-muted transition-[color,background-color,scale] duration-150 hover:bg-fill-hover hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98]",
           className
         )}
       >
         <span aria-hidden="true" className="grid *:col-start-1 *:row-start-1">
-          <CheckIcon
-            className={cn(
-              "size-3.5 transition-[opacity,transform] duration-200 ease-media",
-              copied ? "opacity-100" : "scale-50 opacity-0"
-            )}
-          />
-          <CopyIcon
-            className={cn(
-              "size-3.5 transition-[opacity,transform] duration-200 ease-media",
-              copied ? "scale-50 opacity-0" : "opacity-100"
-            )}
-          />
+          <CheckIcon className={cn("size-3.5", swapIcon(copied))} />
+          <CopyIcon className={cn("size-3.5", swapIcon(!copied))} />
         </span>
       </button>
     </Tooltip>
