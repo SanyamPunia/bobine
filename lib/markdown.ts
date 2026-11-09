@@ -37,7 +37,7 @@ const propsTable = (component: string, props: readonly Prop[]) =>
 
 export const WHEN_TO_USE = `Use bobine when a React app needs a video or audio player that keeps the native element's props, matches the app's shadcn theme, and lives in the repo as editable source. It covers MP4, WebM, MP3, captions (WebVTT), picture-in-picture, fullscreen, keyboard shortcuts and HLS streams through hls.js.
 
-Do not use bobine for a non-React app, for DRM-protected streams (bobine sets up no DRM), or for a video editor or timeline. Use the framework-agnostic core in bobine/core when you need the player state without React.`
+Do not use bobine for a non-React app, for DRM-protected streams (bobine sets up no DRM), or for a video editor or timeline. Use the framework-agnostic core in bobinejs/core when you need the player state without React.`
 
 /** One block per docs section, keyed like `sections` in lib/docs.ts. */
 function sectionMarkdown(origin: string): Record<SectionId, string[]> {
@@ -170,7 +170,7 @@ export function llmsIndex(origin: string): string {
     `## Optional`,
     [
       `- [Agent skill](https://github.com/SanyamPunia/bobine/tree/main/skills/bobine): install with \`${SKILL_INSTALL}\``,
-      `- [npm package](https://www.npmjs.com/package/bobine): bobine, the same components as a dependency`,
+      `- [npm package](https://www.npmjs.com/package/bobinejs): bobinejs, the same components as a dependency`,
       `- [Sitemap](${origin}/sitemap.xml)`,
     ].join("\n"),
   ].join("\n\n") + "\n"

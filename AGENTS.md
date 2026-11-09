@@ -11,7 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 # bobine
 
 Drop-in media players for React, distributed as a shadcn registry and as the
-`bobine` package. `app/page.tsx` is the landing page. The docs are three
+`bobinejs` package on npm. `app/page.tsx` is the landing page. The docs are three
 pages under `app/docs/` (Getting started, Guides, Reference) sharing
 `app/docs/layout.tsx`.
 

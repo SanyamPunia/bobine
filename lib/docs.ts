@@ -64,11 +64,11 @@ export const dashLoader: MediaSourceLoader = (media, src) => {
 }`,
   package: `/* globals.css */
 @import "tailwindcss";
-@import "bobine/styles.css";
+@import "bobinejs/styles.css";
 
-import { VideoPlayer, AudioPlayer } from "bobine"
-import { hlsLoader } from "bobine/hls"
-import { createMediaStore } from "bobine/core"`,
+import { VideoPlayer, AudioPlayer } from "bobinejs"
+import { hlsLoader } from "bobinejs/hls"
+import { createMediaStore } from "bobinejs/core"`,
 }
 
 /** One shadcn command per registry item. */
@@ -79,7 +79,7 @@ export function installCommands(registry: string) {
     audio: add("audio-player"),
     media: add("media"),
     hls: add("media-hls"),
-    package: "pnpm add bobine",
+    package: "pnpm add bobinejs",
   }
 }
 
@@ -112,7 +112,7 @@ export const sections = {
     id: "package",
     title: "Or install the package",
     description:
-      "Prefer a dependency over owning the source? The same components ship as bobine, with a framework-agnostic core.",
+      "Prefer a dependency over owning the source? The same components ship as bobinejs, with a framework-agnostic core.",
   },
   loader: {
     id: "loader",

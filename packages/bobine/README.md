@@ -5,7 +5,7 @@ Drop-in video and audio players for React. Swap `<video>` for `<VideoPlayer>` an
 Two ways to use it:
 
 - **Own the source** (recommended): `npx shadcn@latest add https://bobine.fyi/r/video-player.json`
-- **Install the package**: `pnpm add bobine`
+- **Install the package**: `pnpm add bobinejs`
 
 ## Package setup
 
@@ -13,13 +13,13 @@ Requires React 19 and Tailwind CSS v4 with shadcn-style theme tokens (`--backgro
 
 ```css
 @import "tailwindcss";
-@import "bobine/styles.css";
+@import "bobinejs/styles.css";
 ```
 
 ## Usage
 
 ```tsx
-import { VideoPlayer, AudioPlayer } from "bobine"
+import { VideoPlayer, AudioPlayer } from "bobinejs"
 
 <VideoPlayer
   src="/clip.mp4"
@@ -35,8 +35,8 @@ import { VideoPlayer, AudioPlayer } from "bobine"
 
 ```tsx
 "use client"
-import { VideoPlayer } from "bobine"
-import { hlsLoader } from "bobine/hls" // requires `hls.js`, loaded on demand
+import { VideoPlayer } from "bobinejs"
+import { hlsLoader } from "bobinejs/hls" // requires `hls.js`, loaded on demand
 
 <VideoPlayer src="https://example.com/stream.m3u8" loader={hlsLoader} />
 ```
@@ -44,7 +44,7 @@ import { hlsLoader } from "bobine/hls" // requires `hls.js`, loaded on demand
 ### Compose your own
 
 ```tsx
-import { MediaRoot, MediaVideo, MediaSurface, MediaControls, MediaSeek, MediaPlayButton, MediaTime } from "bobine"
+import { MediaRoot, MediaVideo, MediaSurface, MediaControls, MediaSeek, MediaPlayButton, MediaTime } from "bobinejs"
 
 <MediaRoot className="aspect-video bg-media-scrim text-media-foreground">
   <MediaVideo src="/clip.mp4" className="size-full" />
@@ -65,7 +65,7 @@ Every component exports its props type under its own name plus `Props`, so a
 wrapper can extend it.
 
 ```tsx
-import { AudioPlayer, type AudioPlayerProps } from "bobine"
+import { AudioPlayer, type AudioPlayerProps } from "bobinejs"
 
 function EpisodePlayer(props: AudioPlayerProps) {
   return <AudioPlayer showSpeed persistKey="episodes" {...props} />
@@ -76,10 +76,10 @@ function EpisodePlayer(props: AudioPlayerProps) {
 
 ### Framework-agnostic core
 
-`bobine/core` exports `createMediaStore()`, a dependency-free store you can `attach` to any `HTMLMediaElement`.
+`bobinejs/core` exports `createMediaStore()`, a dependency-free store you can `attach` to any `HTMLMediaElement`.
 
 ```ts
-import { createMediaStore } from "bobine/core"
+import { createMediaStore } from "bobinejs/core"
 
 const store = createMediaStore()
 store.attach(document.querySelector("video")!)

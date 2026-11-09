@@ -15,7 +15,7 @@ Other items: `audio-player`, `media` (unstyled primitives), `media-hls` (HLS loa
 Or install the package:
 
 ```bash
-pnpm add bobine
+pnpm add bobinejs
 ```
 
 ## Use

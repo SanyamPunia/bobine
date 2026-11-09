@@ -1,6 +1,6 @@
 # Publishing bobine
 
-How to release a new version of the `bobine` npm package. The package lives
+How to release a new version of the `bobinejs` npm package. The package lives
 in `packages/bobine/` and compiles the same `components/ui` and `lib` files the
 shadcn registry ships, so a release carries whatever is on `main`.
 
@@ -12,7 +12,7 @@ shadcn registry ships, so a release carries whatever is on `main`.
 2. Ask an owner of the package to add you:
 
    ```bash
-   npm owner add <your-npm-username> bobine
+   npm owner add <your-npm-username> bobinejs
    ```
 
 3. Log in from your terminal and check it worked:
@@ -80,8 +80,8 @@ Run everything from the repository root unless a step says otherwise.
 
    ```bash
    git add packages/bobine/package.json
-   git commit -m "chore(release): bobine 0.1.1"
-   git tag bobine@0.1.1
+   git commit -m "chore(release): bobinejs 0.1.1"
+   git tag bobinejs@0.1.1
    ```
 
 7. **Publish.** `pnpm publish` rebuilds through `prepublishOnly` and refuses
@@ -98,16 +98,16 @@ Run everything from the repository root unless a step says otherwise.
 
    ```bash
    git push
-   git push origin bobine@0.1.1
+   git push origin bobinejs@0.1.1
    ```
 
 9. **Confirm the release.**
 
    ```bash
-   npm view bobine version
+   npm view bobinejs version
    ```
 
-   Then open [npmjs.com/package/bobine](https://www.npmjs.com/package/bobine)
+   Then open [npmjs.com/package/bobinejs](https://www.npmjs.com/package/bobinejs)
    and check the README renders. Optionally, create a GitHub release from the
    tag with a short list of changes.
 
@@ -117,7 +117,7 @@ Run everything from the repository root unless a step says otherwise.
   release a patch, then mark the bad one:
 
   ```bash
-  npm deprecate bobine@0.1.1 "Broken build, use 0.1.2"
+  npm deprecate bobinejs@0.1.1 "Broken build, use 0.1.2"
   ```
 
   npm only allows unpublishing within 72 hours, and a version number can

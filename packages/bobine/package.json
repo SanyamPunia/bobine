@@ -1,5 +1,5 @@
 {
-  "name": "bobine",
+  "name": "bobinejs",
   "version": "0.1.0",
   "description": "Drop-in video and audio players for React. Minimal, themeable, built on composable primitives.",
   "license": "MIT",

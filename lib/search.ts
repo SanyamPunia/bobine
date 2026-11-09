@@ -66,7 +66,7 @@ export function searchItems(): SearchItem[] {
 
   const links: SearchItem[] = [
     { group: "Links", title: "Registry", hint: "registry.json", href: "/r/registry.json", keywords: ["shadcn", "install"], external: true },
-    { group: "Links", title: "npm", hint: "bobine", href: "https://www.npmjs.com/package/bobine", keywords: ["package", "install"], external: true },
+    { group: "Links", title: "npm", hint: "bobinejs", href: "https://www.npmjs.com/package/bobinejs", keywords: ["package", "install"], external: true },
     { group: "Links", title: "GitHub", hint: "SanyamPunia/bobine", href: "https://github.com/SanyamPunia/bobine", keywords: ["source", "repo"], external: true },
     { group: "Links", title: "llms.txt", hint: "Docs index for agents", href: "/llms.txt", keywords: ["ai", "agent", "markdown"], external: true },
     { group: "Links", title: "llms-full.txt", hint: "Every docs page in one file", href: "/llms-full.txt", keywords: ["ai", "agent", "markdown"], external: true },
