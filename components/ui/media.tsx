@@ -85,7 +85,15 @@ type MediaRootProps = React.ComponentProps<"div"> & {
 }
 
 // Keep the controls awake while the pointer rests on them or a menu is open.
-const HOLD_AWAKE = "[data-slot='media-controls']:hover, [data-slot='media-settings'][data-open]"
+const SETTINGS_OPEN = "[data-slot='media-settings'][data-open]"
+
+/**
+ * Hovering the control bar keeps it awake, but only on a device that can
+ * hover. On touch, `:hover` sticks to the last tapped control, so the bar would
+ * never sleep after a tap.
+ */
+const holdAwakeSelector = () =>
+  window.matchMedia("(hover: hover)").matches ? `[data-slot='media-controls']:hover, ${SETTINGS_OPEN}` : SETTINGS_OPEN
 
 function MediaRoot({
   className,
@@ -122,7 +130,7 @@ function MediaRoot({
     setActive(true)
     clearTimeout(timer.current)
     timer.current = setTimeout(function sleep() {
-      if (rootEl.current?.querySelector(HOLD_AWAKE)) {
+      if (rootEl.current?.querySelector(holdAwakeSelector())) {
         timer.current = setTimeout(sleep, idleTimeout)
         return
       }
@@ -181,7 +189,13 @@ function MediaRoot({
           data-captions={state.textTrack !== -1 && state.cues.length > 0 ? "" : undefined}
           data-idle={idle || undefined}
           data-active={active || undefined}
-          className={cn("group/media relative isolate", idle && "cursor-none", className)}
+          className={cn(
+            /* no gray tap flash, no long-press callout over the video, and no
+               double-tap-zoom wait before a tap registers */
+            "group/media relative isolate touch-manipulation [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none]",
+            idle && "cursor-none",
+            className
+          )}
           onPointerMove={(event) => {
             onPointerMove?.(event)
             if (event.pointerType === "mouse") wake()
@@ -192,6 +206,13 @@ function MediaRoot({
           }}
           onPointerLeave={(event) => {
             onPointerLeave?.(event)
+
+            /**
+             * A finger lifting fires pointerleave too, so hiding here on touch
+             * flashed the controls off after every tap and made the next tap
+             * only reveal them. On touch the idle timer hides them instead.
+             */
+            if (event.pointerType !== "mouse") return
             clearTimeout(timer.current)
             setActive(false)
           }}
@@ -269,8 +290,9 @@ function MediaAudio({ ref, src, loader, ...props }: MediaAudioProps) {
 
 /* -------------------------------- Controls -------------------------------- */
 
+/* on touch, an invisible 36px hit area around the 28px button; looks the same */
 const buttonClass =
-  "group/media-button relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,scale,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:enabled:active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
+  "pointer-coarse:after:absolute pointer-coarse:after:-inset-1 pointer-coarse:after:content-[''] group/media-button relative inline-grid size-7 shrink-0 cursor-pointer place-items-center rounded-md outline-none transition-[background-color,scale,opacity] duration-150 ease-media hover:bg-current/15 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:enabled:active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
 
 type MediaTooltipAlign = "start" | "center" | "end"
 
@@ -657,6 +679,16 @@ function MediaSeek({
     store.seek(ratio * store.getState().duration)
   }
 
+  const endScrub = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!scrub.current) return
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    }
+    const { resume } = scrub.current
+    scrub.current = null
+    if (resume) store.play()
+  }
+
   return (
     <div
       role="slider"
@@ -668,7 +700,8 @@ function MediaSeek({
       aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
       data-slot="media-seek"
       className={cn(
-        "group/seek relative flex h-5 min-w-0 grow cursor-pointer touch-none items-center rounded-full outline-none select-none",
+        /* on touch, an invisible 44px-tall hit area around the 20px bar */
+        "group/seek relative flex h-5 min-w-0 grow cursor-pointer touch-none items-center rounded-full outline-none select-none pointer-coarse:before:absolute pointer-coarse:before:inset-x-0 pointer-coarse:before:-inset-y-3 pointer-coarse:before:content-['']",
         className
       )}
       onPointerDown={(event) => {
@@ -683,13 +716,14 @@ function MediaSeek({
         if (event.pointerType === "mouse") setHover(ratio)
         if (scrub.current) seekToRatio(ratio)
       }}
-      onPointerUp={(event) => {
-        if (!scrub.current) return
-        event.currentTarget.releasePointerCapture(event.pointerId)
-        const { resume } = scrub.current
-        scrub.current = null
-        if (resume) store.play()
-      }}
+      onPointerUp={endScrub}
+
+      /**
+       * The system can take a touch away mid-drag (an edge swipe, an incoming
+       * call). Without this the bar stayed in scrub mode: paused, with the
+       * fill frozen, because the draw loop skips while scrubbing.
+       */
+      onPointerCancel={endScrub}
       onPointerLeave={() => setHover(null)}
       onKeyDown={(event) => {
         const { currentTime, duration } = store.getState()
@@ -710,7 +744,7 @@ function MediaSeek({
       }}
       {...props}
     >
-      <div className="relative h-1 w-full overflow-hidden rounded-full bg-current/25 transition-[height] duration-150 ease-media group-hover/seek:h-1.5 group-focus-visible/seek:h-1.5 motion-reduce:transition-none">
+      <div className="relative h-1 w-full overflow-hidden rounded-full bg-current/25 transition-[height] duration-150 ease-media group-hover/seek:h-1.5 group-focus-visible/seek:h-1.5 group-active/seek:h-1.5 motion-reduce:transition-none">
         <div
           className="absolute inset-0 origin-left bg-current/25 transition-transform duration-300 ease-media"
           style={{ transform: `scaleX(${duration ? clamp(bufferedEnd / duration) : 0})` }}
@@ -780,6 +814,11 @@ function MediaVolume({ orientation = "horizontal", className, ...props }: MediaV
       onPointerUp={(event) => {
         dragging.current = false
         event.currentTarget.releasePointerCapture(event.pointerId)
+      }}
+
+      /* a drag the system takes away must end here too, or it stays live */
+      onPointerCancel={() => {
+        dragging.current = false
       }}
       onKeyDown={(event) => {
         const moves: Record<string, number> = {
