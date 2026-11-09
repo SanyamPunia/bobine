@@ -124,8 +124,10 @@ export function DocsNav() {
               className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col gap-6 overflow-y-auto bg-bg px-5 pt-5 pb-8 shadow-frame transition-[translate,opacity] duration-200 ease-media motion-safe:data-ending-style:-translate-x-full motion-safe:data-starting-style:-translate-x-full motion-reduce:data-ending-style:opacity-0 motion-reduce:data-starting-style:opacity-0"
             >
               <div className="flex items-center justify-between">
-                {/* the wordmark is decorative here; the dialog is named for its content */}
-                <span aria-hidden="true" className="font-mono text-action font-medium text-text-primary">
+                {/* the logo is decorative here: the dialog is named for its
+                    content. It matches the header's orb and wordmark. */}
+                <span aria-hidden="true" className="flex items-center gap-2 font-mono text-action font-medium text-text-primary">
+                  <img src="/icon.svg" alt="" draggable={false} className="size-5 select-none" />
                   bobine
                 </span>
                 <Dialog.Title className="sr-only">Docs menu</Dialog.Title>
@@ -141,7 +143,7 @@ export function DocsNav() {
                   </Dialog.Close>
                 </Tooltip>
               </div>
-              <nav aria-label="Docs" className="pl-2">
+              <nav aria-label="Docs">
                 <NavLinks pathname={pathname} onNavigate={() => setOpen(false)} />
               </nav>
             </Dialog.Popup>
