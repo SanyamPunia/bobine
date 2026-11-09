@@ -213,6 +213,11 @@ markdown drift apart. Only the live demos exist in the pages alone.
 - Every copy control swaps its icon through `swapIcon()` in
   `components/site/copy-swap-icon.tsx`, so they all animate alike. Press
   feedback is `motion-safe:active:scale-[0.98]`.
+- The header logo (`LogoLink`) plays cuelume's `tap` cue on click, and
+  only the orb presses in, to `scale-90`. Six clicks less than 600ms apart
+  play `success` and send two blurred copies of the orb out as rings.
+  cuelume synthesizes the sound with Web Audio, so there is no audio file.
+  These are the only sounds on the site.
 - The header is sticky on every page, with no border. A
   blurred page-coloured layer behind it runs 24px past its bottom and fades
   out through `mask-b-from-70%`. Three values depend on its height (about
