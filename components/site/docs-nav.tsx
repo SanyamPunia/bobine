@@ -8,16 +8,10 @@ import { CaretRightIcon, ListIcon, XIcon } from "@phosphor-icons/react"
 
 import { cn } from "@/lib/utils"
 import { CONTENT_HALF_REM, CONTENT_WIDTH } from "@/lib/constants"
-import { docPages } from "@/lib/docs"
+import { docExtras, docPages, docsReadingOrder } from "@/lib/docs"
 import { Tooltip } from "@/components/site/tooltip"
 
 const focus = "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-
-/**
- * Pages listed in the Docs group after the docs pages. They have no sections,
- * markdown copy or pager position, so they stay out of `docPages`.
- */
-const extras = [{ href: "/docs/examples", title: "Examples" }]
 
 /**
  * Raw files for tools and agents, last in the sidebar. They open in a new tab
@@ -54,7 +48,7 @@ function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () 
     <div className="flex flex-col gap-1">
       <span className="mb-1 text-meta text-text-muted">Docs</span>
       {docPages.map(item)}
-      {extras.map(item)}
+      {docExtras.map(item)}
       <span aria-hidden="true" className="my-2 h-px w-full bg-stroke-soft" />
       <span className="mb-1 text-meta text-text-muted">Resources</span>
       {resources.map((file) => (
@@ -86,7 +80,7 @@ export function DocsNav() {
 
   /* the drawer opens on the current page, not on the close button's tooltip */
   const popup = React.useRef<HTMLDivElement>(null)
-  const current = [...docPages, ...extras].find((page) => page.href === pathname)
+  const current = docsReadingOrder.find((page) => page.href === pathname)
 
   return (
     <>

@@ -5,6 +5,7 @@ import { MediaPlayButton, MediaRoot, MediaSeek, MediaSurface, MediaVideo } from 
 import { VideoPlayer } from "@/components/ui/video-player"
 import { CodeBlock } from "@/components/site/code-block"
 import { Demo } from "@/components/site/demo"
+import { DocsPager } from "@/components/site/docs-pager"
 import { PageRail } from "@/components/site/page-rail"
 import { Playground } from "@/components/site/playground"
 import { Section } from "@/components/site/section"
@@ -121,8 +122,8 @@ export default function Page() {
             </RecipeBlock>
           </div>
         </Section>
+        <DocsPager current="/docs/examples" />
       </main>
-
     </>
   )
 }

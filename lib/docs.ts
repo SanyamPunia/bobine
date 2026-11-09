@@ -201,6 +201,16 @@ export const docPages = [
 
 export type DocPage = (typeof docPages)[number]
 
+/**
+ * Pages read after the docs pages. Their content lives outside this file,
+ * so they have no `docPages` entry, but the sidebar lists them and the pager
+ * walks into them.
+ */
+export const docExtras = [{ href: "/docs/examples", title: "Examples" }] as const
+
+/* the order the sidebar lists and the pager walks */
+export const docsReadingOrder: readonly { href: string; title: string }[] = [...docPages, ...docExtras]
+
 export function docPage(href: DocPage["href"]): DocPage {
   // every href in the union exists in the list, so the find cannot miss
   return docPages.find((page) => page.href === href) as DocPage
