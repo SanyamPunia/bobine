@@ -32,7 +32,7 @@ export const usage = {
     <div className="flex items-center gap-1">
       <MediaPlayButton />
       <MediaMuteButton />
-      <MediaVolume />
+      <MediaVolume className="hidden pointer-fine:flex" />
       <MediaTime /> / <MediaTime type="duration" />
       <span className="grow" />
       <MediaPlaybackRateButton />
