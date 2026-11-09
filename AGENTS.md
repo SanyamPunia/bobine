@@ -112,6 +112,34 @@ tailwind-merge reads it as a colour. Add a new size in both places.
 - `CodeBlock` highlights with `sugar-high` on the server. Shell commands
   (`prompt`) skip the highlighter.
 
+## Touch
+
+The players are tested against a phone's touch sequence: tap plays, the
+controls stay up after the finger lifts, they sleep after `idleTimeout`, a tap
+while playing only reveals them, and the next tap pauses.
+
+- `MediaRoot` hides the controls on `pointerleave` for a mouse only. A finger
+  lifting fires `pointerleave` too, and hiding on it flashed the controls off
+  after every tap.
+- Hovering the control bar keeps it awake only where `(hover: hover)` matches,
+  because `:hover` sticks to the last tapped control on touch.
+- The root sets `touch-manipulation`, no tap highlight and no long-press
+  callout, so apps that never set these globally still get them. Control
+  buttons get a 36px hit area on `pointer-coarse` without changing size.
+- Volume sliders render for `pointer-fine` only: phones use hardware buttons,
+  and iOS ignores volume set from the page.
+- The seek and volume sliders track the finger 1:1: the fill is a direct
+  `transform` write with no transition, and touch moves never set React
+  state. They are value sliders, so no momentum, spring or rubber-band.
+- Every drag ends on `pointercancel` as well as `pointerup`. The system can
+  take a touch away mid-drag, and the seek bar used to stay paused with its
+  fill frozen.
+- The seek bar has a 44px-tall hit area on `pointer-coarse`, and its track
+  thickens while pressed (`group-active`), the only grab feedback touch has.
+- No haptics. iOS Safari has no vibration API, and Android's
+  `navigator.vibrate` is a buzz, not a tap, so it would feel worse than none.
+- Any text input is 16px on `pointer-coarse`, or iOS zooms the page into it.
+
 ## Social metadata
 
 Every page builds its metadata with `pageMetadata()` in `lib/metadata.ts`:
