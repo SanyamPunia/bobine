@@ -229,7 +229,8 @@ markdown drift apart. Only the live demos exist in the pages alone.
   pitched with `1lh`. They run past the column, so `body` has
   `overflow-x: clip` (not `hidden`, which would break the sticky header).
 - The header shows the version from `packages/bobine/package.json`. Bump it
-  there on release. Nothing else stores the version.
+  there on release. Nothing else stores the version. `PUBLISHING.md` has the
+  release steps.
 
 ## Docs structure
 
