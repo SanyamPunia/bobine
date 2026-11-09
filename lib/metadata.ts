@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 export const SITE_NAME = "bobine"
-export const SITE_TITLE = "bobine, drop-in media players for React"
+export const SITE_TITLE = "bobine - drop-in media players for React"
 export const SITE_DESCRIPTION =
   "Swap <video> and <audio> for minimal, accessible players you own. Distributed as a shadcn registry."
 
@@ -40,7 +40,7 @@ export function pageMetadata({
   /** this page's markdown copy, such as "/docs.md" */
   markdown?: string
 }): Metadata {
-  const socialTitle = title ? `${title} | ${SITE_NAME}` : SITE_TITLE
+  const socialTitle = title ? `${SITE_NAME} - ${title}` : SITE_TITLE
 
   return {
     ...(title ? { title } : {}),
