@@ -133,10 +133,11 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
               <MagnifyingGlassIcon aria-hidden="true" className="size-4 shrink-0 text-text-muted" />
               {/* no focus ring: the open palette is itself the focused surface,
                   and this is the only control in it */}
+              {/* 16px on touch: iOS zooms the page into any smaller input */}
               <Command.Input
                 autoFocus
                 placeholder="Search pages and sections"
-                className="h-12 w-full bg-transparent text-body text-text-primary outline-none placeholder:text-body placeholder:text-text-muted"
+                className="h-12 w-full bg-transparent text-body text-text-primary outline-none placeholder:text-body placeholder:text-text-muted pointer-coarse:text-base pointer-coarse:placeholder:text-base"
               />
             </div>
             <Command.List className="min-h-0 overflow-y-auto overscroll-contain p-1.5 **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2.5 **:[[cmdk-group-heading]]:pb-1.5 **:[[cmdk-group-heading]]:text-meta **:[[cmdk-group-heading]]:text-text-muted">

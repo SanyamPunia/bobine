@@ -247,6 +247,19 @@
     overscroll-behavior: none;
   }
 
+  /* no gray flash on tap, and no font inflation when a phone turns sideways */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* taps register at once instead of waiting to rule out a double-tap zoom */
+  a,
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
   /* scrollbars in the page's own greys, inherited by every scroller */
   html {
     scrollbar-color: var(--stroke-strong) transparent;
