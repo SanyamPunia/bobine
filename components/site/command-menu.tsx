@@ -19,6 +19,28 @@ import type { SearchItem } from "@/lib/search"
 import { useIsApple } from "@/hooks/use-is-apple"
 import { Tooltip } from "@/components/site/tooltip"
 
+/**
+ * Fades an edge of the results list only while more results sit past it, so
+ * a short list keeps sharp edges. The attributes are written directly, so
+ * scrolling never re-renders the palette.
+ */
+function markScrollEdges(el: HTMLElement) {
+  el.toggleAttribute("data-fade-top", el.scrollTop > 1)
+  el.toggleAttribute("data-fade-bottom", el.scrollTop + el.clientHeight < el.scrollHeight - 1)
+}
+
+/* filtering changes the list height without a scroll event, so watch both */
+function watchScrollEdges(el: HTMLDivElement | null) {
+  if (!el) return
+  const update = () => markScrollEdges(el)
+  const observer = new ResizeObserver(update)
+  observer.observe(el)
+  const sizer = el.querySelector("[cmdk-list-sizer]")
+  if (sizer) observer.observe(sizer)
+  update()
+  return () => observer.disconnect()
+}
+
 const groups: SearchItem["group"][] = ["Pages", "Sections", "Links"]
 const icons = { Pages: FileTextIcon, Sections: HashIcon, Links: ArrowSquareOutIcon }
 
@@ -137,10 +159,13 @@ export function CommandMenu({ items }: { items: SearchItem[] }) {
               <Command.Input
                 autoFocus
                 placeholder="Search pages and sections"
-                className="h-12 w-full bg-transparent text-body text-text-primary outline-none placeholder:text-body placeholder:text-text-muted pointer-coarse:text-base pointer-coarse:placeholder:text-base"
+                className="h-12 w-full bg-transparent text-action text-text-primary outline-none placeholder:text-action placeholder:text-text-muted pointer-coarse:text-base pointer-coarse:placeholder:text-base"
               />
             </div>
-            <Command.List className="min-h-0 overflow-y-auto overscroll-contain p-1.5 **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2.5 **:[[cmdk-group-heading]]:pb-1.5 **:[[cmdk-group-heading]]:text-meta **:[[cmdk-group-heading]]:text-text-muted">
+            <Command.List
+              ref={watchScrollEdges}
+              onScroll={(event) => markScrollEdges(event.currentTarget)}
+              className="min-h-0 overflow-y-auto overscroll-contain p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [--fade-b:0px] [--fade-t:0px] data-fade-bottom:[--fade-b:24px] data-fade-top:[--fade-t:24px] [mask-image:linear-gradient(to_bottom,transparent,black_var(--fade-t),black_calc(100%-var(--fade-b)),transparent)] **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2.5 **:[[cmdk-group-heading]]:pb-1.5 **:[[cmdk-group-heading]]:text-meta **:[[cmdk-group-heading]]:text-text-muted">
               <Command.Empty className="px-2.5 py-8 text-center text-action text-text-muted">No results</Command.Empty>
               {groups.map((group) => {
                 const Icon = icons[group]
