@@ -243,6 +243,11 @@ markdown drift apart. Only the live demos exist in the pages alone.
   `rail` breakpoint. Below it, a bar naming the current page opens the same
   list as a left drawer (Base UI `Dialog`). Both render one `NavLinks`, so
   the two lists cannot drift.
+- Once that bar has scrolled fully behind the sticky header,
+  `DocsMenuButton` slides in left of the logo and opens the same drawer. It
+  is a detached trigger on one `Dialog.createHandle()`, and it reaches the
+  header through `SiteHeader`'s `leading` slot, so the header stays a
+  server component.
 - Code blocks are a double bezel (`fill` tray, `bg` panel with
   `--shadow-well`). The label shows a language mark from `public/brands/`.
 
@@ -283,8 +288,9 @@ search. Decorative lines (column guides, title rules, header divider)
 are all off below `sm`. Anything hidden on phones must stay
 reachable through search.
 
-The docs sidebar lists Examples in the Docs group, after Reference (`extras`
-in `DocsNav`). A "Resources" group closes the sidebar: `registry.json`,
+The docs sidebar lists Examples in the Docs group, after Reference
+(`docExtras` in `lib/docs.ts`). The pager walks `docsReadingOrder`, which is
+`docPages` then `docExtras`, so Reference links on to Examples. A "Resources" group closes the sidebar: `registry.json`,
 `llms.txt` and `llms-full.txt`, which open in a new tab. The footer holds
 only the credit and the licence. The landing page has no sidebar, so all
 three files are also in search.
