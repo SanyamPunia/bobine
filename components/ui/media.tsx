@@ -988,7 +988,28 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
   const [open, setOpen] = React.useState(false)
   const rootEl = React.useRef<HTMLDivElement>(null)
   const triggerEl = React.useRef<HTMLButtonElement>(null)
+  const panelEl = React.useRef<HTMLDivElement>(null)
   const panelId = React.useId()
+
+  /**
+   * The player clips its children, so on a short player (a phone in portrait)
+   * a full-height panel lost its top rows. Cap the panel to the space above
+   * the trigger and let it scroll, and re-measure when the player resizes.
+   */
+  React.useLayoutEffect(() => {
+    const panel = panelEl.current
+    const trigger = triggerEl.current
+    const player = rootEl.current?.closest<HTMLElement>("[data-slot='media-root']")
+    if (!open || !panel || !trigger || !player) return
+    const fit = () => {
+      const space = trigger.getBoundingClientRect().top - player.getBoundingClientRect().top - 16
+      panel.style.maxHeight = `${Math.max(96, Math.min(288, space))}px`
+    }
+    fit()
+    const observer = new ResizeObserver(fit)
+    observer.observe(player)
+    return () => observer.disconnect()
+  }, [open])
 
   React.useEffect(() => {
     if (!open) return
@@ -1060,12 +1081,13 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
       </MediaButton>
       {open && (
       <div
+        ref={panelEl}
         id={panelId}
         role="menu"
         aria-label="Playback settings"
         onKeyDown={onPanelKeyDown}
         className={cn(
-          "absolute right-0 bottom-full z-10 mb-2 flex max-h-72 w-44 origin-bottom-right flex-col gap-2 overflow-y-auto rounded-xl p-1.5",
+          "absolute right-0 bottom-full z-10 mb-2 flex max-h-72 w-44 origin-bottom-right flex-col gap-2 overflow-y-auto overscroll-contain rounded-xl p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           "transition-[opacity,translate,scale] duration-150 ease-media starting:translate-y-1 starting:scale-95 starting:opacity-0 motion-reduce:transition-none",
           panelClassName
         )}

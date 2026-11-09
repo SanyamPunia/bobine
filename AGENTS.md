@@ -139,6 +139,8 @@ while playing only reveals them, and the next tap pauses.
 - No haptics. iOS Safari has no vibration API, and Android's
   `navigator.vibrate` is a buzz, not a tap, so it would feel worse than none.
 - Any text input is 16px on `pointer-coarse`, or iOS zooms the page into it.
+- The player clips its children, so the settings panel caps its height to
+  the space above its trigger and scrolls.
 
 ## Social metadata
 
