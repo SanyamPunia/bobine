@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import { CONTENT_WIDTH } from "@/lib/constants"
 import { searchItems } from "@/lib/search"
 import { CommandMenu } from "@/components/site/command-menu"
+import { LogoLink } from "@/components/site/logo-link"
 import { Tooltip } from "@/components/site/tooltip"
 
 /* the published package's version, so the header always shows what ships */
@@ -37,11 +38,7 @@ export function SiteHeader({ current }: { current?: string }) {
       />
       <header className={cn("mx-auto flex w-full items-center justify-between px-5 py-5", CONTENT_WIDTH)}>
         <div className="flex items-center gap-2">
-          <Link href="/" className={cn(link, "flex items-center gap-2 font-mono font-medium text-text-primary")}>
-            {/* app/icon.svg, the favicon, served at /icon.svg. Decorative: the wordmark names the link. */}
-            <img src="/icon.svg" alt="" draggable={false} className="size-5 select-none" />
-            bobine
-          </Link>
+          <LogoLink className={cn(link, "flex items-center gap-2 font-mono font-medium text-text-primary")} />
           <span className="hidden rounded-full bg-fill px-1.5 py-px font-mono text-meta text-text-muted sm:inline">
             v{bobinePackage.version}
           </span>
