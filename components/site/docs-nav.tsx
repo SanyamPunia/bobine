@@ -14,6 +14,16 @@ import { Tooltip } from "@/components/site/tooltip"
 const focus = "focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 
 /**
+ * One drawer, two triggers: the bar under the header and, once that bar has
+ * scrolled away, a button beside the logo. The handle lets the header's
+ * trigger open a dialog rendered here.
+ */
+const docsMenu = Dialog.createHandle()
+
+/* the header button watches this bar to know when it has scrolled away */
+const BAR_ID = "docs-menu-bar"
+
+/**
  * Raw files for tools and agents, last in the sidebar. They open in a new tab
  * because they are plain text and JSON, not pages.
  */
@@ -93,8 +103,9 @@ export function DocsNav() {
       </nav>
 
       <div className={cn("mx-auto w-full px-5 pt-6 rail:hidden", CONTENT_WIDTH)}>
-        <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Root open={open} onOpenChange={setOpen} handle={docsMenu}>
           <Dialog.Trigger
+            id={BAR_ID}
             className={cn(
               "flex w-full cursor-pointer items-center gap-2 rounded-xl bg-surface px-3 py-2 text-left shadow-frame transition-[background-color,scale] duration-150 hover:bg-fill motion-safe:active:scale-[0.98] aria-expanded:bg-fill",
               focus
@@ -138,5 +149,58 @@ export function DocsNav() {
         </Dialog.Root>
       </div>
     </>
+  )
+}
+
+/**
+ * The drawer trigger beside the logo, below the `rail` breakpoint. It slides
+ * in once the page's menu bar has passed under the sticky header, so a reader
+ * deep in a page can still reach the other pages. Hidden, it takes no width
+ * and is inert.
+ */
+export function DocsMenuButton() {
+  const [shown, setShown] = React.useState(false)
+  const self = React.useRef<HTMLSpanElement>(null)
+
+  React.useEffect(() => {
+    const bar = document.getElementById(BAR_ID)
+    const header = self.current?.closest("header")
+    if (!bar || !header) return
+
+    /**
+     * The bar counts as gone once it is fully behind the header. The observer
+     * fires once, at the crossing, so the test is against the header's edge:
+     * a test against the viewport top missed a slow scroll, where the bar is
+     * still partly on screen when it crosses.
+     */
+    const edge = header.offsetHeight
+    const observer = new IntersectionObserver(
+      ([entry]) => setShown(!entry.isIntersecting && entry.boundingClientRect.bottom <= (entry.rootBounds?.top ?? edge) + 1),
+      { rootMargin: `-${edge}px 0px 0px 0px` }
+    )
+    observer.observe(bar)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <span
+      ref={self}
+      inert={!shown}
+      data-shown={shown || undefined}
+      className="-mr-2 flex w-0 scale-90 opacity-0 transition-[width,margin,opacity,scale] duration-150 ease-media data-shown:mr-0 data-shown:w-8 data-shown:scale-100 data-shown:opacity-100 motion-reduce:transition-none rail:hidden"
+    >
+      <Tooltip label="Docs menu">
+        <Dialog.Trigger
+          handle={docsMenu}
+          aria-label="Docs menu"
+          className={cn(
+            "grid size-8 shrink-0 cursor-pointer place-items-center rounded-full text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary motion-safe:active:scale-[0.98] aria-expanded:bg-fill",
+            focus
+          )}
+        >
+          <ListIcon aria-hidden="true" className="size-4" />
+        </Dialog.Trigger>
+      </Tooltip>
+    </span>
   )
 }

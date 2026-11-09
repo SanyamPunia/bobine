@@ -27,9 +27,10 @@ const link =
  * Behind it sits a page-coloured, blurred layer that runs 24px past the header.
  * The fade starts at the header's bottom edge (70% of the layer), so the logo
  * row stays fully backed and content dissolves over a short 24px below it
- * instead of meeting a hard edge.
+ * instead of meeting a hard edge. `leading` sits left of the logo: the docs
+ * pass their menu button there.
  */
-export function SiteHeader({ current }: { current?: string }) {
+export function SiteHeader({ current, leading }: { current?: string; leading?: React.ReactNode }) {
   return (
     <div className="sticky top-0 z-20">
       <div
@@ -38,6 +39,7 @@ export function SiteHeader({ current }: { current?: string }) {
       />
       <header className={cn("mx-auto flex w-full items-center justify-between px-5 py-5", CONTENT_WIDTH)}>
         <div className="flex items-center gap-2">
+          {leading}
           <LogoLink className={cn(link, "flex items-center gap-2 font-mono font-medium text-text-primary")} />
           <span className="hidden rounded-full bg-fill px-1.5 py-px font-mono text-meta text-text-muted sm:inline">
             v{bobinePackage.version}
