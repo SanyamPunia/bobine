@@ -224,7 +224,7 @@ export const videoProps: readonly Prop[] = [
   {
     name: "tracks",
     type: "VideoTrack[]",
-    description: "WebVTT caption or subtitle files: { src, label, srcLang, kind?, default? }.",
+    description: "WebVTT caption or subtitle files: { src, label, srcLang, kind?, default? }. A default track is on at load.",
   },
   { name: "loader", type: "MediaSourceLoader", description: "Adapter for sources the browser cannot play natively, such as HLS." },
   {

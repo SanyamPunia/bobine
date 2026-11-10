@@ -104,8 +104,20 @@ function captionTracks(media: HTMLMediaElement | null) {
   )
 }
 
+/**
+ * The HTML form drops voice and class tags and decodes entities, so a cue
+ * written as `Q&amp;A` reads `Q&A`. jsdom has no `getCueAsHTML`.
+ */
 function cueText(cue: TextTrackCue) {
-  return ((cue as VTTCue).text ?? "").replace(/<[^>]+>/g, "").trim()
+  const vtt = cue as VTTCue
+  const text = typeof vtt.getCueAsHTML === "function" ? vtt.getCueAsHTML().textContent : vtt.text?.replace(/<[^>]+>/g, "")
+  return (text ?? "").trim()
+}
+
+/* the track a `<track default>` element asks for, or -1 */
+function defaultTrack(media: HTMLMediaElement | null, tracks: TextTrack[]) {
+  const el = Array.from(media?.querySelectorAll("track") ?? []).find((track) => track.default)
+  return el ? tracks.indexOf(el.track) : -1
 }
 
 const sameList = (a: readonly unknown[], b: readonly unknown[]) =>
@@ -135,6 +147,9 @@ export function createMediaStore({ persistKey }: MediaStoreOptions = {}) {
   let container: HTMLElement | null = null
   let cueTrack: TextTrack | null = null
   let metadata: MediaInfo | null = null
+
+  /* set once the viewer picks a track, so `default` stops applying */
+  let trackChosen = false
   const listeners = new Set<Listener>()
 
   const set = (patch: Partial<MediaState>) => {
@@ -189,7 +204,11 @@ export function createMediaStore({ persistKey }: MediaStoreOptions = {}) {
   // in "hidden" mode (cues load, nothing paints) and every other track is off.
   const syncTracks = (requested = state.textTrack) => {
     const tracks = captionTracks(media)
-    let active = requested
+    /**
+     * Attaching sets every track's mode before the browser applies `default`,
+     * which cancels it, so the default is applied here instead.
+     */
+    let active = requested === -1 && !trackChosen ? defaultTrack(media, tracks) : requested
     tracks.forEach((track, i) => {
       if (track.mode === "showing") active = i
     })
@@ -419,6 +438,7 @@ export function createMediaStore({ persistKey }: MediaStoreOptions = {}) {
 
   // An explicit choice must win over a track the browser marked "showing".
   const syncTracksExplicit = (index: number) => {
+    trackChosen = true
     captionTracks(media).forEach((track, i) => {
       if (i !== index && track.mode === "showing") track.mode = "disabled"
     })
