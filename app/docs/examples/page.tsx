@@ -10,6 +10,7 @@ import { PageRail } from "@/components/site/page-rail"
 import { recipeCode, recipeStage } from "@/components/site/recipe-card"
 import { Playground } from "@/components/site/playground"
 import { Section } from "@/components/site/section"
+import { ThemeRecipe } from "@/components/site/theme-recipe"
 import { TrackList } from "@/components/site/track-list"
 import { pageMetadata } from "@/lib/metadata"
 import { CONTENT_WIDTH } from "@/lib/constants"
@@ -27,7 +28,18 @@ const tracks = [{ src: "/media/flower.en.vtt", label: "English", srcLang: "en", 
 const flower = "Demo video of a blooming flower"
 
 /** One recipe: a named use, the live player, then the code that makes it. */
-function RecipeBlock({ recipe, bleed, children }: { recipe: Recipe; bleed?: boolean; children: React.ReactNode }) {
+function RecipeBlock({
+  recipe,
+  bleed,
+  card,
+  children,
+}: {
+  recipe: Recipe
+  bleed?: boolean
+  /* replaces the stage and code, for a recipe whose code follows its demo */
+  card?: React.ReactNode
+  children?: React.ReactNode
+}) {
   return (
     <article id={recipe.id} aria-labelledby={`${recipe.id}-title`} className="flex scroll-mt-24 flex-col gap-3">
       <div className="flex flex-col gap-1">
@@ -43,10 +55,14 @@ function RecipeBlock({ recipe, bleed, children }: { recipe: Recipe; bleed?: bool
        * volume popover near its top edge still shows in full.
        */}
       <div className="rounded-2xl shadow-frame">
-        <Demo bleed={bleed} className={recipeStage}>
-          {children}
-        </Demo>
-        <CodeBlock code={recipe.code} className={recipeCode} />
+        {card ?? (
+          <>
+            <Demo bleed={bleed} className={recipeStage}>
+              {children}
+            </Demo>
+            <CodeBlock code={recipe.code} className={recipeCode} />
+          </>
+        )}
       </div>
     </article>
   )
@@ -117,6 +133,8 @@ export default function Page() {
             <RecipeBlock recipe={a.voice}>
               <AudioPlayer src="/media/track.mp3" frameClassName="max-w-xs rounded-full bg-bg" />
             </RecipeBlock>
+
+            <RecipeBlock recipe={a.theme} card={<ThemeRecipe />} />
 
             <RecipeBlock recipe={a.tracks}>
               <TrackList />

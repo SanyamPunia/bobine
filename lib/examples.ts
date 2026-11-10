@@ -109,6 +109,13 @@ export const audioRecipes = {
   frameClassName="max-w-xs rounded-full"
 />`,
   },
+  theme: {
+    id: "fixed-theme",
+    title: "Fixed theme",
+    description:
+      "The card follows your app's theme by default. theme pins it to light or dark, for a light player on a dark page or the other way round.",
+    code: themeRecipeCode("light"),
+  },
   tracks: {
     id: "track-list",
     title: "Track list",
@@ -134,6 +141,13 @@ function pauseOthers(event: AudioEvent) {
 ))}`,
   },
 } satisfies Record<string, Recipe>
+
+/** The theme recipe's code for each setting of its switch. */
+export function themeRecipeCode(theme: "app" | "light" | "dark"): string {
+  const lines = [`  src="/track.mp3"`, `  title="Morning Drift"`, `  description="Demo track"`]
+  if (theme !== "app") lines.push(`  theme="${theme}"`)
+  return `<AudioPlayer\n${lines.join("\n")}\n/>`
+}
 
 /** The demo tracks in the track list. They share one file. */
 export const demoTracks = [
