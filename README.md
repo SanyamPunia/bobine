@@ -113,8 +113,8 @@ The skill lives in [skills/bobine](skills/bobine/SKILL.md). The site also serves
 ```bash
 pnpm install
 pnpm dev     # site on localhost:3000
-pnpm test    # vitest
-pnpm build   # registry JSON, then the Next.js build
+pnpm check   # typecheck, lint, test and build: run before every push
+pnpm package:build   # the npm package
 ```
 
 ## License

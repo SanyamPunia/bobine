@@ -4,7 +4,6 @@ import * as React from "react"
 import { Menu } from "@base-ui/react/menu"
 import { ArrowSquareOutIcon, CaretDownIcon, FileTextIcon, RobotIcon } from "@phosphor-icons/react"
 
-import { cn } from "@/lib/utils"
 import { useCopy } from "@/hooks/use-copy"
 import { Button } from "@/components/ui/button"
 import { CopyIcon } from "@/components/site/copy-icon"

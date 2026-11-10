@@ -44,6 +44,7 @@ export function PageRail() {
 
   React.useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>("main section[id]")
+    /* eslint-disable-next-line react-hooks/set-state-in-effect -- the sections exist only in the DOM, after mount */
     setEntries(
       Array.from(sections, (el) => ({
         id: el.id,
