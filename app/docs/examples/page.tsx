@@ -7,6 +7,7 @@ import { CodeBlock } from "@/components/site/code-block"
 import { Demo } from "@/components/site/demo"
 import { DocsPager } from "@/components/site/docs-pager"
 import { PageRail } from "@/components/site/page-rail"
+import { recipeCode, recipeStage } from "@/components/site/recipe-card"
 import { Playground } from "@/components/site/playground"
 import { Section } from "@/components/site/section"
 import { TrackList } from "@/components/site/track-list"
@@ -38,14 +39,14 @@ function RecipeBlock({ recipe, bleed, children }: { recipe: Recipe; bleed?: bool
 
       {/**
        * One card per example: the live player on top, its code below, split by
-       * a single border and the change of tone. The card clips both, so the
-       * stage and the code tray drop their own radius and shadow.
+       * a single border and the change of tone. Nothing clips the card, so a
+       * volume popover near its top edge still shows in full.
        */}
-      <div className="overflow-hidden rounded-2xl shadow-frame">
-        <Demo bleed={bleed} className="rounded-none shadow-none">
+      <div className="rounded-2xl shadow-frame">
+        <Demo bleed={bleed} className={recipeStage}>
           {children}
         </Demo>
-        <CodeBlock code={recipe.code} className="rounded-none border-t border-stroke shadow-none" />
+        <CodeBlock code={recipe.code} className={recipeCode} />
       </div>
     </article>
   )

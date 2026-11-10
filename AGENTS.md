@@ -303,8 +303,10 @@ snippets live in `lib/examples.ts`, which the page, `/docs/examples.md`,
 llms.txt and search all
 read, so a new recipe needs an entry there and its live player in the page.
 Each recipe is one card: the live player on top and its code below, split by
-a single border and the change of tone. The card clips both, so `Demo` and
-`CodeBlock` drop their own radius and shadow there. The playground (`components/site/playground.tsx`) builds its code from the
+a single border and the change of tone. `Demo` rounds only its top corners
+and `CodeBlock` only its bottom ones (`components/site/recipe-card.ts`). The
+card must not clip them: a player's volume popover rises past the card's top
+edge. The playground (`components/site/playground.tsx`) builds its code from the
 same toggles it renders, so the two cannot disagree.
 
 The header holds Docs, search and a GitHub icon, nothing else. Examples is a
