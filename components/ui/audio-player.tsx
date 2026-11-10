@@ -72,6 +72,10 @@ function AudioPlayer({
 
   const hasInfo = Boolean(title || description)
 
+  /* the src that failed to load, so a new artwork gets a fresh try */
+  const [failedArtwork, setFailedArtwork] = React.useState<string | null>(null)
+  const showArtwork = artwork && failedArtwork !== artwork
+
   return (
     <MediaRoot
       persistKey={persistKey}
@@ -89,7 +93,7 @@ function AudioPlayer({
           title and the seek row each get the full width */}
       <div className={cn("flex items-center", hasInfo && "row-span-2 @max-sm/audio:row-span-1")}>
         <span className="relative shrink-0">
-          {artwork ? (
+          {showArtwork ? (
             /**
              * The tile presses as one piece. Scaling the button alone pulled
              * its scrim in from the edges and bared a band of the image. No
@@ -100,7 +104,15 @@ function AudioPlayer({
               <img
                 src={artwork}
                 alt=""
-                className="size-full rounded-lg object-cover outline outline-black/10 -outline-offset-1 dark:outline-white/10"
+                draggable={false}
+                onError={() => setFailedArtwork(artwork)}
+
+                /* a server-rendered image can fail before hydration, when no
+                   onError is attached yet */
+                ref={(img) => {
+                  if (img?.complete && img.naturalWidth === 0) setFailedArtwork(artwork)
+                }}
+                className="size-full rounded-lg object-cover outline select-none outline-black/10 -outline-offset-1 dark:outline-white/10"
               />
               <MediaPlayButton
                 tooltipAlign="start"
@@ -117,7 +129,7 @@ function AudioPlayer({
               spinner on the cover, since a spinning square would look broken */}
           <MediaLoading
             className={
-              artwork
+              showArtwork
                 ? "absolute inset-0 m-auto size-5 text-background"
                 : "absolute -inset-1 size-auto border-current/15 border-t-current text-foreground"
             }

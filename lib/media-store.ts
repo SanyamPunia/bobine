@@ -25,6 +25,8 @@ export type MediaState = {
   fullscreen: boolean
   pictureInPicture: boolean
   error: MediaError | null
+  /** False while the element has no source to play. */
+  hasSource: boolean
   /** Caption and subtitle tracks, in document order. */
   textTracks: MediaTextTrack[]
   /** Index into `textTracks`, or -1 when captions are off. */
@@ -56,6 +58,7 @@ const MEDIA_EVENTS = [
   "volumechange",
   "ratechange",
   "emptied",
+  "loadstart",
   "error",
   "enterpictureinpicture",
   "leavepictureinpicture",
@@ -77,6 +80,7 @@ const initialState: MediaState = {
   fullscreen: false,
   pictureInPicture: false,
   error: null,
+  hasSource: false,
   textTracks: [],
   textTrack: -1,
   cues: [],
@@ -183,6 +187,7 @@ export function createMediaStore({ persistKey }: MediaStoreOptions = {}) {
       pictureInPicture:
         typeof document !== "undefined" && document.pictureInPictureElement === media,
       error: media.error,
+      hasSource: Boolean(media.src || media.currentSrc || media.querySelector("source[src]")),
     })
   }
 
@@ -486,7 +491,7 @@ export function describeMediaError(error: MediaError | null) {
     case 3:
       return "This media could not be decoded."
     case 4:
-      return "This format or source isn't supported."
+      return "This media couldn't be loaded."
     default:
       return "Something went wrong during playback."
   }

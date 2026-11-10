@@ -358,11 +358,13 @@ function IconSwap({ show, a, b }: { show: "a" | "b"; a: React.ReactNode; b: Reac
 function MediaPlayButton({ onClick, ...props }: MediaButtonProps) {
   const store = useMediaStore()
   const paused = useMedia((s) => s.paused)
+  const hasSource = useMedia((s) => s.hasSource)
   return (
     <MediaButton
       aria-label={paused ? "Play" : "Pause"}
       tooltip={paused ? "Play" : "Pause"}
       shortcut="K"
+      disabled={!hasSource}
       onClick={(event) => {
         onClick?.(event)
         store.toggle()
@@ -1185,7 +1187,7 @@ function MediaErrorMessage({ className, message, ...props }: MediaErrorMessagePr
       <button
         type="button"
         onClick={() => store.retry()}
-        className="inline-flex h-8 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm outline-none ring-1 ring-current/25 transition-[background-color,scale] duration-150 ease-media hover:bg-current/10 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:active:scale-[0.96]"
+        className="inline-flex h-8 shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-3 text-sm whitespace-nowrap outline-none ring-1 ring-current/25 transition-[background-color,scale] duration-150 ease-media hover:bg-current/10 focus-visible:ring-2 focus-visible:ring-current/60 motion-safe:active:scale-[0.96]"
       >
         <RetryIcon className="size-3.5" />
         Try again

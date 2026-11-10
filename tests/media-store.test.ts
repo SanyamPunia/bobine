@@ -53,7 +53,7 @@ describe("formatTime", () => {
 describe("describeMediaError", () => {
   it("maps known codes and falls back for unknown ones", () => {
     expect(describeMediaError({ code: 2 } as MediaError)).toMatch(/network/i)
-    expect(describeMediaError({ code: 4 } as MediaError)).toMatch(/supported/i)
+    expect(describeMediaError({ code: 4 } as MediaError)).toMatch(/couldn't be loaded/i)
     expect(describeMediaError(null)).toMatch(/went wrong/i)
   })
 })
