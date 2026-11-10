@@ -112,7 +112,7 @@ function AudioPlayer({
                 ref={(img) => {
                   if (img?.complete && img.naturalWidth === 0) setFailedArtwork(artwork)
                 }}
-                className="size-full rounded-lg object-cover outline select-none outline-black/10 -outline-offset-1 dark:outline-white/10"
+                className="size-full rounded-lg object-cover outline select-none outline-foreground/10 -outline-offset-1"
               />
               <MediaPlayButton
                 tooltipAlign="start"

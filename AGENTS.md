@@ -93,7 +93,14 @@ Two token sets live in `app/globals.css`, one per audience.
 - **shadcn tokens** (`background`, `muted`, `card`, `border` and the rest) are
   for `components/ui/`. Consumer apps define these names, so registry code
   must never use a site token. On this site most shadcn names point at a site
-  token, so the players match the page.
+  token, so the players match the page. That alias block is declared on
+  `:root`, `.light` and `.dark` alike, because a `var()` resolves where it is
+  declared. A `.dark` or `.light` wrapper then re-themes what is inside it.
+
+The players draw with tokens only, never `dark:`, so a theme wrapper changes
+every part of them. A user pins one player to light or dark with that
+wrapper. Do not add a prop with fixed colours for this: it would drop the
+user's own palette.
 
 The `dark:` variant follows the same switch as the tokens: `.dark` on `html`,
 or the system preference unless `html` is `.light`. Keep the two in step.
@@ -303,8 +310,10 @@ snippets live in `lib/examples.ts`, which the page, `/docs/examples.md`,
 llms.txt and search all
 read, so a new recipe needs an entry there and its live player in the page.
 Each recipe is one card: the live player on top and its code below, split by
-a single border and the change of tone. The card clips both, so `Demo` and
-`CodeBlock` drop their own radius and shadow there. The playground (`components/site/playground.tsx`) builds its code from the
+a single border and the change of tone. `Demo` rounds only its top corners
+and `CodeBlock` only its bottom ones (`components/site/recipe-card.ts`). The
+card must not clip them: a player's volume popover rises past the card's top
+edge. The playground (`components/site/playground.tsx`) builds its code from the
 same toggles it renders, so the two cannot disagree.
 
 The header holds Docs, search and a GitHub icon, nothing else. Examples is a

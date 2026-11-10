@@ -79,6 +79,24 @@ export const dashLoader: MediaSourceLoader = (media, src) => {
   --media-foreground: oklch(1 0 0); /* icons and text over video */
   --media-scrim: oklch(0 0 0); /* video ground and control glass */
 }`,
+  themeScope: `{/* a dark player on a light page */}
+<div className="dark">
+  <AudioPlayer src="/track.mp3" />
+</div>
+
+{/* a light player on a dark page, after the CSS change below */}
+<div className="light">
+  <AudioPlayer src="/track.mp3" />
+</div>
+
+{/* one token for one player */}
+<AudioPlayer src="/track.mp3" frameClassName="[--primary:oklch(0.55_0.2_260)]" />`,
+  themeLight: `/* globals.css: shadcn defines the light tokens on :root only */
+:root,
+.light {
+  --background: oklch(1 0 0);
+  /* the rest of your light tokens */
+}`,
   package: `/* globals.css */
 @import "tailwindcss";
 @import "bobinejs/styles.css";
@@ -142,7 +160,7 @@ export const sections = {
     id: "theming",
     title: "Theming",
     description:
-      "The players read your shadcn theme tokens (background, foreground, muted, primary, border), so they follow your light and dark mode. Video controls use two more tokens that stay the same in both modes. Requires React 19 and Tailwind CSS 4.",
+      "The players read your shadcn theme tokens (background, foreground, muted, primary, border), so they follow your light and dark mode. Video controls use two more tokens that stay the same in both modes. To theme one player apart from the page, set the tokens on an element around it, such as a .dark or .light wrapper. The player keeps your colours, because it reads the same tokens. Requires React 19 and Tailwind CSS 4.",
   },
   api: {
     id: "api",

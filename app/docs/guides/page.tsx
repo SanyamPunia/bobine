@@ -50,6 +50,8 @@ export default function Page() {
 
       <Section id={s.theming.id} title={s.theming.title} description={s.theming.description}>
         <CodeBlock label="globals.css" code={usage.theming} />
+        <CodeBlock code={usage.themeScope} />
+        <CodeBlock label="globals.css" code={usage.themeLight} />
       </Section>
     </DocsMain>
   )

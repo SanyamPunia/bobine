@@ -45,6 +45,7 @@ npx shadcn@latest add https://bobine.fyi/r/media-hls.json      # hlsLoader for .
 - `persistKey` remembers volume, mute and speed in localStorage.
 - `tooltips={false}` turns off the small labels with shortcuts over the controls. They are on by default.
 - `AudioPlayer` also takes `title`, `description`, `artwork` and `showSpeed`.
+- The players follow the app's shadcn theme. To pin one player to dark, wrap it in `<div className="dark">`. For light inside a dark page, wrap it in `.light` and change `:root {` to `:root, .light {` in `globals.css`, because shadcn defines the light tokens on `:root` only. Do not hardcode colours on the player for this.
 
 ## Streams and loaders
 
