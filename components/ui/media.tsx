@@ -989,6 +989,7 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
   const rootEl = React.useRef<HTMLDivElement>(null)
   const triggerEl = React.useRef<HTMLButtonElement>(null)
   const panelEl = React.useRef<HTMLDivElement>(null)
+  const listEl = React.useRef<HTMLDivElement>(null)
   const panelId = React.useId()
 
   /**
@@ -998,17 +999,34 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
    */
   React.useLayoutEffect(() => {
     const panel = panelEl.current
+    const list = listEl.current
     const trigger = triggerEl.current
     const player = rootEl.current?.closest<HTMLElement>("[data-slot='media-root']")
-    if (!open || !panel || !trigger || !player) return
+    if (!open || !panel || !list || !trigger || !player) return
+
+    /**
+     * A hidden scrollbar gives no sign of more options, so the list's bottom
+     * edge fades. The fade is the distance left to scroll, capped at 24px, so
+     * it eases out with the scroll instead of snapping off at the end. It sits
+     * on the inner list, so the panel's edge and background stay whole.
+     */
+    const edge = () => {
+      const left = Math.min(24, list.scrollHeight - list.clientHeight - list.scrollTop)
+      list.style.maskImage = left > 1 ? `linear-gradient(to bottom, black calc(100% - ${left}px), rgb(0 0 0 / 0.3))` : ""
+    }
     const fit = () => {
       const space = trigger.getBoundingClientRect().top - player.getBoundingClientRect().top - 16
       panel.style.maxHeight = `${Math.max(96, Math.min(288, space))}px`
+      edge()
     }
     fit()
     const observer = new ResizeObserver(fit)
     observer.observe(player)
-    return () => observer.disconnect()
+    list.addEventListener("scroll", edge, { passive: true })
+    return () => {
+      observer.disconnect()
+      list.removeEventListener("scroll", edge)
+    }
   }, [open])
 
   React.useEffect(() => {
@@ -1053,10 +1071,12 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
         select()
         close()
       }}
-      className="flex h-8 w-full cursor-pointer items-center justify-between gap-6 rounded-md px-2 text-left text-sm outline-none transition-colors duration-150 ease-media hover:bg-current/10 focus-visible:bg-current/15"
+      className="flex min-h-8 w-full shrink-0 cursor-pointer items-center justify-between gap-3 rounded-md px-2 py-1.5 text-left text-sm leading-5 outline-none transition-colors duration-150 ease-media hover:bg-current/10 focus-visible:bg-current/15"
     >
-      <span>{label}</span>
-      <CheckIcon className={cn("size-3.5 transition-opacity duration-150", checked ? "opacity-100" : "opacity-0")} />
+      <span dir="auto" className="min-w-0">
+        {label}
+      </span>
+      <CheckIcon className={cn("size-3.5 shrink-0 transition-opacity duration-150", checked ? "opacity-100" : "opacity-0")} />
     </button>
   )
 
@@ -1087,43 +1107,48 @@ function MediaSettings({ rates = [0.5, 0.75, 1, 1.25, 1.5, 2], className, panelC
         aria-label="Playback settings"
         onKeyDown={onPanelKeyDown}
         className={cn(
-          "absolute right-0 bottom-full z-10 mb-2 flex max-h-72 w-44 origin-bottom-right flex-col gap-2 overflow-y-auto overscroll-contain rounded-xl p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "absolute right-0 bottom-full z-10 mb-2 flex max-h-72 w-48 origin-bottom-right flex-col overflow-hidden rounded-xl",
           "transition-[opacity,translate,scale] duration-150 ease-media starting:translate-y-1 starting:scale-95 starting:opacity-0 motion-reduce:transition-none",
           panelClassName
         )}
       >
-        <div role="group" aria-label="Speed" className="flex flex-col">
-          <span className="px-2 pt-1 pb-1.5 text-xs opacity-60">Speed</span>
-          <div className="grid grid-cols-3 gap-1">
-            {rates.map((r) => (
-              <button
-                key={r}
-                type="button"
-                role="menuitemradio"
-                aria-checked={rate === r}
-                aria-label={r === 1 ? "Normal speed" : `${r}× speed`}
-                tabIndex={rate === r ? 0 : -1}
-                onClick={() => {
-                  store.setPlaybackRate(r)
-                  close()
-                }}
-                className={cn(
-                  "h-8 cursor-pointer rounded-md text-sm tabular-nums outline-none transition-colors duration-150 ease-media hover:bg-current/10 focus-visible:ring-1 focus-visible:ring-current/40",
-                  rate === r && "bg-current/15"
-                )}
-              >
-                {`${r}×`}
-              </button>
-            ))}
+        <div
+          ref={listEl}
+          className="flex min-h-0 flex-col gap-2 overflow-y-auto overscroll-contain p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          <div role="group" aria-label="Speed" className="flex flex-col">
+            <span className="px-2 pt-1 pb-1.5 text-xs opacity-60">Speed</span>
+            <div className="grid grid-cols-3 gap-1">
+              {rates.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  role="menuitemradio"
+                  aria-checked={rate === r}
+                  aria-label={r === 1 ? "Normal speed" : `${r}× speed`}
+                  tabIndex={rate === r ? 0 : -1}
+                  onClick={() => {
+                    store.setPlaybackRate(r)
+                    close()
+                  }}
+                  className={cn(
+                    "h-8 cursor-pointer rounded-md text-sm tabular-nums outline-none transition-colors duration-150 ease-media hover:bg-current/10 focus-visible:ring-1 focus-visible:ring-current/40",
+                    rate === r && "bg-current/15"
+                  )}
+                >
+                  {`${r}×`}
+                </button>
+              ))}
+            </div>
           </div>
+          {tracks.length > 0 && (
+            <div role="group" aria-label="Captions" className="flex flex-col">
+              <span className="px-2 pt-1 pb-1.5 text-xs opacity-60">Captions</span>
+              {option("Off", textTrack === -1, () => store.setTextTrack(-1))}
+              {tracks.map((track, i) => option(track.label, textTrack === i, () => store.setTextTrack(i)))}
+            </div>
+          )}
         </div>
-        {tracks.length > 0 && (
-          <div role="group" aria-label="Captions" className="flex flex-col">
-            <span className="px-2 pt-1 pb-1.5 text-xs opacity-60">Captions</span>
-            {option("Off", textTrack === -1, () => store.setTextTrack(-1))}
-            {tracks.map((track, i) => option(track.label, textTrack === i, () => store.setTextTrack(i)))}
-          </div>
-        )}
       </div>
       )}
     </div>
