@@ -57,7 +57,7 @@ function sectionMarkdown(origin: string): Record<SectionId, string[]> {
     compose: [`## ${s.compose.title}`, s.compose.description, fence(cmd.media, "bash"), fence(usage.composed)],
     streaming: [`## ${s.streaming.title}`, s.streaming.description, fence(cmd.hls, "bash"), fence(usage.hls)],
     loader: [`## ${s.loader.title}`, s.loader.description, fence(usage.loader, "ts")],
-    theming: [`## ${s.theming.title}`, s.theming.description, fence(usage.theming, "css")],
+    theming: [`## ${s.theming.title}`, s.theming.description, fence(usage.theming, "css"), fence(usage.themeScope), fence(usage.themeLight, "css")],
     api: [`## ${s.api.title}`, s.api.description, propsTable("VideoPlayer", videoProps), propsTable("AudioPlayer", audioProps)],
     parts: [
       `## ${s.parts.title}`,

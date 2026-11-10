@@ -93,7 +93,14 @@ Two token sets live in `app/globals.css`, one per audience.
 - **shadcn tokens** (`background`, `muted`, `card`, `border` and the rest) are
   for `components/ui/`. Consumer apps define these names, so registry code
   must never use a site token. On this site most shadcn names point at a site
-  token, so the players match the page.
+  token, so the players match the page. That alias block is declared on
+  `:root`, `.light` and `.dark` alike, because a `var()` resolves where it is
+  declared. A `.dark` or `.light` wrapper then re-themes what is inside it.
+
+The players draw with tokens only, never `dark:`, so a theme wrapper changes
+every part of them. A user pins one player to light or dark with that
+wrapper. Do not add a prop with fixed colours for this: it would drop the
+user's own palette.
 
 The `dark:` variant follows the same switch as the tokens: `.dark` on `html`,
 or the system preference unless `html` is `.light`. Keep the two in step.
