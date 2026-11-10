@@ -4,6 +4,16 @@ Changes to the `bobinejs` npm package and the shadcn registry items. The
 registry always serves `main`. The package ships the same source at each
 version below.
 
+## 0.2.1
+
+### Fixed
+
+- The AudioPlayer's artwork outline uses the `foreground` token instead of a
+  `dark:` class, so it follows a `.light` or `.dark` wrapper around the
+  player. Wrapping one player in either class themes it with your app's own
+  palette, for a light player on a dark page or the reverse. The
+  [Theming guide](https://bobine.fyi/docs/guides#theming) shows how.
+
 ## 0.2.0
 
 ### Added
