@@ -5,6 +5,7 @@ import { VideoPlayer } from "@/components/ui/video-player"
 import { CodeBlock } from "@/components/site/code-block"
 import { Demo } from "@/components/site/demo"
 import { DocsMain } from "@/components/site/docs-main"
+import { InstallNote } from "@/components/site/install-note"
 import { PageActions } from "@/components/site/page-actions"
 import { Section } from "@/components/site/section"
 import { pageMetadata } from "@/lib/metadata"
@@ -66,6 +67,7 @@ export default function Page() {
             />
           </Demo>
           <CodeBlock prompt code={cmd.video} />
+          <InstallNote text={intro.requires} />
         </div>
       </header>
 

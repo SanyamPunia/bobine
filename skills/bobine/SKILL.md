@@ -18,6 +18,8 @@ Do not use bobine for a non-React app, for DRM-protected streams, or for a video
 
 ## Install
 
+If the project has no `components.json`, run `npx shadcn@latest init` first. The add command stops on a prompt without it.
+
 ```bash
 npx shadcn@latest add https://bobine.fyi/r/video-player.json   # VideoPlayer
 npx shadcn@latest add https://bobine.fyi/r/audio-player.json   # AudioPlayer

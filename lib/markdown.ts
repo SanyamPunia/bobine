@@ -81,7 +81,7 @@ export function docPageMarkdown(page: DocPage, origin: string): string {
   const blocks = sectionMarkdown(origin)
   const lead =
     page.href === "/docs"
-      ? [`> Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`, `## Install`, fence(installCommands(`${origin}/r`).video, "bash")]
+      ? [`> Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`, `## Install`, fence(installCommands(`${origin}/r`).video, "bash"), intro.requires]
       : [`> ${page.description}`]
   const others = docPages
     .filter((p) => p.href !== page.href)
@@ -101,6 +101,7 @@ export function docsMarkdown(origin: string): string {
       `> ${intro.title} Swap \`<video>\` for \`<VideoPlayer>\`. ${intro.lede}`,
       `## Install`,
       fence(installCommands(`${origin}/r`).video, "bash"),
+      intro.requires,
       ...docPages.flatMap((page) => [`# ${page.title}`, ...page.sections.flatMap((id) => blocks[id])]),
     ].join("\n\n") + "\n"
   )
@@ -150,7 +151,7 @@ export function examplesMarkdown(origin: string): string {
 export function llmsIndex(origin: string): string {
   return [
     `# bobine`,
-    `> Drop-in video and audio players for React, distributed as a shadcn registry and as the bobine npm package.`,
+    `> Drop-in video and audio players for React, distributed as a shadcn registry and as the bobinejs npm package.`,
     WHEN_TO_USE,
     `## Docs`,
     [

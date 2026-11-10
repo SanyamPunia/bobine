@@ -10,6 +10,8 @@ export const intro = {
   title: "The media player your browser should have shipped.",
   /** after "Swap <video> for <VideoPlayer>." */
   lede: "Same props and calmer controls. The shadcn CLI puts the source in your repo, so you own every line.",
+  /** under the first install command. Backticks mark inline code. */
+  requires: "Needs React 19, Tailwind CSS 4 and a shadcn project. In a new project, run `npx shadcn@latest init` first.",
 }
 
 export const usage = {
@@ -24,7 +26,22 @@ export const usage = {
   audio: `import { AudioPlayer } from "@/components/ui/audio-player"
 
 <AudioPlayer src="/episode.mp3" title="Episode 12" description="Field notes" />`,
-  composed: `<MediaRoot className="aspect-video bg-media-scrim text-media-foreground">
+  composed: `import {
+  MediaControls,
+  MediaFullscreenButton,
+  MediaMuteButton,
+  MediaPictureInPictureButton,
+  MediaPlaybackRateButton,
+  MediaPlayButton,
+  MediaRoot,
+  MediaSeek,
+  MediaSurface,
+  MediaTime,
+  MediaVideo,
+  MediaVolume,
+} from "@/components/ui/media"
+
+<MediaRoot className="aspect-video bg-media-scrim text-media-foreground">
   <MediaVideo src="/clip.mp4" className="size-full object-cover" />
   <MediaSurface />
   <MediaControls className="absolute inset-x-3 bottom-3 flex-col gap-1">
@@ -67,6 +84,7 @@ export const dashLoader: MediaSourceLoader = (media, src) => {
 @import "bobinejs/styles.css";
 
 import { VideoPlayer, AudioPlayer } from "bobinejs"
+/* bobinejs/hls needs hls.js: pnpm add hls.js */
 import { hlsLoader } from "bobinejs/hls"
 import { createMediaStore } from "bobinejs/core"`,
 }
@@ -112,7 +130,7 @@ export const sections = {
     id: "package",
     title: "Or install the package",
     description:
-      "Prefer a dependency over owning the source? The same components ship as bobinejs, with a framework-agnostic core.",
+      "Prefer a dependency over owning the source? The same components ship as bobinejs, with a framework-agnostic core. The players read shadcn theme tokens, so run npx shadcn@latest init first, or define background, foreground, card, muted, popover, primary and border yourself. For HLS, also add hls.js.",
   },
   loader: {
     id: "loader",
@@ -263,7 +281,7 @@ export const shortcuts: readonly { keys: readonly string[]; action: string }[] =
   { keys: ["J", "L"], action: "Seek 10 seconds" },
   { keys: ["ArrowLeft", "ArrowRight"], action: "Seek 5 seconds" },
   { keys: ["ArrowUp", "ArrowDown"], action: "Volume" },
-  { keys: ["0", "9"], action: "Jump to 0–90%" },
+  { keys: ["0–9"], action: "Jump to 0–90%" },
   { keys: ["Home", "End"], action: "Start or end" },
   { keys: ["M"], action: "Mute" },
   { keys: ["C"], action: "Captions" },
@@ -281,12 +299,13 @@ export function agentPrompt(origin: string): string {
   return `Add bobine media players to this React project.
 
 1. Read ${origin}/llms-full.txt for the full bobine docs before you change code.
-2. Install the video player with the shadcn CLI:
+2. If the project has no components.json, run npx shadcn@latest init first. bobine needs React 19, Tailwind CSS 4 and shadcn theme tokens.
+3. Install the video player with the shadcn CLI:
    ${cmd.video}
    For audio, also run: ${cmd.audio}
    For HLS streams, also run: ${cmd.hls}
-3. Replace each <video controls> element with <VideoPlayer> from "@/components/ui/video-player". Keep src, poster, tracks and the other native props. Remove the controls attribute.
-4. Replace each <audio controls> element with <AudioPlayer> from "@/components/ui/audio-player" in the same way.
-5. For .m3u8 sources, pass loader={hlsLoader} from "@/lib/media-hls" in a client component.
-6. Do not restyle the installed components unless I ask. They use the project's shadcn theme tokens.`
+4. Replace each <video controls> element with <VideoPlayer> from "@/components/ui/video-player". Keep src, poster, tracks and the other native props. Remove the controls attribute.
+5. Replace each <audio controls> element with <AudioPlayer> from "@/components/ui/audio-player" in the same way.
+6. For .m3u8 sources, pass loader={hlsLoader} from "@/lib/media-hls" in a client component.
+7. Do not restyle the installed components unless I ask. They use the project's shadcn theme tokens.`
 }

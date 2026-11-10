@@ -17,6 +17,7 @@ import { buttonVariants } from "@/components/ui/button"
 import { AudioPlayer } from "@/components/ui/audio-player"
 import { VideoPlayer } from "@/components/ui/video-player"
 import { CodeBlock } from "@/components/site/code-block"
+import { InstallNote } from "@/components/site/install-note"
 import { CopyAction } from "@/components/site/copy-action"
 import { Demo } from "@/components/site/demo"
 import { Section } from "@/components/site/section"
@@ -26,7 +27,7 @@ import { SketchUnderline } from "@/components/site/sketch-underline"
 import { TooltipProvider } from "@/components/site/tooltip"
 import { pageMetadata, SITE_DESCRIPTION } from "@/lib/metadata"
 import { CONTENT_WIDTH } from "@/lib/constants"
-import { agentPrompt, installCommands } from "@/lib/docs"
+import { agentPrompt, installCommands, intro } from "@/lib/docs"
 import { landing, type FeatureKey } from "@/lib/landing"
 import { SITE_URL } from "@/lib/site"
 import { cn } from "@/lib/utils"
@@ -95,6 +96,7 @@ export default function Page() {
               />
             </Demo>
             <CodeBlock prompt code={cmd.video} />
+            <InstallNote text={intro.requires} />
           </div>
         </header>
 

@@ -9,7 +9,7 @@ Two ways to use it:
 
 ## Package setup
 
-Requires React 19 and Tailwind CSS v4 with shadcn-style theme tokens (`--background`, `--foreground`, `--muted`, `--primary`, `--border`, …).
+Requires React 19 and Tailwind CSS v4 with shadcn theme tokens. In a new project, `npx shadcn@latest init` sets them up. Without it, define `background`, `foreground`, `card`, `muted`, `popover`, `primary` and `border` (with their `-foreground` pairs) yourself, or the audio player renders unstyled.
 
 ```css
 @import "tailwindcss";
@@ -33,10 +33,16 @@ import { VideoPlayer, AudioPlayer } from "bobinejs"
 
 ### HLS
 
+`bobinejs/hls` needs hls.js as a dependency. It loads only when an `.m3u8` source appears.
+
+```bash
+pnpm add hls.js
+```
+
 ```tsx
 "use client"
 import { VideoPlayer } from "bobinejs"
-import { hlsLoader } from "bobinejs/hls" // requires `hls.js`, loaded on demand
+import { hlsLoader } from "bobinejs/hls" // loads hls.js on demand
 
 <VideoPlayer src="https://example.com/stream.m3u8" loader={hlsLoader} />
 ```
