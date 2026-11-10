@@ -16,6 +16,15 @@ const shared: Options = {
   esbuildOptions(options) {
     options.alias = { "@": root }
   },
+  /* swaps in the package's own cn, so the site's type scale stays out */
+  esbuildPlugins: [
+    {
+      name: "package-utils",
+      setup(build) {
+        build.onResolve({ filter: /^@\/lib\/utils$/ }, () => ({ path: path.join(__dirname, "src/utils.ts") }))
+      },
+    },
+  ],
 }
 
 export default defineConfig([
