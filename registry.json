@@ -129,7 +129,7 @@
       "name": "media-hls",
       "type": "registry:lib",
       "title": "HLS Loader",
-      "description": "Adds .m3u8 streaming to any Bobine player. hls.js is lazy-loaded; Safari plays natively.",
+      "description": "Adds .m3u8 streaming to any bobine player. hls.js loads on demand, only when an HLS source appears.",
       "dependencies": [
         "hls.js"
       ],

@@ -1,14 +1,21 @@
 import type { MediaSourceLoader } from "@/components/ui/media"
 
-const canPlayNatively = (media: HTMLMediaElement) =>
-  media.canPlayType("application/vnd.apple.mpegurl") !== ""
+/**
+ * Media Source Extensions, which hls.js needs. iPhones before iOS 17.1 have
+ * neither API, and they are the browsers that must play HLS natively.
+ */
+const hasMediaSource = () =>
+  typeof window !== "undefined" && ("MediaSource" in window || "ManagedMediaSource" in window)
 
 /**
- * Plays `.m3u8` streams. Safari plays HLS natively; everywhere else hls.js
- * is loaded on demand so it never lands in the main bundle.
+ * Plays `.m3u8` streams with hls.js, loaded on demand so it never lands in
+ * the main bundle. Native playback is only the fallback for browsers without
+ * Media Source Extensions: Chrome 142 and later report native HLS support,
+ * but cannot parse common MPEG-TS streams, so `canPlayType` is not a safe
+ * test.
  */
 export const hlsLoader: MediaSourceLoader = (media, src) => {
-  if (!/\.m3u8($|\?)/i.test(src) || canPlayNatively(media)) {
+  const playNatively = () => {
     media.src = src
     return () => {
       media.removeAttribute("src")
@@ -16,13 +23,15 @@ export const hlsLoader: MediaSourceLoader = (media, src) => {
     }
   }
 
+  if (!/\.m3u8($|\?)/i.test(src) || !hasMediaSource()) return playNatively()
+
   let disposed = false
   let destroy: (() => void) | undefined
 
   import("hls.js").then(({ default: Hls }) => {
     if (disposed) return
     if (!Hls.isSupported()) {
-      media.src = src
+      destroy = playNatively()
       return
     }
     const hls = new Hls({ enableWorker: true })

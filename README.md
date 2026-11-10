@@ -49,7 +49,7 @@ npx shadcn@latest add https://bobine.fyi/r/video-player.json
 | `video-player` | `<VideoPlayer>` with auto-hiding controls, captions and a settings menu |
 | `audio-player` | `<AudioPlayer>` that follows your theme tokens |
 | `media` | The store and unstyled parts, to compose your own player |
-| `media-hls` | The HLS loader. hls.js loads on demand, and Safari plays natively |
+| `media-hls` | The HLS loader. hls.js loads on demand, only when an `.m3u8` source appears |
 
 Or install the package. It needs React 19 and Tailwind CSS v4.
 
