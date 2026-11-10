@@ -18,8 +18,14 @@ import { VideoPlayer } from "@/components/ui/video-player"
 import { CodeBlock } from "@/components/site/code-block"
 import { swapIcon } from "@/components/site/copy-swap-icon"
 import { Demo } from "@/components/site/demo"
+import { Segmented } from "@/components/site/segmented"
 
 type Kind = "video" | "audio"
+
+const players = [
+  { value: "video", label: "VideoPlayer" },
+  { value: "audio", label: "AudioPlayer" },
+] as const satisfies readonly { value: Kind; label: string }[]
 
 function initial<K extends string>(toggles: readonly { key: K; on: boolean }[]) {
   return Object.fromEntries(toggles.map((t) => [t.key, t.on])) as Record<K, boolean>
@@ -93,25 +99,13 @@ export function Playground() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div role="group" aria-label="Player" className="inline-flex self-start rounded-full bg-fill p-0.5">
-        {(["video", "audio"] as const).map((k) => (
-          <button
-            key={k}
-            type="button"
-            aria-pressed={kind === k}
-            onClick={() => setKind(k)}
-            className={cn(
-              "h-7 cursor-pointer rounded-full px-3 text-action transition-[color,background-color,box-shadow] duration-150",
-              focus,
-              kind === k
-                ? "bg-bg text-text-primary shadow-sm ring-1 ring-stroke-soft"
-                : "text-text-secondary hover:text-text-primary"
-            )}
-          >
-            {k === "video" ? "VideoPlayer" : "AudioPlayer"}
-          </button>
-        ))}
-      </div>
+      <Segmented
+        label="Player"
+        options={players}
+        value={kind}
+        onChange={setKind}
+        className="self-start"
+      />
 
       {kind === "video" ? (
         <Demo bleed={!video.square}>
