@@ -461,13 +461,19 @@ export function createMediaStore({ persistKey }: MediaStoreOptions = {}) {
 
 export type MediaStore = ReturnType<typeof createMediaStore>
 
-export function formatTime(seconds: number) {
+/**
+ * `m:ss`, or `h:mm:ss` from one hour. Pass the duration as `reference` so
+ * every time in a player uses the same fields: `0:00:05` beside `10:00:01`,
+ * and the label does not widen when playback passes an hour.
+ */
+export function formatTime(seconds: number, reference = seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) seconds = 0
   const s = Math.floor(seconds % 60)
   const m = Math.floor((seconds / 60) % 60)
   const h = Math.floor(seconds / 3600)
   const ss = s.toString().padStart(2, "0")
-  return h > 0 ? `${h}:${m.toString().padStart(2, "0")}:${ss}` : `${m}:${ss}`
+  const hours = h > 0 || (Number.isFinite(reference) && reference >= 3600)
+  return hours ? `${h}:${m.toString().padStart(2, "0")}:${ss}` : `${m}:${ss}`
 }
 
 /** Human-readable message for a MediaError code. */

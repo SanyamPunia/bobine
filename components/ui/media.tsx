@@ -761,7 +761,7 @@ function MediaSeek({
           )}
           style={{ left: `${hover * 100}%` }}
         >
-          {formatTime(hover * duration)}
+          {formatTime(hover * duration, duration)}
         </span>
       )}
     </div>
@@ -869,12 +869,19 @@ const timeNames = { current: "elapsed", duration: "duration", remaining: "remain
 function MediaTime({ type = "current", toggle = false, className, ...props }: MediaTimeProps) {
   const [picked, setPicked] = React.useState(type)
   const shown = toggle ? picked : type
+  const duration = useMedia((s) => s.duration)
+
+  /**
+   * Elapsed rounds down and remaining rounds up, so the two add up to the
+   * duration. A clip under a second shows 0:01, not 0:00.
+   */
   const value = useMedia((s) => {
-    if (shown === "duration") return Math.floor(s.duration)
+    if (shown === "duration") return Math.floor(s.duration) || Math.ceil(s.duration)
     if (shown === "remaining") return Math.ceil(Math.max(s.duration - s.currentTime, 0))
     return Math.floor(s.currentTime)
   })
-  const text = shown === "remaining" ? `-${formatTime(value)}` : formatTime(value)
+  const time = formatTime(value, duration)
+  const text = shown === "remaining" ? `-${time}` : time
   const other = type === "remaining" ? "current" : "remaining"
   const next = shown === type ? other : type
 
@@ -883,7 +890,7 @@ function MediaTime({ type = "current", toggle = false, className, ...props }: Me
       {toggle ? (
         <button
           type="button"
-          aria-label={`${shown === "remaining" ? "Time remaining" : shown === "duration" ? "Duration" : "Time elapsed"} ${formatTime(value)}`}
+          aria-label={`${shown === "remaining" ? "Time remaining" : shown === "duration" ? "Duration" : "Time elapsed"} ${time}`}
           onClick={() => setPicked(next)}
           className="group/media-button relative cursor-pointer rounded-sm outline-none transition-colors duration-150 ease-media hover:text-current focus-visible:ring-2 focus-visible:ring-current/60"
         >

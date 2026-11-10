@@ -42,6 +42,12 @@ describe("formatTime", () => {
   ])("formats %s as %s", (input, expected) => {
     expect(formatTime(input)).toBe(expected)
   })
+
+  it("uses the reference's fields, so times in one player match", () => {
+    expect(formatTime(5, 36001)).toBe("0:00:05")
+    expect(formatTime(5, 120)).toBe("0:05")
+    expect(formatTime(5, Infinity)).toBe("0:05")
+  })
 })
 
 describe("describeMediaError", () => {
