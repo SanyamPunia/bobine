@@ -127,12 +127,27 @@ function AudioPlayer({
 
       {hasInfo && (
         <div className="col-start-2 flex min-w-0 items-baseline gap-2 self-end text-sm leading-5 @max-sm/audio:col-span-3 @max-sm/audio:col-start-1 @max-sm/audio:row-start-2 @max-sm/audio:pt-1">
-          {title && <span className="truncate font-medium">{title}</span>}
-          {description && <span className="truncate text-muted-foreground">{description}</span>}
+          {/* the description gives way first, and the full text sits in a
+              title for when either one truncates */}
+          {title && (
+            <span dir="auto" title={typeof title === "string" ? title : undefined} className="truncate font-medium">
+              {title}
+            </span>
+          )}
+          {description && (
+            <span
+              dir="auto"
+              title={typeof description === "string" ? description : undefined}
+              className="min-w-12 shrink-[4] truncate text-muted-foreground"
+            >
+              {description}
+            </span>
+          )}
         </div>
       )}
 
       <div
+        dir="ltr"
         className={cn(
           "col-start-2 flex items-center gap-2.5 text-muted-foreground",
           hasInfo && "row-start-2 self-start @max-sm/audio:col-span-3 @max-sm/audio:col-start-1 @max-sm/audio:row-start-3"

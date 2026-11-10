@@ -465,6 +465,7 @@ function MediaPlaybackRateButton({
     <MediaButton
       aria-label={`Playback speed ${rate}x`}
       tooltip="Playback speed"
+      dir="ltr"
       className={cn("w-(--media-rate-width) min-w-7 px-1.5 font-mono text-xs tabular-nums", className)}
       style={{ "--media-rate-width": `calc(${chars}ch + 0.75rem)`, ...style } as React.CSSProperties}
       onClick={(event) => {
@@ -886,7 +887,7 @@ function MediaTime({ type = "current", toggle = false, className, ...props }: Me
   const next = shown === type ? other : type
 
   return (
-    <span data-slot="media-time" className={cn("font-mono text-xs tabular-nums", className)} {...props}>
+    <span data-slot="media-time" dir="ltr" className={cn("font-mono text-xs tabular-nums", className)} {...props}>
       {toggle ? (
         <button
           type="button"
@@ -943,7 +944,7 @@ function MediaCaptions({ className, ...props }: MediaCaptionsProps) {
       {...props}
     >
       {cues.map((cue, i) => (
-        <span key={`${i}-${cue}`} className="whitespace-pre-line text-balance rounded-md px-2 py-0.5 box-decoration-clone">
+        <span key={`${i}-${cue}`} dir="auto" className="whitespace-pre-line text-balance rounded-md px-2 py-0.5 box-decoration-clone">
           {cue}
         </span>
       ))}

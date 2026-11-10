@@ -121,7 +121,8 @@ function VideoPlayer({
 
       <MediaCaptions
         className={cn(
-          "absolute inset-x-4 bottom-4 text-sm leading-snug transition-transform duration-200 ease-media motion-reduce:transition-none sm:text-base",
+          /* sized by the player, not the viewport, so a small player keeps its cues */
+          "absolute inset-x-4 bottom-4 text-xs leading-snug transition-transform duration-200 ease-media motion-reduce:transition-none @xs/player:text-sm @2xl/player:text-base",
           "group-data-active/media:-translate-y-10 group-has-focus-visible/media:-translate-y-10 group-data-paused/media:group-data-started/media:-translate-y-10",
           "[&>span]:bg-media-scrim/75 [&>span]:text-media-foreground"
         )}
@@ -136,11 +137,15 @@ function VideoPlayer({
         )}
       />
 
-      {/* tooltips match the seek preview: light on the dark bar */}
-      <MediaControls className="absolute inset-x-2 bottom-2 h-9 gap-1 px-1 **:data-[slot=media-tooltip]:bg-media-foreground **:data-[slot=media-tooltip]:text-media-scrim">
+      {/* tooltips match the seek preview: light on the dark bar. The bar stays
+          left to right in RTL pages, like the seek math */}
+      <MediaControls
+        dir="ltr"
+        className="absolute inset-x-2 bottom-2 h-9 gap-1 px-1 **:data-[slot=media-tooltip]:bg-media-foreground **:data-[slot=media-tooltip]:text-media-scrim">
         <MediaPlayButton tooltipAlign="start" />
         <MediaSeek className="mx-2" previewClassName="bg-media-foreground text-media-scrim" />
-        <MediaTime type="remaining" toggle className="min-w-10 text-right text-media-foreground/80" />
+        {/* below 20rem the seek bar needs the room more than the label */}
+        <MediaTime type="remaining" toggle className="hidden min-w-10 text-right text-media-foreground/80 @xs/player:inline" />
 
         {/* a vertical slider above mute, so opening it never squeezes the seek
             bar. Fine pointers only: phones set volume with their own buttons,
