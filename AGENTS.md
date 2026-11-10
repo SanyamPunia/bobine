@@ -48,7 +48,7 @@ skills/bobine/         the agent skill, installed with `npx skills add SanyamPun
 public/brands/       third-party marks from svgl.app: OpenAI and Claude (page actions), TypeScript, CSS and Bash (code block labels), GitHub (header)
 public/team/         author avatars for the footer credit, 96px JPEGs cropped to the face
 public/media/        demo video, captions and audio
-.github/assets/      README screenshots, taken from the landing page players at 2x and saved as WebP. Both READMEs load them from raw.githubusercontent.com, because npm cannot resolve relative paths. Retake them when the controls change
+.github/assets/      README screenshots, taken from the landing page players at 2x and saved as WebP. The root README loads them by relative path, which works while the repo is private. The npm README has no images, because npm needs absolute URLs and raw.githubusercontent.com returns 404 for a private repo. Retake them when the controls change
 ```
 
 ## Code comments

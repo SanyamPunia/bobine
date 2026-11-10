@@ -2,23 +2,10 @@
 
 Drop-in video and audio players for React. Swap `<video>` for `<VideoPlayer>` and keep every native prop.
 
-<img src="https://raw.githubusercontent.com/SanyamPunia/bobine/main/.github/assets/video.webp" alt="VideoPlayer paused on a flower, with an English caption above the control bar" width="592">
-
 Two ways to use it:
 
 - **Own the source** (recommended): `npx shadcn@latest add https://bobine.fyi/r/video-player.json`
 - **Install the package**: `pnpm add bobinejs`
-
-Captions and playback speed share one settings menu:
-
-<img src="https://raw.githubusercontent.com/SanyamPunia/bobine/main/.github/assets/video-settings.webp" alt="VideoPlayer with the settings menu open, showing speed options and caption tracks" width="592">
-
-`AudioPlayer` takes your theme tokens, so it matches your app in light and dark:
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SanyamPunia/bobine/main/.github/assets/audio-dark.webp">
-  <img src="https://raw.githubusercontent.com/SanyamPunia/bobine/main/.github/assets/audio-light.webp" alt="AudioPlayer with a title, a seek bar, a speed toggle and a mute button" width="448">
-</picture>
 
 ## Package setup
 
