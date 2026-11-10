@@ -19,8 +19,8 @@ const choices = [
 ] as const satisfies readonly { value: Choice; label: string }[]
 
 /**
- * The theme recipe's card. A switch on the stage sets the prop, and the code
- * below follows it, so the two always match.
+ * The theme recipe's card. A switch on the stage sets the wrapper's theme
+ * class, and the code below follows it, so the two always match.
  */
 export function ThemeRecipe() {
   const [theme, setTheme] = React.useState<Choice>("light")
@@ -29,13 +29,11 @@ export function ThemeRecipe() {
     <>
       <Demo className={cn("flex-col gap-6", recipeStage)}>
         <Segmented label="Player theme" options={choices} value={theme} onChange={setTheme} />
-        <AudioPlayer
-          src="/media/track.mp3"
-          title="Morning Drift"
-          description="Demo track"
-          theme={theme === "app" ? undefined : theme}
-          frameClassName="max-w-md"
-        />
+
+        {/* the wrapper scopes the tokens, as the code below shows */}
+        <div className={cn("w-full max-w-md", theme !== "app" && theme)}>
+          <AudioPlayer src="/media/track.mp3" title="Morning Drift" description="Demo track" />
+        </div>
       </Demo>
       <CodeBlock code={themeRecipeCode(theme)} className={recipeCode} />
     </>

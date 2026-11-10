@@ -113,7 +113,7 @@ export const audioRecipes = {
     id: "fixed-theme",
     title: "Fixed theme",
     description:
-      "The card follows your app's theme by default. theme pins it to light or dark, for a light player on a dark page or the other way round.",
+      "The card follows your app's theme. To pin one player to light or dark, wrap it in that theme's class. It keeps your colours, because it reads the same tokens. A .light wrapper needs the CSS change in Theming.",
     code: themeRecipeCode("light"),
   },
   tracks: {
@@ -144,9 +144,9 @@ function pauseOthers(event: AudioEvent) {
 
 /** The theme recipe's code for each setting of its switch. */
 export function themeRecipeCode(theme: "app" | "light" | "dark"): string {
-  const lines = [`  src="/track.mp3"`, `  title="Morning Drift"`, `  description="Demo track"`]
-  if (theme !== "app") lines.push(`  theme="${theme}"`)
-  return `<AudioPlayer\n${lines.join("\n")}\n/>`
+  const player = `<AudioPlayer\n  src="/track.mp3"\n  title="Morning Drift"\n  description="Demo track"\n/>`
+  if (theme === "app") return player
+  return `<div className="${theme}">\n${player.replace(/^/gm, "  ")}\n</div>`
 }
 
 /** The demo tracks in the track list. They share one file. */

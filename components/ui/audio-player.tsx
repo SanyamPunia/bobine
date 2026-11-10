@@ -35,66 +35,9 @@ type AudioPlayerProps = Omit<React.ComponentProps<"audio">, "controls" | "title"
   metadata?: MediaInfo
   /** Remember volume, mute and speed under this localStorage key. */
   persistKey?: string
-  /**
-   * Fix the player to a neutral light or dark palette. Left unset, it follows
-   * your app's theme like the rest of your shadcn components.
-   */
-  theme?: "light" | "dark"
 }
 
 const muted = "text-muted-foreground hover:text-foreground"
-
-/* shadcn's neutral palette, one value per token the player draws with */
-const palettes = {
-  light: {
-    background: "oklch(1 0 0)",
-    foreground: "oklch(0.145 0 0)",
-    card: "oklch(1 0 0)",
-    "card-foreground": "oklch(0.145 0 0)",
-    popover: "oklch(1 0 0)",
-    "popover-foreground": "oklch(0.145 0 0)",
-    primary: "oklch(0.205 0 0)",
-    "primary-foreground": "oklch(0.985 0 0)",
-    muted: "oklch(0.97 0 0)",
-    "muted-foreground": "oklch(0.556 0 0)",
-    border: "oklch(0.922 0 0)",
-    ring: "oklch(0.708 0 0)",
-  },
-  dark: {
-    background: "oklch(0.145 0 0)",
-    foreground: "oklch(0.985 0 0)",
-    card: "oklch(0.205 0 0)",
-    "card-foreground": "oklch(0.985 0 0)",
-    popover: "oklch(0.205 0 0)",
-    "popover-foreground": "oklch(0.985 0 0)",
-    primary: "oklch(0.922 0 0)",
-    "primary-foreground": "oklch(0.205 0 0)",
-    muted: "oklch(0.269 0 0)",
-    "muted-foreground": "oklch(0.708 0 0)",
-    border: "oklch(1 0 0 / 10%)",
-    ring: "oklch(0.556 0 0)",
-  },
-} as const
-
-/**
- * The palette as variables on the frame, so every part inside reads it and
- * nothing outside does. Each token is set as `--card` and as `--color-card`:
- * shadcn's `@theme inline` reads the first, a plain `@theme` the second.
- */
-function themeStyle(theme: "light" | "dark") {
-  const style: Record<string, string> = { colorScheme: theme }
-  for (const [token, value] of Object.entries(palettes[theme])) {
-    style[`--${token}`] = value
-    style[`--color-${token}`] = value
-  }
-  return style as React.CSSProperties
-}
-
-/* the artwork edge follows the player's theme, not the page's */
-const artworkEdge = {
-  light: "outline-black/10 dark:outline-black/10",
-  dark: "outline-white/10",
-} as const
 
 /**
  * The volume popover opens on hover or keyboard focus, never on a click, so the
@@ -115,7 +58,6 @@ function AudioPlayer({
   loader,
   metadata,
   persistKey,
-  theme,
   ...props
 }: AudioPlayerProps) {
   const sessionInfo =
@@ -139,8 +81,6 @@ function AudioPlayer({
       persistKey={persistKey}
       metadata={sessionInfo}
       tooltips={tooltips}
-      data-player-theme={theme}
-      style={theme ? themeStyle(theme) : undefined}
       className={cn(
         "@container/audio grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 rounded-xl border bg-card p-2.5 pr-3 text-card-foreground",
         frameClassName
@@ -172,10 +112,7 @@ function AudioPlayer({
                 ref={(img) => {
                   if (img?.complete && img.naturalWidth === 0) setFailedArtwork(artwork)
                 }}
-                className={cn(
-                  "size-full rounded-lg object-cover outline select-none outline-black/10 -outline-offset-1 dark:outline-white/10",
-                  theme && artworkEdge[theme]
-                )}
+                className="size-full rounded-lg object-cover outline select-none outline-foreground/10 -outline-offset-1"
               />
               <MediaPlayButton
                 tooltipAlign="start"

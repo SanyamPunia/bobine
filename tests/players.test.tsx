@@ -24,14 +24,6 @@ describe("server rendering", () => {
     expect(renderToString(<VideoPlayer src="/clip.mp4" tooltips={false} />)).not.toContain('data-slot="media-tooltip"')
   })
 
-  it("pins AudioPlayer to a palette only when theme is set", () => {
-    expect(renderToString(<AudioPlayer src="/song.mp3" />)).not.toContain("--card:")
-    const html = renderToString(<AudioPlayer src="/song.mp3" theme="dark" />)
-    expect(html).toContain('data-player-theme="dark"')
-    expect(html).toContain("--card:oklch(0.205 0 0)")
-    expect(html).toContain("--color-card:oklch(0.205 0 0)")
-  })
-
   it("renders AudioPlayer with title and description", () => {
     const html = renderToString(<AudioPlayer src="/song.mp3" title="Song" description="Artist" />)
     expect(html).toContain("<audio")

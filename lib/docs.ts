@@ -260,11 +260,6 @@ export const audioProps: readonly Prop[] = [
   { name: "artwork", type: "string", description: "Cover image beside the controls and in OS media controls." },
   { name: "showSpeed", type: "boolean", description: "Show a playback speed toggle, for podcasts and voice notes." },
   { name: "tooltips", type: "boolean", description: "Same as on VideoPlayer. On by default." },
-  {
-    name: "theme",
-    type: '"light" | "dark"',
-    description: "Fix the player to a neutral light or dark palette. Unset, it follows your app's theme.",
-  },
   { name: "frameClassName", type: "string", description: "Classes for the outer frame. className targets the <audio> element." },
   { name: "loader", type: "MediaSourceLoader", description: "Same as on VideoPlayer." },
   { name: "metadata", type: "MediaInfo", description: "Overrides the metadata built from title, description and artwork." },
