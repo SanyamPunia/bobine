@@ -57,7 +57,7 @@ Run everything from the repository root unless a step says otherwise.
 
 3. **Update what documents the API**, if the release changes it:
    `packages/bobine/README.md`, `skills/bobine/SKILL.md` and the props in
-   `lib/docs.ts`.
+   `lib/docs.ts`. Add the version's entry to `CHANGELOG.md`.
 
 4. **Run the checks.**
 
@@ -79,7 +79,7 @@ Run everything from the repository root unless a step says otherwise.
 6. **Commit and tag the release.**
 
    ```bash
-   git add packages/bobine/package.json
+   git add packages/bobine/package.json CHANGELOG.md
    git commit -m "chore(release): bobinejs 0.1.1"
    git tag bobinejs@0.1.1
    ```
