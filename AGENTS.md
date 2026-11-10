@@ -48,8 +48,6 @@ skills/bobine/         the agent skill, installed with `npx skills add SanyamPun
 public/brands/       third-party marks from svgl.app: OpenAI and Claude (page actions), TypeScript, CSS and Bash (code block labels), GitHub (header)
 public/team/         author avatars for the footer credit, 96px JPEGs cropped to the face
 public/media/        demo video, captions and audio
-app/dev/             dev-only pages, 404 in production. `break-media` renders the players with worst-case props behind a `?data=` toggle
-public/media/worst/  the worst-case media, captions and covers for `app/dev/break-media`
 ```
 
 ## Code comments
@@ -159,8 +157,6 @@ while playing only reveals them, and the next tap pauses.
   labels are `dir="auto"`, so each follows its own text.
 - Every time in one player has the same fields: `formatTime` takes the
   duration as its second argument, so `0:00:05` sits beside `10:00:01`.
-- `app/dev/break-media` is the regression page for these cases. Check it at
-  all four states after any player change.
 
 ## Social metadata
 
