@@ -48,6 +48,8 @@ skills/bobine/         the agent skill, installed with `npx skills add SanyamPun
 public/brands/       third-party marks from svgl.app: OpenAI and Claude (page actions), TypeScript, CSS and Bash (code block labels), GitHub (header)
 public/team/         author avatars for the footer credit, 96px JPEGs cropped to the face
 public/media/        demo video, captions and audio
+app/dev/             dev-only pages, 404 in production. `break-media` renders the players with worst-case props behind a `?data=` toggle
+public/media/worst/  the worst-case media, captions and covers for `app/dev/break-media`
 ```
 
 ## Code comments
@@ -140,7 +142,25 @@ while playing only reveals them, and the next tap pauses.
   `navigator.vibrate` is a buzz, not a tap, so it would feel worse than none.
 - Any text input is 16px on `pointer-coarse`, or iOS zooms the page into it.
 - The player clips its children, so the settings panel caps its height to
-  the space above its trigger and scrolls.
+  the space above its trigger and scrolls. Its scrollbar is hidden, so the
+  list inside it fades at the bottom while more options sit below. The fade
+  is the distance left to scroll, capped at 24px, so it shrinks with the
+  scroll. It masks the inner list, never the panel, so the panel's edge and
+  background stay whole.
+
+## Player layout
+
+- Sizes inside the video player follow the player (`@container/player`), not
+  the viewport, because the same player sits in a page, a card and a sidebar.
+  Caption text steps from `text-xs` to `text-base`, and the time label hides
+  below `@xs/player` so the seek bar keeps its room.
+- The control bars, `MediaTime` and the rate button are `dir="ltr"`, because
+  the seek math reads from the left edge. Cues, titles, descriptions and track
+  labels are `dir="auto"`, so each follows its own text.
+- Every time in one player has the same fields: `formatTime` takes the
+  duration as its second argument, so `0:00:05` sits beside `10:00:01`.
+- `app/dev/break-media` is the regression page for these cases. Check it at
+  all four states after any player change.
 
 ## Social metadata
 
