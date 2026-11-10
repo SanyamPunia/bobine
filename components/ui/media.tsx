@@ -45,9 +45,9 @@ function useMedia<T>(selector: (state: MediaState) => T): T {
   )
 }
 
-function useComposedRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return React.useCallback(composeRefs(...refs), refs)
+/* a fixed arity, so the dependency list is a literal the hooks rules can check */
+function useComposedRefs<T>(a: React.Ref<T> | undefined, b: React.Ref<T> | undefined, c?: React.Ref<T>) {
+  return React.useCallback((node: T | null) => composeRefs(a, b, c)(node), [a, b, c])
 }
 
 function composeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
@@ -251,16 +251,16 @@ function useMediaElement<E extends HTMLMediaElement>(
     return loader(media, src) ?? undefined
   }, [store, loader, src])
 
-  return { mediaRef }
+  return mediaRef
 }
 
 type MediaVideoProps = MediaElementProps<React.ComponentProps<"video">>
 
 function MediaVideo({ className, ref, src, loader, ...props }: MediaVideoProps) {
-  const media = useMediaElement(ref, typeof src === "string" ? src : undefined, loader)
+  const mediaRef = useMediaElement(ref, typeof src === "string" ? src : undefined, loader)
   return (
     <video
-      ref={media.mediaRef}
+      ref={mediaRef}
       data-slot="media-video"
       playsInline
       preload="metadata"
@@ -275,10 +275,10 @@ function MediaVideo({ className, ref, src, loader, ...props }: MediaVideoProps) 
 type MediaAudioProps = MediaElementProps<React.ComponentProps<"audio">>
 
 function MediaAudio({ ref, src, loader, ...props }: MediaAudioProps) {
-  const media = useMediaElement(ref, typeof src === "string" ? src : undefined, loader)
+  const mediaRef = useMediaElement(ref, typeof src === "string" ? src : undefined, loader)
   return (
     <audio
-      ref={media.mediaRef}
+      ref={mediaRef}
       data-slot="media-audio"
       preload="metadata"
       {...props}
