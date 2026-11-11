@@ -49,7 +49,7 @@ npx shadcn@latest add https://bobine.fyi/r/media-hls.json      # hlsLoader for .
 
 ## Streams and loaders
 
-- For `.m3u8`, pass `loader={hlsLoader}` from `@/lib/media-hls`. Use it in a client component (`"use client"`). hls.js loads only when an HLS source appears. Browsers without Media Source Extensions, such as older iPhones, play HLS natively.
+- For `.m3u8`, pass `loader={hlsLoader}` from `@/lib/media-hls`. Use it in a client component (`"use client"`). hls.js loads only when an HLS source appears. Safari and every iOS browser play HLS natively and never load hls.js.
 - A custom loader has the type `MediaSourceLoader`: `(media, src) => cleanup | void`. When a loader is set, bobine does not put `src` on the element. The loader must set `media.src` for any source it does not handle. Return a cleanup function.
 
 ## Compose a custom player

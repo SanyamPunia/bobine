@@ -142,7 +142,7 @@ export const sections = {
     id: "streaming",
     title: "Streaming",
     description:
-      "Pass a loader for adaptive streams. The loader fetches hls.js only when an .m3u8 source appears. Browsers without Media Source Extensions, such as older iPhones, play HLS natively.",
+      "Pass a loader for adaptive streams. The loader fetches hls.js only when an .m3u8 source appears. Safari and every iOS browser play HLS natively and never load hls.js.",
   },
   package: {
     id: "package",
