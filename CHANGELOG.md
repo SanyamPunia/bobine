@@ -4,6 +4,15 @@ Changes to the `bobinejs` npm package and the shadcn registry items. The
 registry always serves `main`. The package ships the same source at each
 version below.
 
+## 0.2.2
+
+### Fixed
+
+- `hlsLoader` plays HLS natively on Safari and every iOS browser, which all
+  run WebKit, instead of downloading hls.js there. Other browsers still use
+  hls.js, because Chrome 142 and later report native HLS support but cannot
+  parse common MPEG-TS streams.
+
 ## 0.2.1
 
 ### Fixed
