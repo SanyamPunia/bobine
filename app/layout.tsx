@@ -1,5 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { Geist_Mono, Instrument_Serif, Inter } from 'next/font/google'
 import { ColumnGuides } from '@/components/site/column-guides'
 import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE } from '@/lib/metadata'
@@ -51,7 +52,12 @@ export default function RootLayout({
         </a>
         <ColumnGuides />
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Analytics />
+            <Script src="https://assets.onedollarstats.com/stonks.js" strategy="afterInteractive" />
+          </>
+        )}
       </body>
     </html>
   )
