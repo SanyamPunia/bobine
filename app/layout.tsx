@@ -55,7 +55,7 @@ export default function RootLayout({
         {process.env.NODE_ENV === 'production' && (
           <>
             <Analytics />
-            <Script src="https://assets.onedollarstats.com/stonks.js" strategy="afterInteractive" />
+            <Script src="/m/s.js" data-url="/m/e" strategy="afterInteractive" />
           </>
         )}
       </body>
