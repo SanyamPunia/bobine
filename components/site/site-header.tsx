@@ -64,14 +64,13 @@ export function SiteHeader({ current, leading }: { current?: string; leading?: R
           <span aria-hidden="true" className="hidden h-4 w-px bg-stroke sm:block" />
           <div className="flex items-center gap-1.5">
             <CommandMenu items={searchItems()} />
-            {/* hidden on phones, where it does not fit; GitHub is in search */}
             <Tooltip label="GitHub repository">
               <a
                 href="https://github.com/SanyamPunia/bobine"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub repository"
-                className="hidden size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98] sm:grid"
+                className="grid size-8 cursor-pointer place-items-center rounded-full text-text-secondary transition-[color,background-color,scale] duration-150 hover:bg-fill hover:text-text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none motion-safe:active:scale-[0.98]"
               >
                 {/* svgl's GitHub mark as a mask, so it takes the text colour */}
                 <span
