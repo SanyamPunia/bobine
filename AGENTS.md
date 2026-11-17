@@ -319,9 +319,8 @@ same toggles it renders, so the two cannot disagree.
 The header holds Docs, search and a GitHub icon, nothing else. Examples is a
 docs page, reached from the sidebar and search. Registry is in the sidebar
 and search, npm only in search.
-Below `sm` the version pill, the GitHub icon and the divider hide, and the
-search trigger becomes a 32px circle, so a phone shows the logo, Docs and
-search. Decorative lines (column guides, title rules, header divider)
+Below `sm` the version pill and the divider hide, and the search trigger
+becomes a 32px circle, so a phone shows the logo, Docs, search and GitHub. Decorative lines (column guides, title rules, header divider)
 are all off below `sm`. Anything hidden on phones must stay
 reachable through search.
 
